@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  background-color: rgb(26, 26, 28);
+}
+
+.bg-gray{
+  background-color: rgb(26, 26, 28);
+}
+
+.bg-dimm{
+  background-color:rgb(111, 34, 50);
+}
+
+.bg-mid{
+  background-color:rgb(149, 7, 65);
+}
+
+.bg-hi{
+  background-color:rgb(195, 8, 63);
+}
+.bordercol-gray{
+  border-color: rgb(26, 26, 28);
+}
+
+.bordercol-dimm{
+  border-color:rgb(111, 34, 50);
+}
+
+.bordercol-mid{
+  border-color:rgb(149, 7, 65);
+}
+
+.bordercol-hi{
+  border-color:rgb(195, 8, 63);
+}
+
+
+.textcol-main{
+  color:rgb(202, 233, 234);
+}
+.textcol-dimm{
+  color:rgb(149, 171, 172);
+}
+
+.flexgap{
+  display:flex;
+  gap:10px;
+}
+
+@media only screen and (max-width: 600px) {
+    .flexgap{
+      gap:5px;
+    }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(122, 37, 55) rgb(13, 3, 6);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgb(13, 3, 6);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(122, 37, 55);
+}
