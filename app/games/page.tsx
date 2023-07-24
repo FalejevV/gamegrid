@@ -9,7 +9,17 @@ export default async function Games(){
 
     const supabase = createServerComponentClient({ cookies })
 
-    const {data, error} = await supabase.from('Game').select("*")
+    const {data, error} = await supabase.from('Game').select(`
+        *,
+        developer:Developer(developer),
+        state:ActionState(state),
+        tags:GameTag(
+            Tag(tag)
+        )
+    `);
+    
+    console.log(error);
+    console.log(data);
 
     function displayGames(){
         if(data && data.length > 0){
