@@ -5,13 +5,50 @@ export interface Game{
         developer:string
     }
     release_date:Date,
-    tags: tagItem[]
+    tags: TagItem[]
     description:string,
     image:string,
+    score:AverageScoreItem
 }
 
-export interface tagItem{
+export interface AverageScoreItem{
+    id:number,
+    game_id:number,
+    graphics_avg: number,
+    sound_avg: number,
+    gameplay_avg: number,
+    level_avg: number,
+    balance_avg: number,
+    story_avg: number,
+    performance_avg: number,
+    original_avg: number,
+    customization_avg: number,
+    microtransactions_avg: number,
+    support_avg: number
+}
+
+export interface TagItem{
     Tag:{
         tag:string
     }
+}
+
+export interface ScoreItem{
+    title:string,
+    value:number
+}
+
+export interface ScoreNameList{
+    graphics: string,
+    sound: string,
+    gameplay: string,
+    level: string,
+    balance: string,
+    story: string,
+    performance: string,
+    original: string,
+    customization: string,
+    microtransactions: string,
+    support: string,
+    total:string
 }

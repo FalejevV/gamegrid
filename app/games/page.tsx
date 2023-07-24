@@ -15,11 +15,9 @@ export default async function Games(){
         state:ActionState(state),
         tags:GameTag(
             Tag(tag)
-        )
+        ),
+        score:AverageReview(*)
     `);
-    
-    console.log(error);
-    console.log(data);
 
     function displayGames(){
         if(data && data.length > 0){
@@ -31,6 +29,11 @@ export default async function Games(){
         }
     }
 
+    if(error){
+        return <div className="w-full flex flex-col gap-[60px] items-center py-[60px] textcol-main text-[25px]">
+            <p>An error has acquired</p>
+        </div>
+    }
 
     return(
         <div className="w-full flex flex-col gap-[60px] items-center py-[60px]">
