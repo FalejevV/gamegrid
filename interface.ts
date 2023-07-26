@@ -52,3 +52,7 @@ export interface ScoreNameList{
     support: string,
     total:string
 }
+
+export interface GameSortFilterParams{
+    sort:"string"
+}

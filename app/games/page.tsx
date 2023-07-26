@@ -1,24 +1,40 @@
 import GamePreviewItem from "@/components/GamePreviewItem/GamePreviewItem";
+import SortFilterQueryLink from "@/components/SortFilterQueryLink/SortFilterQueryLink";
 import { Game } from "@/interface";
-import supabaseClient from "@/utils/supabaseClient";
+import SortFilterTab from "@/layout/SortFilterTab";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
 
-export default async function Games(){
+export default async function Games({searchParams}:{
+    searchParams:{}
+}){
 
     const supabase = createServerComponentClient({ cookies })
+    let query = supabase.from('Game');
+    if(Object.keys(searchParams).length === 0){
+        var {data, error} = await query.select(`
+            *,
+            developer:Developer(developer),
+            state:ActionState(state),
+            tags:GameTag(
+                Tag(tag)
+            ),
+            score:AverageReview(*)
+        `).order("release_date", {ascending:true})
+    }else{
+        var {data, error} = await query.select(`
+            *,
+            developer:Developer(developer),
+            state:ActionState(state),
+            tags:GameTag(
+                Tag(tag)
+            ),
+            score:AverageReview(*)
+        `).order("release_date", {ascending:false})
+    }
 
-    const {data, error} = await supabase.from('Game').select(`
-        *,
-        developer:Developer(developer),
-        state:ActionState(state),
-        tags:GameTag(
-            Tag(tag)
-        ),
-        score:AverageReview(*)
-    `);
-
+    
     function displayGames(){
         if(data && data.length > 0){
             return (
@@ -37,6 +53,7 @@ export default async function Games(){
 
     return(
         <div className="w-full flex flex-col gap-[60px] items-center py-[60px]">
+            <SortFilterTab />
             {data && displayGames()}
         </div>
     )
