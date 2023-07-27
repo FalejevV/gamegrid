@@ -1,7 +1,7 @@
 import GamePreviewItem from "@/components/GamePreviewItem/GamePreviewItem";
-import SortFilterQueryLink from "@/components/SortFilterQueryLink/SortFilterQueryLink";
 import { Game } from "@/interface";
 import SortFilterTab from "@/layout/SortFilterTab";
+import { fetchFilteredGames } from "@/utils/dataFetching";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
@@ -9,31 +9,17 @@ import { cookies } from "next/headers";
 export default async function Games({searchParams}:{
     searchParams:{}
 }){
-
-    const supabase = createServerComponentClient({ cookies })
-    let query = supabase.from('Game');
+    let isError;
+    let resultData: Game[] | null = null;
     if(Object.keys(searchParams).length === 0){
-        var {data, error} = await query.select(`
-            *,
-            developer:Developer(developer),
-            state:ActionState(state),
-            tags:GameTag(
-                Tag(tag)
-            ),
-            score:AverageReview(*)
-        `).order("release_date", {ascending:true})
+        var {data, error} = await fetchFilteredGames(searchParams);
+        isError = error;
+        resultData = data;
     }else{
-        var {data, error} = await query.select(`
-            *,
-            developer:Developer(developer),
-            state:ActionState(state),
-            tags:GameTag(
-                Tag(tag)
-            ),
-            score:AverageReview(*)
-        `).order("release_date", {ascending:false})
+
     }
 
+    
     
     function displayGames(){
         if(data && data.length > 0){
@@ -45,7 +31,7 @@ export default async function Games({searchParams}:{
         }
     }
 
-    if(error){
+    if(isError){
         return <div className="w-full flex flex-col gap-[60px] items-center py-[60px] textcol-main text-[25px]">
             <p>An error has acquired</p>
         </div>
@@ -54,7 +40,7 @@ export default async function Games({searchParams}:{
     return(
         <div className="w-full flex flex-col gap-[60px] items-center py-[60px]">
             <SortFilterTab />
-            {data && displayGames()}
+            {resultData && displayGames()}
         </div>
     )
 }

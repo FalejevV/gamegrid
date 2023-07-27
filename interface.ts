@@ -1,3 +1,5 @@
+import { PostgrestError } from "@supabase/supabase-js"
+
 export interface Game{
     id:string
     name:string,
@@ -55,4 +57,9 @@ export interface ScoreNameList{
 
 export interface GameSortFilterParams{
     sort:"string"
+}
+
+export interface FilteredIDPromise{
+    data:number[],
+    error:PostgrestError | null
 }
