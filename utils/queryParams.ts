@@ -1,4 +1,5 @@
 import { SortFilterDropdowns } from "@/store/features/sortFilter";
+import { getDefaultScoreName } from "./scoreName";
 
 export interface URLQueryObject{ 
     pathname: string, 
@@ -6,8 +7,9 @@ export interface URLQueryObject{
         sort:string,
         tags:string[],
         platforms:string[],
-        players:string[],
+        players:string,
         aspect:string,
+        amount:number
     }
 }
 
@@ -18,8 +20,9 @@ export function generateSortFilterParams(sortFilterData:SortFilterDropdowns, hre
             sort:sortFilterData.sort.selectedItems[0],
             tags:sortFilterData.tags.selectedItems,
             platforms:sortFilterData.platform.selectedItems,
-            players:sortFilterData.players.selectedItems,
-            aspect:sortFilterData.aspects.selectedItems[0],
+            players:(sortFilterData.players.selectedItems[0] === "Players" ? "" : sortFilterData.players.selectedItems[0]),
+            aspect:getDefaultScoreName(sortFilterData.aspects.selectedItems[0]) || "",
+            amount:3
         }
     }
 }

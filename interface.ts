@@ -41,6 +41,7 @@ export interface ScoreItem{
 }
 
 export interface ScoreNameList{
+    none:string,
     graphics: string,
     sound: string,
     gameplay: string,
@@ -52,7 +53,6 @@ export interface ScoreNameList{
     customization: string,
     microtransactions: string,
     support: string,
-    total:string
 }
 
 export interface GameSortFilterParams{
@@ -71,4 +71,5 @@ export interface FilterQueryParams{
     platforms:string[] | undefined,
     players:string[] | undefined,
     aspect:string | undefined,
+    amount:number
 }

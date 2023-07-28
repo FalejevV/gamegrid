@@ -1,6 +1,7 @@
 import { ScoreNameList } from "@/interface";
 
 const scoreList:ScoreNameList = {
+    none:"Aspect - All",
     graphics: "Graphics",
     sound: "Sound Design",
     gameplay: "Gameplay",
@@ -12,7 +13,26 @@ const scoreList:ScoreNameList = {
     customization:"Customization",
     microtransactions:"Microtransactions",
     support:"Support",
-    total:"Overall Rating"
+}
+
+export function convertToFancyScores(defaultArray:string[]):string[]{
+    let resultArray:string[] = [];
+    defaultArray.forEach((item) => {
+        let loweredKey = item.toLowerCase() as keyof ScoreNameList;
+        if(scoreList[loweredKey]){
+            resultArray.push(scoreList[loweredKey]);
+        }
+    })
+    return resultArray;
+}
+
+export function getDefaultScoreName(fancyAspectName:string){
+    // @ts-ignore 
+    const key = Object.keys(scoreList).find((key:keyof ScoreNameList) => {
+        let objectValue = scoreList[key] || "None";
+        return fancyAspectName === objectValue;
+    });
+    return key;
 }
 
 export default scoreList;

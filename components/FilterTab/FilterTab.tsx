@@ -9,12 +9,14 @@ import SortFilterSearch from "../FilterSearch/FilterSearch";
 import { useMemo, useState } from "react";
 import OutClickListener from "../OutClickListener/OutClickListener";
 
+
+
 export default function SortFilterItem(props:{
     title:keyof SortFilterDropdowns,
     content:string[],
     isSearch?:boolean
 }){
-
+    
     const filterDrowdownSelector = useAppSelector((state:RootState) => state.sortFilter.dropdowns[props.title])
     const dispatch = useAppDispatch();
     const [searchValue,setSearchValue] = useState("");
@@ -70,6 +72,7 @@ export default function SortFilterItem(props:{
         return(
             <div className={`${"tab-"+props.title} w-[250px] h-fit max-h-[250px] flex-col absolute left-[-35px] top-[50px] z-50 p-[10px] bg-mid shadow-lg
                 ${props.content.length > 6 && "overflow-y-scroll"}
+                ${filterDrowdownSelector.selectedItems.length >= 3 && "brightness-75"}
             `}>
                 <OutClickListener target={props.title} />
                 {props.isSearch && <SortFilterSearch searchValue={searchValue} setSearchValue={setSearchValue} />}

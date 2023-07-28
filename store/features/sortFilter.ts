@@ -40,13 +40,13 @@ const initialState:SortFilter = {
         },
         players: {
             isDropdown: false,
-            selectedItems: [],
-            defaultValue: [],
+            selectedItems: ["Players"],
+            defaultValue: ["Players"],
         },
         aspects: {
             isDropdown: false,
-            selectedItems: [],
-            defaultValue: [],
+            selectedItems: ["Favorite Aspect"],
+            defaultValue: ["Favorite Aspect"],
         },
     }
 }
@@ -67,6 +67,8 @@ const sortFilterSlice = createSlice({
                 newSelectedItems = state.dropdowns[action.payload.key].selectedItems.filter((item:string) =>  item !== action.payload.value)
                 state.dropdowns[action.payload.key].selectedItems = [...newSelectedItems]
             }else{
+                if(state.dropdowns[action.payload.key].selectedItems.length >= 3) return;
+                
                 state.dropdowns[action.payload.key].selectedItems.push(action.payload.value);
                 return state
             }

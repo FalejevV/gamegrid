@@ -5,6 +5,7 @@ import SortFilterQueryLink from "@/components/SortFilterQueryLink/SortFilterQuer
 import SortTab from "@/components/SortTab/SortTab";
 import { SortFilterDropdowns, clearAllOptions, sortFilterExpand, toggleAllDropdowns } from "@/store/features/sortFilter";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
+import { convertToFancyScores } from "@/utils/scoreName";
 import supabaseClient from "@/utils/supabaseClient";
 import { getTableList } from "@/utils/tableFetching";
 import { useEffect, useState } from "react";
@@ -25,7 +26,7 @@ export default function SortFilterTab(){
     const [tagOptions, setTagOptions] = useState<string[]>([]);
     const [platformOptions, setPlatformOptions] = useState<string[]>([]);
     const [playerOptions, setPlayerOptions] = useState<string[]>([]);
-    const [AspectOptions, setAspectOptions] = useState<string[]>([]);
+    const [aspectOptions, setAspectOptions] = useState<string[]>([]);
     const [loaded, setLoaded] = useState(false);
     
     function ExpadedRowPC(){
@@ -34,8 +35,8 @@ export default function SortFilterTab(){
                 <div className="w-full h-[60px] flex items-center justify-between">
                     <FilterTab title="tags" content={tagOptions} isSearch/>
                     <FilterTab title="platform" content={platformOptions}/>
-                    <FilterTab title="players" content={playerOptions}/>
-                    <FilterTab title="aspects" content={AspectOptions} isSearch/>
+                    <SortTab clearable title="players" content={playerOptions}/>
+                    <SortTab clearable title="aspects" content={aspectOptions}/>
                 </div>
 
                 <div className="w-full h-[60px] flex items-center justify-between">
@@ -47,11 +48,10 @@ export default function SortFilterTab(){
 
     useEffect(() => {
         if(loaded){
-            console.log("FETCH");
-            let tagList = getTableList(supabaseClient, "Tag").then(res => setTagOptions(res.data || []));
-            let platformList = getTableList(supabaseClient, "Platform").then(res => setPlatformOptions(res.data || []));
-            let playersList = getTableList(supabaseClient, "Player").then(res => setPlayerOptions(res.data || []));
-            let aspectList = getTableList(supabaseClient, "Aspect").then(res => setAspectOptions(res.data || []));
+            getTableList(supabaseClient, "Tag").then(res => setTagOptions(res.data || []));
+            getTableList(supabaseClient, "Platform").then(res => setPlatformOptions(res.data || []));
+            getTableList(supabaseClient, "Player").then(res => setPlayerOptions(res.data || []));
+            getTableList(supabaseClient, "Aspect").then(res => setAspectOptions(convertToFancyScores(res.data || [])));
         }
     },[loaded]);
 
