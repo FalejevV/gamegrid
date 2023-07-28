@@ -1,13 +1,11 @@
 import GamePreviewItem from "@/components/GamePreviewItem/GamePreviewItem";
-import { Game } from "@/interface";
+import { FilterQueryParams, Game } from "@/interface";
 import SortFilterTab from "@/layout/SortFilterTab";
-import { fetchFilteredGames } from "@/utils/dataFetching";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { fetchFilteredGames } from "@/utils/gameFetching";
 
 
 export default async function Games({searchParams}:{
-    searchParams:{}
+    searchParams:FilterQueryParams
 }){
     let isError;
     let resultData: Game[] | null = null;
@@ -16,7 +14,9 @@ export default async function Games({searchParams}:{
         isError = error;
         resultData = data;
     }else{
-
+        var {data, error} = await fetchFilteredGames(searchParams);
+        isError = error;
+        resultData = data;
     }
 
     

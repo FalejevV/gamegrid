@@ -5,9 +5,9 @@ export interface URLQueryObject{
     query: { 
         sort:string,
         tags:string[],
-        platform:string[],
+        platforms:string[],
         players:string[],
-        aspects:string[],
+        aspect:string,
     }
 }
 
@@ -17,9 +17,9 @@ export function generateSortFilterParams(sortFilterData:SortFilterDropdowns, hre
         query: { 
             sort:sortFilterData.sort.selectedItems[0],
             tags:sortFilterData.tags.selectedItems,
-            platform:sortFilterData.platform.selectedItems,
+            platforms:sortFilterData.platform.selectedItems,
             players:sortFilterData.players.selectedItems,
-            aspects:sortFilterData.aspects.selectedItems,
+            aspect:sortFilterData.aspects.selectedItems[0],
         }
     }
 }

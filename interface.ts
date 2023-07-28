@@ -63,3 +63,12 @@ export interface FilteredIDPromise{
     data:number[],
     error:PostgrestError | null
 }
+
+
+export interface FilterQueryParams{
+    sort:string | undefined,
+    tags:string[] | undefined,
+    platforms:string[] | undefined,
+    players:string[] | undefined,
+    aspect:string | undefined,
+}

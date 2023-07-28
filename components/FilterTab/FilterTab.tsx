@@ -30,6 +30,7 @@ export default function SortFilterItem(props:{
     // If search input is empty = show all
     // Else = filter options that fit the search
     const getFilterOptionsMemo = useMemo(() => {
+        if(props.content.length === 0) return "Loading..."
 
         if(props.isSearch && searchValue.trim() !== ""){
             return props.content.map((option) =>  {

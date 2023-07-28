@@ -5,28 +5,37 @@ import SortFilterQueryLink from "@/components/SortFilterQueryLink/SortFilterQuer
 import SortTab from "@/components/SortTab/SortTab";
 import { SortFilterDropdowns, clearAllOptions, sortFilterExpand, toggleAllDropdowns } from "@/store/features/sortFilter";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
-import { testAspects, testPlatform, testPlayers, testTags } from "@/testDatabase";
-import { generateSortFilterParams } from "@/utils/queryParams";
-import Router, { useRouter } from "next/navigation"
+import supabaseClient from "@/utils/supabaseClient";
+import { getTableList } from "@/utils/tableFetching";
 import { useEffect, useState } from "react";
 
+
+interface SortFilterOptionList{
+    tags:string[],
+    platforms:string[],
+    players:string[],
+    aspects:string[],
+}
 
 export default function SortFilterTab(){
 
     const dispatch = useAppDispatch();
     const sortFilterSelector = useAppSelector((state:RootState) => state.sortFilter);
     const windowWidthSelector = useAppSelector((state:RootState) => state.window.width);
-    const router = useRouter();
+    const [tagOptions, setTagOptions] = useState<string[]>([]);
+    const [platformOptions, setPlatformOptions] = useState<string[]>([]);
+    const [playerOptions, setPlayerOptions] = useState<string[]>([]);
+    const [AspectOptions, setAspectOptions] = useState<string[]>([]);
     const [loaded, setLoaded] = useState(false);
     
     function ExpadedRowPC(){
         return(
             <div className="w-full flex flex-col gap-[10px]">
                 <div className="w-full h-[60px] flex items-center justify-between">
-                    <FilterTab title="tags" content={testTags} isSearch/>
-                    <FilterTab title="platform" content={testPlatform}/>
-                    <FilterTab title="players" content={testPlayers}/>
-                    <FilterTab title="aspects" content={testAspects} isSearch/>
+                    <FilterTab title="tags" content={tagOptions} isSearch/>
+                    <FilterTab title="platform" content={platformOptions}/>
+                    <FilterTab title="players" content={playerOptions}/>
+                    <FilterTab title="aspects" content={AspectOptions} isSearch/>
                 </div>
 
                 <div className="w-full h-[60px] flex items-center justify-between">
@@ -35,6 +44,16 @@ export default function SortFilterTab(){
             </div>
         )
     }
+
+    useEffect(() => {
+        if(loaded){
+            console.log("FETCH");
+            let tagList = getTableList(supabaseClient, "Tag").then(res => setTagOptions(res.data || []));
+            let platformList = getTableList(supabaseClient, "Platform").then(res => setPlatformOptions(res.data || []));
+            let playersList = getTableList(supabaseClient, "Player").then(res => setPlayerOptions(res.data || []));
+            let aspectList = getTableList(supabaseClient, "Aspect").then(res => setAspectOptions(res.data || []));
+        }
+    },[loaded]);
 
     function ExpadedRowTabletMobile(){
         return(
