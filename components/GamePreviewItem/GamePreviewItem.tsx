@@ -159,7 +159,7 @@ export default function GamePreviewItem(props:{
 
         let totalScore = sum / (keys.length-2);
         setTotal({
-            title:scoreName["total"],
+            title:"Overall Rating",
             value: Math.floor(totalScore)
         })
     },[])
