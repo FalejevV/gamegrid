@@ -1,11 +1,11 @@
 "use client"
 
 import { RootState, useAppSelector } from "@/store/store"
-import SortFilterGrid from "./SortFilter/SortFilterGrid";
+import SortFilterGrid from "./SortFilterGrid";
 import { primaryTags } from "@/data";
 import { useState } from "react";
 import SearchBar from "@/components/SearchBar/SearchBar";
-import SortFilterList from "./SortFilter/SortFilterList";
+import SortFilterList from "./SortFilterList";
 import OutClickListener from "@/components/OutClickListener/OutClickListener";
 
 

@@ -14,7 +14,7 @@ export async function getTableList(supabase:SupabaseClient, tableName:TableName)
         let error = data.error;
         if(objectArray && objectArray.length > 0){
             return {
-                data:objectArray.map((item:any) => item[tableName.toLowerCase()]),
+                data: Array.from(new Set(objectArray.map((item:any) => item[tableName.toLowerCase()]))),
                 error : null,
             }
         }else{

@@ -1,13 +1,14 @@
 "use client"
 
-import { SortFilterDropdowns, toggleOption } from "@/store/features/sortFilter"
+import { SortFilterDropdowns, clearOptions, toggleOption } from "@/store/features/sortFilter"
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store";
 import Image from "next/image";
 
 export default function SortFilterGridOption(props:{
     title:string,
     icon:string,
-    dropdownName:keyof SortFilterDropdowns
+    dropdownName:keyof SortFilterDropdowns,
+    singlePick?:boolean,
 }){
 
     const sortFilterSelector = useAppSelector((state:RootState) => state.sortFilter);
@@ -15,6 +16,10 @@ export default function SortFilterGridOption(props:{
     let optionToggled= sortFilterSelector.dropdowns[props.dropdownName].selectedItems.includes(props.title);
 
     function toggleDropdownOption(){
+        if(props.singlePick){
+            diapatch(clearOptions(props.dropdownName));
+        }
+
         diapatch(toggleOption({
             key: props.dropdownName,
             value: props.title

@@ -1,6 +1,6 @@
 import GamePreviewItem from "@/components/GamePreviewItem/GamePreviewItem";
 import { FilterQueryParams, Game } from "@/interface";
-import SortFilterTab from "@/layout/SortFilterTab";
+import SortFilterTab from "@/layout/SortFilter/SortFilterTab";
 import { fetchFilteredGames } from "@/utils/gameFetching";
 import { PostgrestError } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";

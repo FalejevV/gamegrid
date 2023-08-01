@@ -2,12 +2,15 @@
 
 import { SortFilterDropdowns, clearAllOptions, sortFilterExpand } from "@/store/features/sortFilter";
 import { useAppDispatch, useAppSelector } from "@/store/store"
-import SortFilterButton from "@/components/SortFilterButton";
+import SortFilterButton from "@/components/SortFilterButton/SortFilterButton";
 import TagsFilterDropdown from "./TagsFilterDropdown";
 import { useEffect, useState } from "react";
 import { getTableList } from "@/utils/tableFetching";
 import supabaseClient from "@/utils/supabaseClient";
 import { convertToFancyScores } from "@/utils/scoreName";
+import PlatformFilterDropdown from "./PlatformFilterDropdown";
+import PlayersFilterDropdown from "./PlayersFilterDropdown";
+import DeveloperFilterDropdown from "./DeveloperFilterDropdown";
 
 
 export default function SortFilterTab(){
@@ -18,6 +21,7 @@ export default function SortFilterTab(){
     const [platformOptions, setPlatformOptions] = useState<string[]>([]);
     const [playerOptions, setPlayerOptions] = useState<string[]>([]);
     const [aspectOptions, setAspectOptions] = useState<string[]>([]);
+    const [developerOptions, setDeveloperOptions] = useState<string[]>([]);
 
 
     useEffect(() => {
@@ -25,6 +29,7 @@ export default function SortFilterTab(){
             getTableList(supabaseClient, "Platform").then(res => setPlatformOptions(res.data || []));
             getTableList(supabaseClient, "Player").then(res => setPlayerOptions(res.data || []));
             getTableList(supabaseClient, "Aspect").then(res => setAspectOptions(convertToFancyScores(res.data || [])));
+            getTableList(supabaseClient, "Developer").then(res => setDeveloperOptions(res.data || []));
         }
     ,[]);
 
@@ -63,10 +68,46 @@ export default function SortFilterTab(){
     function TagFilter(){
         return(
             <div className="tab-tags relative">
-                <SortFilterButton title={"Tags"} dropdownName={"tags"} />
+                <SortFilterButton doCount title={"Tags"} dropdownName={"tags"} />
                 {sortFilterSelector.dropdowns.tags.isDropdown && 
                 <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[450px] bg-mid z-[500]">
                     <TagsFilterDropdown itemList={tagOptions} />
+                </div>}
+            </div>
+        )
+    }
+
+    function PlatformFilter(){
+        return(
+            <div className="tab-platform relative">
+                <SortFilterButton doCount title={"Platform"} dropdownName={"platform"} />
+                {sortFilterSelector.dropdowns.platform.isDropdown && 
+                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[350px] bg-mid z-[500]">
+                    <PlatformFilterDropdown itemList={platformOptions} />
+                </div>}
+            </div>
+        )
+    }
+
+    function PlayerFilter(){
+        return(
+            <div className="tab-players relative">
+                <SortFilterButton mimicTitle title={"Players"} dropdownName={"players"} />
+                {sortFilterSelector.dropdowns.players.isDropdown && 
+                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-fit bg-mid z-[500]">
+                    <PlayersFilterDropdown itemList={playerOptions} />
+                </div>}
+            </div>
+        )
+    }
+
+    function DeveloperFilter(){
+        return(
+            <div className="tab-developer relative">
+                <SortFilterButton mimicTitle title={"Developer"} dropdownName={"developer"} />
+                {sortFilterSelector.dropdowns.developer.isDropdown && 
+                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[300px] bg-mid z-[500] overflow-y-scroll">
+                    <DeveloperFilterDropdown itemList={developerOptions} />
                 </div>}
             </div>
         )
@@ -76,8 +117,11 @@ export default function SortFilterTab(){
 
     function AdvancedSearchWindowPC(){
         return(
-            <div className="w-full h-[60px] relative flex items-center justify-center">
+            <div className="w-full h-[60px] relative flex items-center justify-between">
                 {TagFilter()}
+                {PlatformFilter()}
+                {PlayerFilter()}
+                {DeveloperFilter()}
             </div>
         )
     }

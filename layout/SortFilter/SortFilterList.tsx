@@ -7,7 +7,8 @@ export default function SortFilterList(props:{
     itemList:string[]
     dropdownType:keyof SortFilterDropdowns,
     searchCriteria?:string,
-    excludeItems?:string[]
+    excludeItems?:string[],
+    singlePick?:boolean
 }){
     
     function getItemList(){
@@ -18,14 +19,14 @@ export default function SortFilterList(props:{
             if(criteria.trim() !== ""){
                 return props.itemList.map((item:string) => {
                     if(item.toLowerCase().includes(criteria) && !excludeList.includes(item)){
-                        return <SortFilterListOption key={item} title={item} dropdownName={props.dropdownType} />
+                        return <SortFilterListOption singlePick={props.singlePick} key={item} title={item} dropdownName={props.dropdownType} />
                     }
                 })
             }else{
-                return props.itemList.map((item:string) => !excludeList.includes(item) && <SortFilterListOption key={item} title={item} dropdownName={props.dropdownType} />)
+                return props.itemList.map((item:string) => !excludeList.includes(item) && <SortFilterListOption singlePick={props.singlePick} key={item} title={item} dropdownName={props.dropdownType} />)
             }
         }
-        return props.itemList.map((item:string) => !excludeList.includes(item) && <SortFilterListOption key={item} title={item} dropdownName={props.dropdownType} />)
+        return props.itemList.map((item:string) => !excludeList.includes(item) && <SortFilterListOption singlePick={props.singlePick} key={item} title={item} dropdownName={props.dropdownType} />)
     }
 
     return(

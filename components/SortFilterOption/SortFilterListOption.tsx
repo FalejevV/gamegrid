@@ -1,6 +1,6 @@
 "use client";
 
-import { SortFilterDropdowns, toggleOption } from "@/store/features/sortFilter";
+import { SortFilterDropdowns, clearOptions, toggleOption } from "@/store/features/sortFilter";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
 
 
@@ -9,9 +9,10 @@ import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
 export default function SortFilterListOption(props:{
     title:string,
     dropdownName:keyof SortFilterDropdowns
+    singlePick?:boolean
 }){
     const sortFilterSelector = useAppSelector((state:RootState) => state.sortFilter);
-    const diapatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
     function Indicator(){
         let optionToggled= sortFilterSelector.dropdowns[props.dropdownName].selectedItems.includes(props.title);
@@ -22,7 +23,11 @@ export default function SortFilterListOption(props:{
     }
 
     function toggleDropdownOption(){
-        diapatch(toggleOption({
+        if(props.singlePick){
+            dispatch(clearOptions(props.dropdownName));
+        }
+
+        dispatch(toggleOption({
             key: props.dropdownName,
             value: props.title
         }))

@@ -12,7 +12,7 @@ export interface SortFilterDropdowns{
     sort:SortFilterDropdownItem,
     platform:SortFilterDropdownItem,
     players:SortFilterDropdownItem,
-    aspects:SortFilterDropdownItem
+    developer:SortFilterDropdownItem
 }
 
 export interface SortFilter{
@@ -41,13 +41,13 @@ const initialState:SortFilter = {
         },
         players: {
             isDropdown: false,
-            selectedItems: ["Players"],
-            defaultValue: ["Players"],
+            selectedItems: [],
+            defaultValue: [],
         },
-        aspects: {
+        developer: {
             isDropdown: false,
-            selectedItems: ["Favorite Aspect"],
-            defaultValue: ["Favorite Aspect"],
+            selectedItems: [],
+            defaultValue: [],
         },
     },
     amount:3
