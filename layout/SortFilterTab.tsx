@@ -1,126 +1,101 @@
 "use client"
 
-import FilterTab from "@/components/FilterTab/FilterTab";
-import SortFilterQueryLink from "@/components/SortFilterQueryLink/SortFilterQueryLink";
-import SortTab from "@/components/SortTab/SortTab";
-import { SortFilterDropdowns, clearAllOptions, sortFilterExpand, toggleAllDropdowns } from "@/store/features/sortFilter";
-import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
-import { convertToFancyScores } from "@/utils/scoreName";
-import supabaseClient from "@/utils/supabaseClient";
-import { getTableList } from "@/utils/tableFetching";
+import { SortFilterDropdowns, clearAllOptions, sortFilterExpand } from "@/store/features/sortFilter";
+import { useAppDispatch, useAppSelector } from "@/store/store"
+import SortFilterButton from "@/components/SortFilterButton";
+import TagsFilterDropdown from "./TagsFilterDropdown";
 import { useEffect, useState } from "react";
+import { getTableList } from "@/utils/tableFetching";
+import supabaseClient from "@/utils/supabaseClient";
+import { convertToFancyScores } from "@/utils/scoreName";
 
-
-interface SortFilterOptionList{
-    tags:string[],
-    platforms:string[],
-    players:string[],
-    aspects:string[],
-}
 
 export default function SortFilterTab(){
-
+    const sortFilterSelector = useAppSelector((state) => state.sortFilter);
     const dispatch = useAppDispatch();
-    const sortFilterSelector = useAppSelector((state:RootState) => state.sortFilter);
-    const windowWidthSelector = useAppSelector((state:RootState) => state.window.width);
+
     const [tagOptions, setTagOptions] = useState<string[]>([]);
     const [platformOptions, setPlatformOptions] = useState<string[]>([]);
     const [playerOptions, setPlayerOptions] = useState<string[]>([]);
     const [aspectOptions, setAspectOptions] = useState<string[]>([]);
-    const [loaded, setLoaded] = useState(false);
-    
-    function ExpadedRowPC(){
-        return(
-            <div className="w-full flex flex-col gap-[10px]">
-                <div className="w-full h-[60px] flex items-center justify-between">
-                    <FilterTab title="tags" content={tagOptions} isSearch/>
-                    <FilterTab title="platform" content={platformOptions}/>
-                    <SortTab clearable title="players" content={playerOptions}/>
-                    <SortTab clearable title="aspects" content={aspectOptions}/>
-                </div>
 
-                <div className="w-full h-[60px] flex items-center justify-between">
-                    <SortFilterQueryLink />
-                </div>
-            </div>
-        )
-    }
 
     useEffect(() => {
-        if(loaded){
             getTableList(supabaseClient, "Tag").then(res => setTagOptions(res.data || []));
             getTableList(supabaseClient, "Platform").then(res => setPlatformOptions(res.data || []));
             getTableList(supabaseClient, "Player").then(res => setPlayerOptions(res.data || []));
             getTableList(supabaseClient, "Aspect").then(res => setAspectOptions(convertToFancyScores(res.data || [])));
         }
-    },[loaded]);
+    ,[]);
 
-    function ExpadedRowTabletMobile(){
+    
+
+    function isFilteringSelected(){
+        let filterKeys = Object.keys(sortFilterSelector.dropdowns) as (keyof SortFilterDropdowns)[];
+        let filteringFound = false;
+        filterKeys.forEach((key:keyof SortFilterDropdowns) => {
+            if(filteringFound) return;
+            // If dropdown filter has items in array or it is different that default value
+            if(sortFilterSelector.dropdowns[key].selectedItems.length > 0 && sortFilterSelector.dropdowns[key].selectedItems[0] !== sortFilterSelector.dropdowns[key].defaultValue[0]){
+                filteringFound = true;
+            }
+        })
+        return filteringFound;
+    }
+
+    function ClearFiltersButton(){
         return(
-            <div className="sm:w-[calc(100%-90px)] 
-            w-full flex flex-col gap-[10px] h-[90vh] max-h-[400px] bg-gray fixed right-0 bottom-0 z-[41] border-t-[5px] bordercol-hi">
-                <div className="fixed w-full bottom-[400px] bg-gray opacity-70 h-[100vh]" onClick={() => toggleExpand(false)}>
+            <button className="bg-mid px-[10px] py-[5px]" onClick={() => dispatch(clearAllOptions())}>
+                Clear
+            </button>
+        )
+    }
 
-                </div>
+    function SearchFilterButton(){
+        return(
+            <button className="bg-hi px-[10px] py-[5px]" onClick={() => alert("search!")}>
+                Search!
+            </button>
+        )
+    }
+
+
+    function TagFilter(){
+        return(
+            <div className="tab-tags relative">
+                <SortFilterButton title={"Tags"} dropdownName={"tags"} />
+                {sortFilterSelector.dropdowns.tags.isDropdown && 
+                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[450px] bg-mid z-[500]">
+                    <TagsFilterDropdown itemList={tagOptions} />
+                </div>}
             </div>
         )
     }
 
-    function toggleExpand(value:boolean){
-        dispatch(sortFilterExpand(value));
-        dispatch(toggleAllDropdowns(false))
-    }
 
-    function isFilterSelected(){
-        //@ts-ignore
-        const keys: (keyof SortFilterDropdowns)[] = Object.keys(sortFilterSelector.dropdowns);
-        let selected = false;
-        keys.forEach((key: keyof SortFilterDropdowns) => {
-            if(key !== "sort"){
-                if(sortFilterSelector.dropdowns[key].selectedItems > sortFilterSelector.dropdowns[key].defaultValue){
-                    selected = true;
-                }
-            }
-        })
-        return selected;
-    }
 
-    useEffect(() => {
-        if(!loaded){
-            setLoaded(true);
-            return;
-        }
-
-        let button = document.querySelector("#sortFilterSearchButton") as HTMLButtonElement;
-        if (button){
-            button.click();
-        }
-        
-    },[sortFilterSelector.dropdowns.sort.selectedItems]);
-
-    function MainRow(){
+    function AdvancedSearchWindowPC(){
         return(
-            <div className="w-full h-[60px] flex items-center justify-between">
-                <div className="flex items-center gap-[25px] pl-[10px]">
-                    <button onClick={() => toggleExpand(!sortFilterSelector.expand)} className={`bg-transparent textcol-main whitespace-nowrap ${sortFilterSelector.expand && "opacity-50"}`}>Advanced Search</button>
-                    {isFilterSelected() && <button onClick={() => dispatch(clearAllOptions())} className="bg-transparent textcol-main whitespace-nowrap opacity-75">Clear</button>}
-                </div>
-                <SortFilterQueryLink invisible={true}/>
-                <SortTab content={["New First", "Old First", "Most Rated", "Least Rated"]} title="sort"/>
+            <div className="w-full h-[60px] relative flex items-center justify-center">
+                {TagFilter()}
+            </div>
+        )
+    }
+
+    function MainRowPC(){
+        return(
+            <div className={`w-full h-[60px] flex items-center gap-[10px] textcol-main`}>
+                <button className={`${sortFilterSelector.expand && "textcol-dimm"}`} onClick={() => dispatch(sortFilterExpand(!sortFilterSelector.expand))}>Advanced Search</button>
+                {isFilteringSelected() && ClearFiltersButton()}
+                {isFilteringSelected() && SearchFilterButton()}
             </div>
         )
     }
 
     return(
-        <div className={`w-full max-w-[950px] h-fit bg-dimm flex flex-col px-[10px] items-center justify-between transition-all duration-300`}>
-        
-        {sortFilterSelector.expand && windowWidthSelector > 880 && ExpadedRowPC()}
-        {sortFilterSelector.expand && windowWidthSelector < 880 && ExpadedRowTabletMobile()}
-
-        {MainRow()}
-        
-
-            
+        <div className={`w-full max-w-[950px] h-fit bg-dimm p-[10px]`}>
+            {MainRowPC()}
+            {sortFilterSelector.expand && AdvancedSearchWindowPC()}
         </div>
     )
 }

@@ -11,7 +11,6 @@ export default async function Games({searchParams}:{
 }){
     let isError:PostgrestError | null =null;
     let resultData: Game[] | null = null;
-    searchParams.amount = 3;
 
     let {data, error} = await fetchFilteredGames(searchParams);
         isError = error;

@@ -17,7 +17,8 @@ export interface SortFilterDropdowns{
 
 export interface SortFilter{
     expand: boolean;
-    dropdowns:SortFilterDropdowns
+    dropdowns:SortFilterDropdowns,
+    amount:number
 }
 
 const initialState:SortFilter = {
@@ -48,7 +49,8 @@ const initialState:SortFilter = {
             selectedItems: ["Favorite Aspect"],
             defaultValue: ["Favorite Aspect"],
         },
-    }
+    },
+    amount:3
 }
 
 const sortFilterSlice = createSlice({
@@ -74,7 +76,7 @@ const sortFilterSlice = createSlice({
             }
         }),
         clearOptions: ((state:SortFilter, action:PayloadAction<keyof SortFilterDropdowns>) => {
-            state.dropdowns[action.payload].selectedItems = [];
+            state.dropdowns[action.payload].selectedItems = [...state.dropdowns[action.payload].defaultValue];
         }),
         clearAllOptions: ((state:SortFilter) => {
             // @ts-ignore 
@@ -90,10 +92,13 @@ const sortFilterSlice = createSlice({
                 state.dropdowns[key].isDropdown = action.payload
             })
         }),
+        setAmount: ((state:SortFilter, action:PayloadAction<number>) => {
+            state.amount = action.payload
+        })
     }
 })
 
 export default sortFilterSlice.reducer;
 
 
-export const {sortFilterExpand, toggleDropdown, toggleOption , clearOptions, clearAllOptions, toggleAllDropdowns} = sortFilterSlice.actions 
+export const {sortFilterExpand, toggleDropdown, toggleOption , clearOptions, clearAllOptions, toggleAllDropdowns, setAmount} = sortFilterSlice.actions 
