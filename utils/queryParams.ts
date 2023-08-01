@@ -8,7 +8,6 @@ export interface URLQueryObject{
         tags:string[],
         platforms:string[],
         players:string,
-        aspect:string,
         amount:number
     }
 }
@@ -21,7 +20,6 @@ export function generateSortFilterParams(sortFilterData:SortFilter, href:string)
             tags:sortFilterData.dropdowns.tags.selectedItems,
             platforms:sortFilterData.dropdowns.platform.selectedItems,
             players:(sortFilterData.dropdowns.players.selectedItems[0] === "Players" ? "" : sortFilterData.dropdowns.players.selectedItems[0]),
-            aspect:getDefaultScoreName(sortFilterData.dropdowns.aspects.selectedItems[0]) || "",
             amount:sortFilterData.amount
         }
     }
