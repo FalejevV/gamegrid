@@ -9,7 +9,7 @@ export interface SortFilterDropdownItem{
 
 export interface SortFilterDropdowns{
     tags:SortFilterDropdownItem,
-    sort:SortFilterDropdownItem,
+    order:SortFilterDropdownItem,
     platform:SortFilterDropdownItem,
     players:SortFilterDropdownItem,
     developer:SortFilterDropdownItem
@@ -29,10 +29,10 @@ const initialState:SortFilter = {
             selectedItems: [],
             defaultValue: [],
         },
-        sort: {
+        order: {
             isDropdown: false,
-            selectedItems: ["New First"],
-            defaultValue: ["New First"],
+            selectedItems: [],
+            defaultValue: [],
         },
         platform: {
             isDropdown: false,

@@ -26,7 +26,8 @@ export interface AverageScoreItem{
     original_avg: number,
     customization_avg: number,
     microtransactions_avg: number,
-    support_avg: number
+    support_avg: number,
+    total:number
 }
 
 export interface TagItem{
@@ -66,10 +67,9 @@ export interface FilteredIDPromise{
 
 
 export interface FilterQueryParams{
-    sort:string | undefined,
+    order:string | undefined,
     tags:string[] | undefined,
     platforms:string[] | undefined,
     players:string[] | undefined,
-    aspect:string | undefined,
     amount:number
 }

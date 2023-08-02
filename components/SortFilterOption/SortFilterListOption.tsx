@@ -21,7 +21,6 @@ export default function SortFilterListOption(props:{
             ${optionToggled && "bg-hi"}`}/>
         )
     }
-
     function toggleDropdownOption(){
         if(props.singlePick){
             dispatch(clearOptions(props.dropdownName));

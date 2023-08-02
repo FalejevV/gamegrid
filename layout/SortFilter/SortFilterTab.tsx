@@ -11,6 +11,9 @@ import { convertToFancyScores } from "@/utils/scoreName";
 import PlatformFilterDropdown from "./PlatformFilterDropdown";
 import PlayersFilterDropdown from "./PlayersFilterDropdown";
 import DeveloperFilterDropdown from "./DeveloperFilterDropdown";
+import OrderByDropdown from "./OrderByDropdown";
+import { generateSortFilterParams } from "@/utils/queryParams";
+import Link from "next/link";
 
 
 export default function SortFilterTab(){
@@ -50,17 +53,17 @@ export default function SortFilterTab(){
 
     function ClearFiltersButton(){
         return(
-            <button className="bg-mid px-[10px] py-[5px]" onClick={() => dispatch(clearAllOptions())}>
+            <Link href="games" className="bg-mid px-[10px] py-[5px]" onClick={() => dispatch(clearAllOptions())}>
                 Clear
-            </button>
+            </Link>
         )
     }
 
     function SearchFilterButton(){
         return(
-            <button className="bg-hi px-[10px] py-[5px]" onClick={() => alert("search!")}>
+            <Link className="bg-hi px-[10px] py-[5px]" href={generateSortFilterParams(sortFilterSelector, "games")}>
                 Search!
-            </button>
+            </Link>
         )
     }
 
@@ -70,7 +73,7 @@ export default function SortFilterTab(){
             <div className="tab-tags relative">
                 <SortFilterButton doCount title={"Tags"} dropdownName={"tags"} />
                 {sortFilterSelector.dropdowns.tags.isDropdown && 
-                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[450px] bg-mid z-[500]">
+                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[500px] bg-mid z-[500]">
                     <TagsFilterDropdown itemList={tagOptions} />
                 </div>}
             </div>
@@ -113,6 +116,17 @@ export default function SortFilterTab(){
         )
     }
 
+    function SortByTab(){
+        return(
+            <div className="tab-order relative">
+                <SortFilterButton mimicTitle title={"Order by"} dropdownName={"order"} />
+                {sortFilterSelector.dropdowns.order.isDropdown && 
+                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[500px] bg-mid z-[500] overflow-y-scroll">
+                    <OrderByDropdown  itemList={aspectOptions} />
+                </div>}
+            </div>
+        )
+    }
 
 
     function AdvancedSearchWindowPC(){
@@ -132,6 +146,8 @@ export default function SortFilterTab(){
                 <button className={`${sortFilterSelector.expand && "textcol-dimm"}`} onClick={() => dispatch(sortFilterExpand(!sortFilterSelector.expand))}>Advanced Search</button>
                 {isFilteringSelected() && ClearFiltersButton()}
                 {isFilteringSelected() && SearchFilterButton()}
+                <div className="flex-auto"/>
+                {SortByTab()}
             </div>
         )
     }

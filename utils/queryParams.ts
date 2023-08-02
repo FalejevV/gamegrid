@@ -4,7 +4,7 @@ import { getDefaultScoreName } from "./scoreName";
 export interface URLQueryObject{ 
     pathname: string, 
     query: { 
-        sort:string,
+        order:string,
         tags:string[],
         platforms:string[],
         players:string,
@@ -16,7 +16,7 @@ export function generateSortFilterParams(sortFilterData:SortFilter, href:string)
     return {
         pathname: href, 
         query: { 
-            sort:sortFilterData.dropdowns.sort.selectedItems[0],
+            order:sortFilterData.dropdowns.order.selectedItems[0],
             tags:sortFilterData.dropdowns.tags.selectedItems,
             platforms:sortFilterData.dropdowns.platform.selectedItems,
             players:(sortFilterData.dropdowns.players.selectedItems[0] === "Players" ? "" : sortFilterData.dropdowns.players.selectedItems[0]),

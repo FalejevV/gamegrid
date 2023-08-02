@@ -118,7 +118,10 @@ export default function GamePreviewItem(props:{
     const windowSelector = useAppSelector((state:RootState) => state.window)
     const [leastLoved,setLeastLoved] = useState<ScoreItem>();
     const [mostLoved,setMostLoved] = useState<ScoreItem>();
-    const [total,setTotal] = useState<ScoreItem>();
+    const [total,setTotal] = useState<ScoreItem>({
+        title:"Overall rating",
+        value:props.gameData.score.total
+    });
 
     useEffect(() => {
         // @ts-ignore 
@@ -158,10 +161,6 @@ export default function GamePreviewItem(props:{
         })
 
         let totalScore = sum / (keys.length-2);
-        setTotal({
-            title:"Overall Rating",
-            value: Math.floor(totalScore)
-        })
     },[])
 
     // check if width is set and values are calculated
