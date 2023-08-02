@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 let amountDefault = 3;
 
 
-function generateOrderByType(order:string):[string, {ascending:boolean}, isAspect:boolean, itTotal:boolean]{
+function generateOrderByType(order:string):[orderBy:string, {ascending:boolean}, isAspect:boolean, itTotal:boolean]{
     let orderBy = "id";
     let ascending = false
     let isAspect = false;
