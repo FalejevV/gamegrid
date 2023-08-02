@@ -10,7 +10,7 @@ export interface SortFilterDropdownItem{
 export interface SortFilterDropdowns{
     tags:SortFilterDropdownItem,
     order:SortFilterDropdownItem,
-    platform:SortFilterDropdownItem,
+    platforms:SortFilterDropdownItem,
     players:SortFilterDropdownItem,
     developer:SortFilterDropdownItem
 }
@@ -34,7 +34,7 @@ const initialState:SortFilter = {
             selectedItems: [],
             defaultValue: [],
         },
-        platform: {
+        platforms: {
             isDropdown: false,
             selectedItems: [],
             defaultValue: [],

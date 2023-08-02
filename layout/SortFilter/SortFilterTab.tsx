@@ -14,6 +14,8 @@ import DeveloperFilterDropdown from "./DeveloperFilterDropdown";
 import OrderByDropdown from "./OrderByDropdown";
 import { generateSortFilterParams } from "@/utils/queryParams";
 import Link from "next/link";
+import SortFilterQueryReader from "@/components/SortFilterQueryReader/SortFilterQueryReader";
+import { nanoid } from "nanoid";
 
 
 export default function SortFilterTab(){
@@ -82,9 +84,9 @@ export default function SortFilterTab(){
 
     function PlatformFilter(){
         return(
-            <div className="tab-platform relative">
-                <SortFilterButton doCount title={"Platform"} dropdownName={"platform"} />
-                {sortFilterSelector.dropdowns.platform.isDropdown && 
+            <div className="tab-platforms relative">
+                <SortFilterButton doCount title={"Platform"} dropdownName={"platforms"} />
+                {sortFilterSelector.dropdowns.platforms.isDropdown && 
                 <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[350px] bg-mid z-[500]">
                     <PlatformFilterDropdown itemList={platformOptions} />
                 </div>}
@@ -153,9 +155,12 @@ export default function SortFilterTab(){
     }
 
     return(
-        <div className={`w-full max-w-[950px] h-fit bg-dimm p-[10px]`}>
-            {MainRowPC()}
-            {sortFilterSelector.expand && AdvancedSearchWindowPC()}
-        </div>
+        <>
+            <SortFilterQueryReader />
+            <div className={`w-full max-w-[950px] h-fit bg-dimm p-[10px]`}>
+                {MainRowPC()}
+                {sortFilterSelector.expand && AdvancedSearchWindowPC()}
+            </div>
+        </>
     )
 }
