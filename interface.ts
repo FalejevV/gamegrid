@@ -71,5 +71,6 @@ export interface FilterQueryParams{
     tags:string[] | undefined,
     platforms:string[] | undefined,
     players:string[] | undefined,
-    amount:number
+    developer:string | undefined,
+    amount:number,
 }

@@ -65,7 +65,7 @@ function generateOrderByType(order:string):[orderBy:string, ascending:{ascending
 /// Accepts array of Tags. Returns array of games, that have these tags.
 async function filterByTags(supabase:SupabaseClient, tags:string[]):Promise<FilteredIDPromise>{
     if(typeof tags === "string") tags = [tags];
-    let { data, error } = await supabase.rpc('get_games_by_all_tags', { tags }).select("id");
+    let { data, error } = await supabase.rpc('get_games_by_tags', { tags })
     let resultArray:number[] = [];
     if(data){
         data.forEach((filteredItem:{id:number}) => resultArray.push(filteredItem.id));
@@ -76,23 +76,31 @@ async function filterByTags(supabase:SupabaseClient, tags:string[]):Promise<Filt
 // Accepts arraof Platforms, returns array of games, that have these platforms
 async function filterByPlatforms(supabase:SupabaseClient, platforms:string[], gameids:number[]):Promise<FilteredIDPromise>{
     if(typeof platforms === "string") platforms = [platforms];
-    const { data, error } = await supabase.rpc('get_games_by_platforms', { platforms, gameids }).select("id");
+    const { data, error } = await supabase.rpc('get_games_by_any_platforms', { platform_names: platforms, game_ids: gameids })
     let resultArray:number[] = [];
     if(data){
-        data.forEach((filteredItem:{id:number}) => resultArray.push(filteredItem.id));
+        data.forEach((filteredItem:{game_id:number}) => resultArray.push(filteredItem.game_id));
+    }
+    return { data:resultArray, error};
+}
+// Accepts arraof Players, returns array of games, that have these players
+async function filterByPlayers(supabase:SupabaseClient, players:string[], gameids:number[]):Promise<FilteredIDPromise>{
+    if(typeof players === "string") players = [players];
+    const { data, error } = await supabase.rpc('get_games_by_one_player', { player_name: players[0], game_ids: gameids })
+    let resultArray:number[] = [];
+    if(data){
+        data.forEach((filteredItem:{game_id:number}) => resultArray.push(filteredItem.game_id));
     }
     return { data:resultArray, error};
 }
 
-// Accepts arraof Players, returns array of games, that have these players
-async function filterByPlayers(supabase:SupabaseClient, players:string[], gameids:number[]):Promise<FilteredIDPromise>{
-    if(typeof players === "string") players = [players];
-    const { data, error } = await supabase.rpc('get_games_by_players_and_ids', { players, gameids }).select("id");
+async function filterByDevelopers(supabase:SupabaseClient, developer:string, gameids:number[]):Promise<FilteredIDPromise>{
+    const { data, error } = await supabase.rpc('get_games_by_developer', { developer_name: developer, game_ids: gameids})
     let resultArray:number[] = [];
     if(data){
-        data.forEach((filteredItem:{id:number}) => resultArray.push(filteredItem.id));
+        data.forEach((filteredItem:{game_id:number}) => resultArray.push(filteredItem.game_id));
     }
-    return { data:resultArray, error};
+    return {data:resultArray, error};
 }
 
 
@@ -141,6 +149,16 @@ export async function fetchFilteredGames(filters:FilterQueryParams):Promise<{
             return {data:[], error:null};
         }
         anyError = playersResponse.error;
+    }
+
+    if(!anyError && filters.developer){
+        const developerResponse = await filterByDevelopers(supabase, filters.developer, gameIds);
+        gameIds = developerResponse.data || [];
+        if(gameIds.length === 0) nothingFoundOnPrevQuery = true;
+        if(nothingFoundOnPrevQuery){
+            return {data:[], error:null};
+        }
+        anyError = developerResponse.error;
     }
 
 
