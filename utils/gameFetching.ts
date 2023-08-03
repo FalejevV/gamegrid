@@ -102,9 +102,17 @@ async function filterByDevelopers(supabase:SupabaseClient, developer:string, gam
     return {data:resultArray, error};
 }
 
+async function sortByAspect(supabase:SupabaseClient, aspect:string, gameids:number[] | null, sort: "asc" | "desc"):Promise<FilteredIDPromise>{
+    if(gameids && gameids.length === 0){
+        gameids = null
+    }
+    const { data, error } = await supabase.rpc('get_review_game_ids_by_aspect_and_game_ids', { aspect, gameids, sort }).limit(amountDefault)
+    return {data, error};
+}
 
 
-export async function fetchFilteredGames(filters:FilterQueryParams):Promise<{
+
+export async function fetchFilteredGames(filters:FilterQueryParams, offset: number = 0):Promise<{
     data:Game[] | null,
     error:PostgrestError | null
 }>{
@@ -150,6 +158,7 @@ export async function fetchFilteredGames(filters:FilterQueryParams):Promise<{
         anyError = playersResponse.error;
     }
 
+    
     if(!anyError && filters.developer){
         const developerResponse = await filterByDevelopers(supabase, filters.developer, gameIds);
         gameIds = developerResponse.data || [];
@@ -160,8 +169,19 @@ export async function fetchFilteredGames(filters:FilterQueryParams):Promise<{
         anyError = developerResponse.error;
     }
 
-
     let [orderBy, ascending,isAspect, isTotal] = generateOrderByType(filters.order || "");
+    if(isAspect && !anyError && filters.order){
+        let orderType: "asc" | "desc" = ascending.ascending ? "asc" : "desc";
+        const aspectResponse = await sortByAspect(supabase, orderBy, gameIds, orderType);
+
+        gameIds = aspectResponse.data || [];
+        if(gameIds.length === 0) nothingFoundOnPrevQuery = true;
+        if(nothingFoundOnPrevQuery){
+            return {data:[], error:null};
+        }
+        anyError = aspectResponse.error;
+    }
+
     let query = supabase.from('Game').select(`
                 *,
                 developer:Developer(developer),
@@ -170,24 +190,29 @@ export async function fetchFilteredGames(filters:FilterQueryParams):Promise<{
                     Tag(tag)
                 ),
                 score:AverageReview(*)
-        `);
+    `);
+    
     if(gameIds.length > 0) query.in("id", gameIds);
-    if(!isAspect) query.order(orderBy, ascending);
-    if(!isAspect) query.limit(filters.amount || amountDefault)
+    if(!isAspect) {
+        query.order(orderBy, ascending);
+        query.range(offset, offset + amountDefault - 1);
+    }else{
+        query.order('id', ascending)
+    }
+
     let {data, error} = await query;
 
-    if(isAspect && data && !isTotal){
-        data = data.sort((a, b) => b.score[orderBy] - a.score[orderBy]).slice(0, filters.amount || amountDefault);
-    }
-    else if(isTotal && data){
-        if(!ascending.ascending){
-            data = data.sort((a, b) => b.score[orderBy] - a.score[orderBy]).slice(0, filters.amount || amountDefault);
-        }else{
-            data = data.sort((a, b) => a.score[orderBy] - b.score[orderBy]).slice(0, filters.amount || amountDefault);
-        }
-    }
 
-
+    
+    if(isTotal){
+        let result:Game[] = [];
+        result= gameIds.map((id) => {
+            if(data){
+                return data.find((game) => game.id === id)
+            }
+        }).slice(0, amountDefault)
+        return {data: result, error};
+    }
     return {data, error};
     
 }
