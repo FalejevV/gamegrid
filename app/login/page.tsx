@@ -2,23 +2,22 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Link from 'next/link'
+import supabaseClient from '@/utils/supabaseClient'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [view, setView] = useState('sign-in')
   const router = useRouter()
-  const supabase = createClientComponentClient()
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    await supabase.auth.signUp({
+    await supabaseClient.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
+        emailRedirectTo: `/auth/callback`,
       },
     })
     setView('check-email')
@@ -26,7 +25,7 @@ export default function Login() {
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    await supabase.auth.signInWithPassword({
+    await supabaseClient.auth.signInWithPassword({
       email,
       password,
     })
