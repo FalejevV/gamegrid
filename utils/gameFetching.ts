@@ -84,9 +84,8 @@ async function filterByPlatforms(supabase:SupabaseClient, platforms:string[], ga
     return { data:resultArray, error};
 }
 // Accepts arraof Players, returns array of games, that have these players
-async function filterByPlayers(supabase:SupabaseClient, players:string[], gameids:number[]):Promise<FilteredIDPromise>{
-    if(typeof players === "string") players = [players];
-    const { data, error } = await supabase.rpc('get_games_by_one_player', { player_name: players[0], game_ids: gameids })
+async function filterByPlayers(supabase:SupabaseClient, players:string, gameids:number[]):Promise<FilteredIDPromise>{
+    const { data, error } = await supabase.rpc('get_games_by_one_player', { player_name: players, game_ids: gameids })
     let resultArray:number[] = [];
     if(data){
         data.forEach((filteredItem:{game_id:number}) => resultArray.push(filteredItem.game_id));

@@ -70,7 +70,7 @@ export interface FilterQueryParams{
     order:string | undefined,
     tags:string[] | undefined,
     platforms:string[] | undefined,
-    players:string[] | undefined,
+    players:string | undefined,
     developer:string | undefined,
     amount:number,
 }

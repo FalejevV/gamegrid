@@ -1,4 +1,5 @@
 import GamePreviewItem from "@/components/GamePreviewItem/GamePreviewItem";
+import LoadMoreGamesButton from "@/components/LoadMoreGamesButton";
 import { FilterQueryParams, Game } from "@/interface";
 import SortFilterTab from "@/layout/SortFilter/SortFilterTab";
 import { fetchFilteredGames } from "@/utils/gameFetching";
@@ -15,7 +16,6 @@ export default async function Games({searchParams}:{
     let {data, error} = await fetchFilteredGames(searchParams);
         isError = error;
         resultData = data;
-
     function displayGames(){
         if(data && data.length > 0 && !isError){
             return (
@@ -37,6 +37,7 @@ export default async function Games({searchParams}:{
         <div className="w-full flex flex-col gap-[60px] items-center py-[60px]">
             <SortFilterTab />
             {resultData && displayGames()}
+            <LoadMoreGamesButton searchParams={searchParams} />
         </div>
     )
 }
