@@ -16,9 +16,11 @@ export default function ProfileBar(){
         setLoaded(true);
     },[]);
 
-    if(!loaded || userSelector.userId === "-1") return;
+    if(!loaded) return;
     
-    if(!userSelector.userId){
+    if(userSelector.userId === "-1") return;
+    
+    if(loaded && !userSelector.userId){
         return(
             <div className="w-full max-w-[200px] h-full flex items-center gap-[20px]">
                 <button className="textcol-main" onClick={() => dispatch(toggleAuthWindow(true))}>Login</button>
