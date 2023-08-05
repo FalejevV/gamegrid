@@ -1,12 +1,13 @@
 "use client"
 
-import { store } from "@/store/store"
+import { RootState, store, useAppSelector } from "@/store/store"
 import { Provider } from "react-redux"
 import ServerWrap from "./ServerWrap"
 import React, { useMemo } from "react"
 import WindowResizeListener from "@/components/WindowResizeListener/WindowResizeListener"
 import Header from "./Header"
 import Sidebar from "./Sidebar"
+import AuthPopUp from "./AuthPopUp"
 
 
 export default function MainLayout(props:{

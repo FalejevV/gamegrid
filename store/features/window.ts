@@ -1,11 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface Window{
-    width:number
+    width:number,
+    displayAuthWindow:boolean,
 }
 
 const initialState:Window = {
-    width:-1
+    width:-1,
+    displayAuthWindow:false,
 }
 
 const windowSlice = createSlice({
@@ -14,10 +16,13 @@ const windowSlice = createSlice({
     reducers:{
         setWidth:((state:Window, action:PayloadAction<number>) => {
             state.width = action.payload
+        }),
+        toggleAuthWindow:((state:Window, action:PayloadAction<boolean>) => {
+            state.displayAuthWindow = action.payload;
         })
     }
 })
 
 export default windowSlice.reducer;
 
-export const { setWidth } = windowSlice.actions
+export const { setWidth, toggleAuthWindow } = windowSlice.actions

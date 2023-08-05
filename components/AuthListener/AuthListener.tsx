@@ -3,12 +3,12 @@
 import { AuthSession } from '@supabase/supabase-js';
 import supabaseClient from "@/utils/supabaseClient";
 import { RootState, useAppDispatch, useAppSelector } from '@/store/store';
-import { setUser } from '@/store/features/supabase';
+import { setUser } from '@/store/features/userAuth';
 
 export default function AuthListener(){
 
     const dispatch = useAppDispatch();
-    const userSelector = useAppSelector((state:RootState) => state.supabase);
+    const userSelector = useAppSelector((state:RootState) => state.userAuth);
 
     supabaseClient.auth.onAuthStateChange(async (event: string, session: AuthSession | null) => {
         if(session === null){

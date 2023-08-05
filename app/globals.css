@@ -21,6 +21,15 @@ body{
 .bg-hi{
   background-color:rgb(195, 8, 63);
 }
+
+.bg-textcolmain{
+  background-color:rgb(202, 233, 234);
+}
+
+.bg-textcoldimm{
+  background-color:rgb(149, 171, 172);
+}
+
 .bordercol-gray{
   border-color: rgb(26, 26, 28);
 }
@@ -43,6 +52,10 @@ body{
 }
 .textcol-dimm{
   color:rgb(149, 171, 172);
+}
+
+.textcol-bgmid{
+  color:rgb(149, 7, 65);
 }
 
 .flexgap{

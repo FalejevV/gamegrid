@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit"
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux"
-import supabase from "./features/supabase"
+import userAuth from "./features/userAuth"
 import window from "./features/window"
 import sortFilter from "./features/sortFilter"
 
 export const store = configureStore({
   reducer: {
-    supabase:supabase,
+    userAuth:userAuth,
     window:window,
     sortFilter:sortFilter
   }
