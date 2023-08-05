@@ -22,14 +22,14 @@ export default function ProfileBar(){
     
     if(loaded && !userSelector.userId){
         return(
-            <div className="w-full max-w-[200px] h-full flex items-center gap-[20px]">
+            <div className="w-full h-full flex items-center gap-[20px] justify-end pr-[10px]">
                 <button className="textcol-main" onClick={() => dispatch(toggleAuthWindow(true))}>Login</button>
             </div>
         )
     }
 
     return(
-        <div className="w-full max-w-[200px] h-full flex items-center gap-[20px]">
+        <div className="w-full h-full flex items-center gap-[20px] justify-end pr-[10px]">
             <p className="textcol-main text-[20px]">{userSelector.username}</p>
             <button className="textcol-main" onClick={() => supabaseClient.auth.signOut()}>Logout</button>
         </div>

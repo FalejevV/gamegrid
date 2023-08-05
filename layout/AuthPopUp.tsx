@@ -13,7 +13,7 @@ export default function AuthPopUp(){
 
     const dispatch = useAppDispatch();
     const router = useRouter()
-    const [formType, setFormType] = useState<"Sign in" | "Sign up">("Sign in");
+    const [formType, setFormType] = useState<"Sign in" | "Sign up" | "Recover">("Sign in");
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -39,7 +39,7 @@ export default function AuthPopUp(){
         setProcessing(false);
       }
     
-      const handleSignIn = async () => {
+    const handleSignIn = async () => {
         setProcessing(true);
 
         const result = await supabaseClient.auth.signInWithPassword({
@@ -56,11 +56,34 @@ export default function AuthPopUp(){
         setProcessing(false);
         router.push('/');
         router.refresh();
-      }
+    }
+
+    const handleRecoverPassword = async () => {
+        setProcessing(true);
+
+        const result = await supabaseClient.auth.resetPasswordForEmail(email);
+        
+        if(result.error){
+            setAlertText(result.error.message);
+        }else{
+            setAlertText("Success! Please check your email for confirmation letter");
+        }
+        setProcessing(false);
+    }
       
 
     function FormSubmit(e:React.FormEvent){
         e.preventDefault();
+
+        if(formType === "Recover"){
+            if(email){
+                setAlertText("");
+                handleRecoverPassword();
+            }else{
+                return;
+            }
+            return;
+        }
 
         if(!email.trim() || !password.trim()){  
             setAlertText("Please fill all inputs");
@@ -124,7 +147,8 @@ export default function AuthPopUp(){
 
     function ForgotPasswordButton(){
         return(
-            <button className="textcol-main bg-transparent text-[14px] font-semibold underline underline-offset-2 w-full text-right">
+            <button onClick={() => setFormType("Recover")}
+            className="textcol-main bg-transparent text-[14px] font-semibold underline underline-offset-2 w-full text-right">
                 Forgot password?
             </button>
         )
@@ -149,6 +173,20 @@ export default function AuthPopUp(){
                 <InputField value={repeatPassword} setValue={setRepeatPassword} type="password" label={"Repeat password"} name={"repassword"} placeholder="Repeat password here"/>
                 {ForgotPasswordButton()}
                 {FormAuthButton("Sign up")}
+            </form>
+        )
+    }
+
+    function RecoverPasswordForm(){
+        return(
+            <form className="flex flex-col gap-[15px]" onSubmit={FormSubmit}>
+                <InputField value={email} type="email" setValue={setEmail}  label={"Registered E-Mail Address"} name={"email"} placeholder="Email goes here"/>
+                {FormAuthButton("Recover password")}
+                <div className="w-full flex items-center justify-center gap-[20px] textcol-dimm">
+                    <button onClick={() => setFormType("Sign in")}>Sign In</button>
+                    <p>/</p>
+                    <button onClick={() => setFormType("Sign up")}>Sign Up</button>
+                </div>
             </form>
         )
     }
@@ -207,6 +245,8 @@ export default function AuthPopUp(){
 
                 {formType === "Sign up" && InputSignUpForm()}
                 {formType === "Sign up" && SignInSwitch()}
+
+                {formType === "Recover" && RecoverPasswordForm()}
 
                 {alertText && AlertDisplay()}
             </div>
