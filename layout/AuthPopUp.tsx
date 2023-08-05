@@ -4,11 +4,87 @@ import InputField from "@/components/InputField/InputField";
 import SocialAuthButton from "@/components/SocialAuthButton/SocialAuthButton";
 import { toggleAuthWindow } from "@/store/features/window";
 import { useAppDispatch } from "@/store/store";
+import supabaseClient from "@/utils/supabaseClient";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 
 export default function AuthPopUp(){
 
     const dispatch = useAppDispatch();
+    const router = useRouter()
+    const [formType, setFormType] = useState<"Sign in" | "Sign up">("Sign in");
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [repeatPassword, setRepeatPassword] = useState("");
+    const [alertText, setAlertText] = useState("");
+    const [processing, setProcessing] = useState(false);
+
+    const handleSignUp = async () => {
+        setProcessing(true);
+        const result = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `/auth/callback`,
+          },
+        })
+        
+        if(result.error){
+            setAlertText(result.error.message);
+        }else{
+            setAlertText("Success! Please check your email for confirmation letter");
+        }
+        setProcessing(false);
+      }
+    
+      const handleSignIn = async () => {
+        setProcessing(true);
+
+        const result = await supabaseClient.auth.signInWithPassword({
+          email,
+          password,
+        })
+        
+        if(result.error){
+            setAlertText(result.error.message);
+            setProcessing(false);
+            return;
+        }
+        dispatch(toggleAuthWindow(false));
+        setProcessing(false);
+        router.push('/');
+        router.refresh();
+      }
+      
+
+    function FormSubmit(e:React.FormEvent){
+        e.preventDefault();
+
+        if(!email.trim() || !password.trim()){  
+            setAlertText("Please fill all inputs");
+            return;
+        }
+        if(formType === "Sign up"){
+            if(!repeatPassword.trim()){
+                setAlertText("Please fill all inputs");
+                return;
+            }
+            if(repeatPassword !== password){
+                setAlertText("Passwords do not match");
+                return;
+            }
+        }
+        
+        setAlertText("");
+        if(formType === "Sign in"){
+            handleSignIn();
+        }else{
+            handleSignUp();
+        }
+
+    }
 
     function clickLocationCheck(e: React.MouseEvent){
         let target = e.target as HTMLElement;
@@ -54,24 +130,64 @@ export default function AuthPopUp(){
         )
     }
 
-    function InputForm(){
+    function InputSignInForm(){
         return(
-            <form className="flex flex-col gap-[15px]">
-                <InputField label={"E-Mail"} name={"email"} placeholder="Email goes here!"/>
-                <InputField type="password" label={"Password"} name={"password"} placeholder="Password here!"/>
+            <form className="flex flex-col gap-[15px]" onSubmit={FormSubmit}>
+                <InputField value={email} setValue={setEmail} type="email" label={"E-Mail"} name={"email"} placeholder="Email goes here"/>
+                <InputField value={password} setValue={setPassword} type="password" label={"Password"} name={"password"} placeholder="Password here"/>
+                {ForgotPasswordButton()}
+                {FormAuthButton("Sign in")}
             </form>
         )
     }
 
-    function SignUpSentence(){
+    function InputSignUpForm(){
+        return(
+            <form className="flex flex-col gap-[15px]" onSubmit={FormSubmit}>
+                <InputField value={email} type="email" setValue={setEmail}  label={"E-Mail"} name={"email"} placeholder="Email goes here"/>
+                <InputField value={password} setValue={setPassword} type="password" label={"Password"} name={"password"} placeholder="Password here"/>
+                <InputField value={repeatPassword} setValue={setRepeatPassword} type="password" label={"Repeat password"} name={"repassword"} placeholder="Repeat password here"/>
+                {ForgotPasswordButton()}
+                {FormAuthButton("Sign up")}
+            </form>
+        )
+    }
+
+    function SignUpSwitch(){
         return(
             <div className="w-full items-center justify-center textcol-main flex gap-[10px]">
                 <p className="text-[15px]">Don&#x0027;t have an account?</p>
-                <button className="text-[15px] font-semibold">Sign Up!</button>
+                <button className="text-[15px] font-semibold" onClick={(() => setFormType("Sign up"))}>Sign Up!</button>
             </div>
         )
     }
 
+    function SignInSwitch(){
+        return(
+            <div className="w-full items-center justify-center textcol-main flex gap-[10px]">
+                <p className="text-[15px]">Already registered?</p>
+                <button className="text-[15px] font-semibold" onClick={(() => setFormType("Sign in"))}>Sign in!</button>
+            </div>
+        )
+    }
+    
+    function AlertDisplay(){
+        return(
+            <div className="flex gap-[20px] items-center justify-center mt-[35px] textcol-dimm animate-[bounce_1s_ease-in-out_forwards]">
+                <p>!#</p>
+                <p className="text-[18px] textcol-main ">{alertText}</p>
+                <p>#!</p>
+            </div>
+        )
+    }
+
+    function FormAuthButton(name:string){
+        return(
+            <button type="submit" disabled={processing} className={`w-full h-[45px] bg-hi text-[20px] textcol-main font-bold
+            ${processing && "opacity-20"}
+            `}>{name}</button>
+        )
+    }
 
 
     return(
@@ -85,13 +201,14 @@ export default function AuthPopUp(){
 
                 {ORLine()}
 
-                {InputForm()}
+                {formType === "Sign in" && InputSignInForm()}
+                {formType === "Sign in" && SignUpSwitch()}
 
-                {ForgotPasswordButton()}
 
-                <button className="w-full h-[45px] bg-hi text-[20px] textcol-main font-bold">Sign in</button>
+                {formType === "Sign up" && InputSignUpForm()}
+                {formType === "Sign up" && SignInSwitch()}
 
-                {SignUpSentence()}
+                {alertText && AlertDisplay()}
             </div>
         </span>
     )
