@@ -3,6 +3,7 @@ import ProfileBar from "@/components/ProfileBar/ProfileBar";
 import { RootState, useAppSelector } from "@/store/store";
 import Image from "next/image";
 import AuthPopUp from "./AuthPopUp";
+import Link from "next/link";
 
 
 
@@ -15,7 +16,10 @@ export default function Header(){
             
             <AuthListener />
             {windowSelector.displayAuthWindow && <AuthPopUp />}
-            <Image src={"Logo.svg"} alt={"logo-image"}  width={155} height={29}/>
+            
+            <Link href={"/"}>
+                <Image src={"Logo.svg"} alt={"logo-image"}  width={155} height={29}/>
+            </Link>
             
             <span className="flex-auto"/>
             
