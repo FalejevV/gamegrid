@@ -1,5 +1,7 @@
 "use client";
 
+import AlertText from "@/components/AlertText/AlertText";
+import FormAuthButton from "@/components/FormButton/FormButton";
 import InputField from "@/components/InputField/InputField";
 import SocialAuthButton from "@/components/SocialAuthButton/SocialAuthButton";
 import { toggleAuthWindow } from "@/store/features/window";
@@ -72,7 +74,7 @@ export default function AuthPopUp(){
     }
       
 
-    function FormSubmit(e:React.FormEvent){
+    function formSubmit(e:React.FormEvent){
         e.preventDefault();
 
         if(formType === "Recover"){
@@ -156,32 +158,32 @@ export default function AuthPopUp(){
 
     function InputSignInForm(){
         return(
-            <form className="flex flex-col gap-[15px]" onSubmit={FormSubmit}>
+            <form className="flex flex-col gap-[15px]" onSubmit={formSubmit}>
                 <InputField value={email} setValue={setEmail} type="email" label={"E-Mail"} name={"email"} placeholder="Email goes here"/>
                 <InputField value={password} setValue={setPassword} type="password" label={"Password"} name={"password"} placeholder="Password here"/>
                 {ForgotPasswordButton()}
-                {FormAuthButton("Sign in")}
+                <FormAuthButton name={"Sign in"} processing={processing} />
             </form>
         )
     }
 
     function InputSignUpForm(){
         return(
-            <form className="flex flex-col gap-[15px]" onSubmit={FormSubmit}>
+            <form className="flex flex-col gap-[15px]" onSubmit={formSubmit}>
                 <InputField value={email} type="email" setValue={setEmail}  label={"E-Mail"} name={"email"} placeholder="Email goes here"/>
                 <InputField value={password} setValue={setPassword} type="password" label={"Password"} name={"password"} placeholder="Password here"/>
                 <InputField value={repeatPassword} setValue={setRepeatPassword} type="password" label={"Repeat password"} name={"repassword"} placeholder="Repeat password here"/>
                 {ForgotPasswordButton()}
-                {FormAuthButton("Sign up")}
+                <FormAuthButton name={"Sign up"} processing={processing} />
             </form>
         )
     }
 
     function RecoverPasswordForm(){
         return(
-            <form className="flex flex-col gap-[15px]" onSubmit={FormSubmit}>
+            <form className="flex flex-col gap-[15px]" onSubmit={formSubmit}>
                 <InputField value={email} type="email" setValue={setEmail}  label={"Registered E-Mail Address"} name={"email"} placeholder="Email goes here"/>
-                {FormAuthButton("Recover password")}
+                <FormAuthButton name={"Recover password"} processing={processing} />
                 <div className="w-full flex items-center justify-center gap-[20px] textcol-dimm">
                     <button onClick={() => setFormType("Sign in")}>Sign In</button>
                     <p>/</p>
@@ -208,24 +210,8 @@ export default function AuthPopUp(){
             </div>
         )
     }
-    
-    function AlertDisplay(){
-        return(
-            <div className="flex gap-[20px] items-center justify-center mt-[35px] textcol-dimm animate-[bounce_1s_ease-in-out_forwards]">
-                <p>!#</p>
-                <p className="text-[18px] textcol-main ">{alertText}</p>
-                <p>#!</p>
-            </div>
-        )
-    }
 
-    function FormAuthButton(name:string){
-        return(
-            <button type="submit" disabled={processing} className={`w-full h-[45px] bg-hi text-[20px] textcol-main font-bold
-            ${processing && "opacity-20"}
-            `}>{name}</button>
-        )
-    }
+    
 
 
     return(
@@ -248,7 +234,7 @@ export default function AuthPopUp(){
 
                 {formType === "Recover" && RecoverPasswordForm()}
 
-                {alertText && AlertDisplay()}
+                {alertText && <AlertText alertText={alertText} />}
             </div>
         </span>
     )
