@@ -131,8 +131,8 @@ export default function AuthPopUp(){
     function SocialsSignIn(){
         return(
             <div className="flex items-center justify-center h-fit gap-[20px]">
-                <SocialAuthButton title={"Facebook"} icon={"facebook-icon"} />
-                <SocialAuthButton title={"Google"} icon={"google-icon"} />
+                <SocialAuthButton provider="twitch" title={"Twitch"} icon={"twitch-icon"} />
+                <SocialAuthButton provider="google" title={"Google"} icon={"google-icon"} />
             </div>
         )
     }
