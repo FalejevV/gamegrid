@@ -4,6 +4,8 @@ import { RootState, useAppSelector } from "@/store/store";
 import Image from "next/image";
 import AuthPopUp from "./AuthPopUp";
 import Link from "next/link";
+import MenuBurger from "@/components/MenuBurger/MenuBurger";
+import SidebarMenu from "./SidebarMenu";
 
 
 
@@ -16,8 +18,13 @@ export default function Header(){
             
             <AuthListener />
             {windowSelector.displayAuthWindow && <AuthPopUp />}
-            
-            <Link href={"/"}>
+
+            {windowSelector.width < 880 && <>
+                <MenuBurger />
+                <SidebarMenu />
+            </>}
+
+            <Link href={"/"} className="min-w-[120px]">
                 <Image src={"Logo.svg"} alt={"logo-image"}  width={155} height={29}/>
             </Link>
             

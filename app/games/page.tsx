@@ -1,12 +1,10 @@
 import GamePreviewItem from "@/components/GamePreviewItem/GamePreviewItem";
-import GamePreviewItemLS from "@/components/GamePreviewItem/GamePreviewItemLoadingSkeletont";
 import LoadMoreGamesButton from "@/components/LoadMoreGamesButton";
 import { FilterQueryParams, Game } from "@/interface";
 import SortFilterTab from "@/layout/SortFilter/SortFilterTab";
 import { fetchFilteredGames } from "@/utils/gameFetching";
 import { PostgrestError } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
-import Loading from "./loading";
 
 
 export default async function Games({searchParams}:{

@@ -15,6 +15,10 @@ module.exports = {
           'background-hover': 'hsl(var(--btn-background-hover))',
         },
       },
+      screens: {
+        'md': '880px',
+        // => @media (min-width: 992px) { ... }
+      },
     },
   },
   plugins: [],

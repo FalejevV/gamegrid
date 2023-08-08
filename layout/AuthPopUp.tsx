@@ -215,7 +215,7 @@ export default function AuthPopUp(){
 
 
     return(
-        <span onClick={(e) => clickLocationCheck(e)} className="fixed w-screen h-screen left-0 top-0 bg-[#000000c0] flex items-center justify-center cursor-pointer pl-[90px] pb-[10vh]">
+        <span onClick={(e) => clickLocationCheck(e)} className="fixed w-screen h-screen left-0 top-0 bg-[#000000c0] flex items-center justify-center cursor-pointer md:pl-[90px] sm:pb-[10vh] overflow-scroll">
             <div className="w-full h-fit max-w-[400px] bg-dimm cursor-default flex flex-col p-[20px] gap-[15px]">
                 {HiThereText()}
 

@@ -48,7 +48,7 @@ function PCItemLayout(gameData:Game, leastLoved:ScoreItem, mostLoved:ScoreItem, 
 
 function TabletItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreItem, total:ScoreItem){
     return(
-        <div className="w-full max-w-[770px] h-[344px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
+        <div className="w-full h-[344px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
         <header className="flexgap flex-col w-full h-[78px] items-center">
             <GamePreviewTitle title={gameData.name} stretch center/>
             <div className="flex gap-[30px] w-full h-full flex-auto bg-red-400 items-center px-3 bg-dimm">
@@ -62,12 +62,12 @@ function TabletItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreIte
             <GamePreviewImage src={gameData.image}/>
             <section className="flexgap flex-col flex-auto">
 
-                <div className="max-w-[360px] w-full h-[158px] leading-[25px] ">
-                <GamePreviewParagraph text={gameData.description} />
+                <div className="w-full h-[158px] leading-[25px] ">
+                    <GamePreviewParagraph text={gameData.description} />
                 </div>
 
                 <div className="flexgap flex-auto">
-                    <div className="flexgap flex-col">
+                    <div className="flexgap flex-col flex-auto">
                         <GamePreviewMostLoved discipline={mostLoved.title} value={mostLoved.value} minimal/>
                         <GamePreviewLeastLoved discipline={leastLoved.title} value={leastLoved.value} minimal/>
                     </div>
