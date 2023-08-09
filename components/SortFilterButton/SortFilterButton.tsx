@@ -22,7 +22,6 @@ export default function SortFilterButton(props:{
             value: !sortFilterDropdownSelector.isDropdown
         }))
     }
-
     function isSomethingSelected(){
         return sortFilterDropdownSelector.selectedItems.length > 0 && sortFilterDropdownSelector.selectedItems[0] != sortFilterDropdownSelector.defaultValue[0];
     }
@@ -50,11 +49,11 @@ export default function SortFilterButton(props:{
         className={`w-screen max-w-[185px] h-[40px] bg-mid flex items-center justify-between p-[10px] gap-[10px] whitespace-nowrap`}
         onClick={switchDropdown}
         >
-            <p className="textcol-main flex-auto max-w-[120px] overflow-hidden" >
+            <p className="textcol-main flex-auto max-w-[120px] whitespace-nowrap overflow-hidden text-ellipsis" >
                 {titleContentDisplay()}
             </p>
-            {isSomethingSelected() && <Image src={"/icons/Close.svg"} alt={"clear options"} width={14} height={14}  className="transition-all duration-150 hover:scale-110" onClick={(e) => clearAllOptions(e)}/>}
-            <Image src={"/icons/Chevron-down.svg"} alt={"down arrow"} width={15} height={10} />
+            {isSomethingSelected() && <Image src={"/icons/Close.svg"} alt={"clear options"} width={14} height={14}  className="transition-all duration-150 hover:scale-110 w-[16px] h-[16px]" onClick={(e) => clearAllOptions(e)}/>}
+            <Image src={"/icons/Chevron-down.svg"} alt={"down arrow"} width={15} height={10} className="w-[15px] h-[10px]" />
         </div>
     )
 }

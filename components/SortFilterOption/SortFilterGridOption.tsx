@@ -35,7 +35,7 @@ export default function SortFilterGridOption(props:{
         tabIndex={0}
         >
             <p className="textcol-main">{props.title}</p>
-            <Image src={props.icon} alt={props.title} width={22} height={22} className="opacity-70"/>
+            <Image src={props.icon} alt={props.title} width={22} height={22} className="opacity-70 w-[22px] h-[22px]" />
         </div>
     )
 }

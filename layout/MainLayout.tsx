@@ -1,13 +1,12 @@
 "use client"
 
-import { RootState, store, useAppSelector } from "@/store/store"
+import { store } from "@/store/store"
 import { Provider } from "react-redux"
 import ServerWrap from "./ServerWrap"
 import React, { useMemo } from "react"
 import WindowResizeListener from "@/components/WindowResizeListener/WindowResizeListener"
 import Header from "./Header"
 import Sidebar from "./Sidebar"
-import AuthPopUp from "./AuthPopUp"
 
 
 export default function MainLayout(props:{
@@ -26,7 +25,7 @@ export default function MainLayout(props:{
               <ServerWrap>
                 <Header />
                 <Sidebar />
-                <main className="min-h-screen max-w-screen pl-[10px] pt-[80px] pr-[10px] overflow-hidden md:pl-[100px]">
+                <main className="min-h-screen max-w-screen pl-[10px] pt-[80px] pr-[10px] md:pl-[100px]">
                   {props.elem}
                 </main>
               </ServerWrap>

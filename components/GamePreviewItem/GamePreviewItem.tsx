@@ -6,7 +6,6 @@ import GamePreviewParagraph from "../GamePreviewBlocks/GamePreviewParagraph";
 import GamePreviewTotalScore from "../GamePreviewBlocks/GamePreviewTotalScore";
 import GamePreviewImage from "../GamePreviewBlocks/GamePreviewImage";
 import { RootState, useAppSelector } from "@/store/store";
-import { dateToText } from "@/utils/formatter";
 import GamePreviewTags from "@/layout/GamePreviewTags";
 import { AverageScoreItem, Game, ScoreItem, ScoreNameList } from "@/interface";
 import { useEffect, useState } from "react";
@@ -16,7 +15,7 @@ import scoreName from "@/utils/scoreName";
 
 function PCItemLayout(gameData:Game, leastLoved:ScoreItem, mostLoved:ScoreItem, total:ScoreItem){
     return(
-        <div className="w-full max-w-[950px] h-[300px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
+        <div className="w-full max-w-[950px] h-[300px] min-h-[300px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
         <header className="flexgap w-full h-[34px] items-center">
             <GamePreviewTitle title={gameData.name} />
             <div className="flex gap-[30px] h-full flex-auto bg-red-400 items-center px-3 bg-dimm">

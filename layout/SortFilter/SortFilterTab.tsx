@@ -111,7 +111,7 @@ export default function SortFilterTab(){
             <div className="tab-developer relative">
                 <SortFilterButton mimicTitle title={"Developer"} dropdownName={"developer"} />
                 {sortFilterSelector.dropdowns.developer.isDropdown && 
-                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[300px] bg-mid z-[500] overflow-y-scroll">
+                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[300px] bg-mid z-[500]">
                     <DeveloperFilterDropdown itemList={developerOptions} />
                 </div>}
             </div>
@@ -131,9 +131,12 @@ export default function SortFilterTab(){
     }
 
 
-    function AdvancedSearchWindowPC(){
+    function AdvancedSearchWindowPC(expand:boolean){
         return(
-            <div className="w-full h-[60px] relative flex items-center justify-between">
+            <div className={`w-full relative flex items-center justify-between transition-all duration-300
+                ${expand && "h-[60px] opacity-100 overflow-visible"}
+                ${!expand && "h-[0px] opacity-0 overflow-hidden"}
+            `}>
                 {TagFilter()}
                 {PlatformFilter()}
                 {PlayerFilter()}
@@ -159,7 +162,7 @@ export default function SortFilterTab(){
             <SortFilterQueryReader />
             <div className={`w-full max-w-[950px] h-fit bg-dimm p-[10px]`}>
                 {MainRowPC()}
-                {sortFilterSelector.expand && AdvancedSearchWindowPC()}
+                {AdvancedSearchWindowPC(sortFilterSelector.expand)}
             </div>
         </>
     )

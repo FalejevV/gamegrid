@@ -34,12 +34,12 @@ export default function MenuItem(props:{
         <Link href={props.href} className={`w-full flex items-center gap-[15px] transition-all duration-150
             hover:scale-105 hover:brightness-125
         `}> 
-            <Image src={`icons/menu/${props.icon}.svg`} alt={`menu-${props.icon}`} width={props.width || 35} height={35}
-            className={`scale-110 h-[35px]  min-w-[${props.width+"px" || "35px"}]
-            ${pathname !== props.href && "brightness-[60%] scale-100"} 
-            w-[${props.width+"px" || "35px"}]
-            hover:
-            `}/>
+            <div className="max-w-[35px] min-w-[35px] min-h-[35px] max-h-[35px] flex items-start justify-start">
+                <Image src={`icons/menu/${props.icon}.svg`} alt={`menu-${props.icon}`} width={props.width || 35} height={35}
+                className={`scale-110 h-[35px]
+                ${pathname !== props.href && "brightness-[60%] scale-100"} 
+                `}/>
+            </div>
             <p className={`textcol-main whitespace-nowrap transition-all duration-150 pt-[5px]
             ${windowSidebarSelector && "opacity-100 delay-150"}
             ${!windowSidebarSelector && "opacity-0 delay-0"}
