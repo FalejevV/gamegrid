@@ -31,7 +31,7 @@ export default function MenuItem(props:{
     return(
         <Link href={props.href} className="w-full flex justify-center items-center"> 
             <Image src={`icons/menu/${props.icon}.svg`} alt={`menu-${props.icon}`} width={props.width || 35} height={35}
-            className={`scale-110  ${pathname !== props.href && "brightness-[60%] scale-100"}`}/>
+            className={`scale-110  ${pathname !== props.href && "brightness-[60%] scale-100"} w-[${props.width || "35px"}] h-[35px]`}/>
         </Link>
     )
 }

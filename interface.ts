@@ -42,7 +42,6 @@ export interface ScoreItem{
 }
 
 export interface ScoreNameList{
-    none:string,
     graphics: string,
     sound: string,
     gameplay: string,

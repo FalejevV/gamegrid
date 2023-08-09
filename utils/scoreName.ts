@@ -1,7 +1,6 @@
 import { ScoreNameList } from "@/interface";
 
 const scoreList:ScoreNameList = {
-    none:"Aspect - All",
     graphics: "Graphics",
     sound: "Sound Design",
     gameplay: "Gameplay",

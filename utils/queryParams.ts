@@ -1,5 +1,4 @@
-import { SortFilter, SortFilterDropdowns } from "@/store/features/sortFilter";
-import { getDefaultScoreName } from "./scoreName";
+import { SortFilter } from "@/store/features/sortFilter";
 
 export interface URLQueryObject{ 
     pathname: string, 

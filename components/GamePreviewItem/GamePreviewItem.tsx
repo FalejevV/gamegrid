@@ -21,7 +21,7 @@ function PCItemLayout(gameData:Game, leastLoved:ScoreItem, mostLoved:ScoreItem, 
             <GamePreviewTitle title={gameData.name} />
             <div className="flex gap-[30px] h-full flex-auto bg-red-400 items-center px-3 bg-dimm">
                 <p className="textcol-main font-medium text-[15px] whitespace-nowrap">{gameData.developer.developer}</p>
-                <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap"> {dateToText(gameData.release_date)} </p>
+                <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap"> {gameData.release_date.toString()} </p>
                 <GamePreviewTags tags={gameData.tags} />
             </div>
         </header>
@@ -53,7 +53,7 @@ function TabletItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreIte
             <GamePreviewTitle title={gameData.name} stretch center/>
             <div className="flex gap-[30px] w-full h-full flex-auto bg-red-400 items-center px-3 bg-dimm">
                 <p className="textcol-main font-medium text-[15px] whitespace-nowrap">{gameData.developer.developer}</p>
-                <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap">{dateToText(gameData.release_date)}</p>
+                <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap">{gameData.release_date.toString()}</p>
                 <GamePreviewTags tags={gameData.tags} />
             </div>
         </header>
@@ -95,7 +95,7 @@ function MobileItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreIte
 
             <div className="flex gap-[30px] w-[calc(100%-10px)] h-[34px] flex-auto items-center justify-between px-3 bg-dimm absolute z-30 top-[153px] left-[5px]">
                 <p className="textcol-main font-medium text-[15px] whitespace-nowrap">{gameData.developer.developer}</p>
-                <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap"> {dateToText(gameData.release_date)}</p>
+                <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap"> {gameData.release_date.toString()}</p>
             </div>
 
             <section className="flexgap flex-auto flex-col">
