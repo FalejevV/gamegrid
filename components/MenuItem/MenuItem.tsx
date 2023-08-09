@@ -1,5 +1,5 @@
 import { toggleDropdownMenu } from "@/store/features/window";
-import { useAppDispatch } from "@/store/store";
+import { RootState, useAppDispatch, useAppSelector } from "@/store/store";
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from 'next/navigation';
@@ -10,7 +10,7 @@ export default function MenuItem(props:{
     icon:string,
     width?:number,
     mobile?:boolean,
-    title?:string,
+    title:string,
 }){
 
     const pathname = usePathname();
@@ -28,10 +28,22 @@ export default function MenuItem(props:{
         )
     }
     
+    const windowSidebarSelector = useAppSelector((state:RootState) => state.window.sidebarHovered);
+
     return(
-        <Link href={props.href} className="w-full flex justify-center items-center"> 
+        <Link href={props.href} className={`w-full flex items-center gap-[15px] transition-all duration-150
+            hover:scale-105 hover:brightness-125
+        `}> 
             <Image src={`icons/menu/${props.icon}.svg`} alt={`menu-${props.icon}`} width={props.width || 35} height={35}
-            className={`scale-110  ${pathname !== props.href && "brightness-[60%] scale-100"} w-[${props.width || "35px"}] h-[35px]`}/>
+            className={`scale-110 h-[35px]  min-w-[${props.width+"px" || "35px"}]
+            ${pathname !== props.href && "brightness-[60%] scale-100"} 
+            w-[${props.width+"px" || "35px"}]
+            hover:
+            `}/>
+            <p className={`textcol-main whitespace-nowrap transition-all duration-150 pt-[5px]
+            ${windowSidebarSelector && "opacity-100 delay-150"}
+            ${!windowSidebarSelector && "opacity-0 delay-0"}
+            `}>{props.title}</p>
         </Link>
     )
 }

@@ -4,12 +4,14 @@ interface Window{
     width:number,
     displayAuthWindow:boolean,
     displayDropdownMenu:boolean,
+    sidebarHovered:boolean
 }
 
 const initialState:Window = {
     width:-1,
     displayAuthWindow:false,
-    displayDropdownMenu:false
+    displayDropdownMenu:false,
+    sidebarHovered:false
 }
 
 const windowSlice = createSlice({
@@ -24,10 +26,13 @@ const windowSlice = createSlice({
         }),
         toggleDropdownMenu : ((state: Window, action:PayloadAction<boolean>) => {
             state.displayDropdownMenu = action.payload;
+        }),
+        toggleSidebarHover : ((state:Window, action:PayloadAction<boolean>) => {
+            state.sidebarHovered = action.payload;
         })
     }
 })
 
 export default windowSlice.reducer;
 
-export const { setWidth, toggleAuthWindow, toggleDropdownMenu } = windowSlice.actions
+export const { setWidth, toggleAuthWindow, toggleDropdownMenu, toggleSidebarHover} = windowSlice.actions

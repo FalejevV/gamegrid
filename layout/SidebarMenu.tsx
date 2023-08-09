@@ -1,21 +1,8 @@
 import MenuItem from "@/components/MenuItem/MenuItem";
 import { toggleDropdownMenu } from "@/store/features/window";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store";
-import Link from "next/link";
 
 
-
-function SidebarMenuPC(){
-    return(
-        <nav className="flex flex-col gap-[25px] w-full h-full justify-center pb-[45px]">
-            <MenuItem href={"/"} icon={"Home"} />
-            <MenuItem href={"/games"} icon={"Games"} />
-            <MenuItem href={"/collection"} icon={"Collection"} />
-            <div className="flex-auto"/>
-            <MenuItem href={"/about"} icon={"Info"} width={13}/>
-        </nav>
-    )
-}
 
 
 export default function SidebarMenu(){
@@ -42,13 +29,30 @@ export default function SidebarMenu(){
                 `}>
                     
                     <MenuItem href={"/"} icon={""} mobile title="Home" />
-                    <MenuItem href={"/games"} icon={""} mobile title="Games" />
+                    <MenuItem href={"/games"} icon={""} mobile title="Game list" />
                     <MenuItem href={"/collection"} icon={""} mobile title="My Collection" />
-                    <MenuItem href={"/about"} icon={""} mobile title="About us" />
+                    <MenuItem href={"/about"} icon={""} mobile title="About Us" />
                 </nav>
             </span>
         )
     }
+
+    
+    function SidebarMenuPC(){
+        return(
+            <nav className={`flex flex-col gap-[25px] w-full h-full justify-center items-center pb-[45px] relative transition-all duration-300
+            ${!windowSelector.sidebarHovered && "left-[25px]"}
+            ${windowSelector.sidebarHovered && "left-[20px]"}
+            `}>
+                <MenuItem href={"/"} icon={"Home"} title={"Home"} />
+                <MenuItem href={"/games"} icon={"Games"} title={"Game list"}/>
+                <MenuItem href={"/collection"} icon={"Collection"} title={"My Collection"}/>
+                <div className="flex-auto"/>
+                <MenuItem href={"/about"} icon={"Info"} width={35} title={"About Us"}/>
+            </nav>
+        )
+    }
+
 
 
 
