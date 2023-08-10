@@ -17,7 +17,7 @@ export default function MenuBurger(){
     }
 
     return(
-        <div className="min-w-[40px] min-h-[40px] max-w-[40px] max-h-[40px] mr-[30px] ml-[5px] flex flex-col justify-center gap-[10px] cursor-pointer" onClick={toggleMenu}>
+        <div className="min-w-[35px] min-h-[35px] max-w-[35px] max-h-[35x] mr-[30px] ml-[5px] flex flex-col justify-center gap-[10px] cursor-pointer" onClick={toggleMenu}>
             <span className={`w-full h-[3px] bg-hi transition-all duration-300
                 ${windowSelector.displayDropdownMenu && "translate-y-[13px] rotate-[135deg]"}
             `}/>

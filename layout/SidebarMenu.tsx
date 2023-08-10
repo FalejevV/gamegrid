@@ -20,10 +20,10 @@ export default function SidebarMenu(){
 
     function SidebarMenuMobile(){
         return(
-            <span className={`fixed left-0 top-0 w-full h-screen pointer-events-none transition-all duration-300  overflow-hidden
+            <span className={`fixed left-0 top-0 w-full h-screen pointer-events-none transition-all duration-300 overflow-hidden
             ${windowSelector.displayDropdownMenu && "bg-[#00000080] pointer-events-auto"}`} 
             onClick={clickLocationCheck}>
-                <nav className={`w-full h-fit bg-dimm absolute left-0 transition-all duration-300 p-[20px] py-[40px] flex flex-col gap-[30px]
+                <nav className={`w-full h-fit bg-dimm absolute left-0 transition-all duration-300 p-[20px] py-[40px] flex flex-col gap-[30px] overflow-y-scroll
                 ${windowSelector.displayDropdownMenu && "bottom-0"}
                 ${!windowSelector.displayDropdownMenu && "bottom-[-100vh]"}
                 `}>

@@ -47,7 +47,7 @@ function PCItemLayout(gameData:Game, leastLoved:ScoreItem, mostLoved:ScoreItem, 
 
 function TabletItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreItem, total:ScoreItem){
     return(
-        <div className="w-full h-[344px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
+        <div className="w-full h-[344px] min-h-[344px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
         <header className="flexgap flex-col w-full h-[78px] items-center">
             <GamePreviewTitle title={gameData.name} stretch center/>
             <div className="flex gap-[30px] w-full h-full flex-auto bg-red-400 items-center px-3 bg-dimm">
@@ -81,7 +81,7 @@ function TabletItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreIte
 
 function MobileItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreItem, total:ScoreItem){
     return(
-        <div className="w-full max-w-[770px] h-[360px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
+        <div className="w-full max-w-[770px] h-[360px] min-h-[360px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
         <header className="flexgap flex-col w-full h-[34px]">
             <GamePreviewTitle title={gameData.name} stretch/>
         </header>
