@@ -1,7 +1,6 @@
 import { FilterQueryParams, FilteredIDPromise, Game } from "@/interface";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import { cookies } from "next/headers";
+import supabaseServer from "./supabaseServer";
 
 let amountDefault = 3;
 
@@ -116,7 +115,7 @@ export async function fetchFilteredGames(filters:FilterQueryParams, offset: numb
     data:Game[] | null,
     error:PostgrestError | null
 }>{
-    const supabase = createServerComponentClient({ cookies })
+    const supabase = supabaseServer();
     let gameIds:number[] = [];
     let anyError:PostgrestError | null = null;
     let sortedByAspect:boolean = false;

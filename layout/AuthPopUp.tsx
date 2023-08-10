@@ -56,7 +56,6 @@ export default function AuthPopUp(){
         }
         dispatch(toggleAuthWindow(false));
         setProcessing(false);
-        router.push('/');
         router.refresh();
     }
 

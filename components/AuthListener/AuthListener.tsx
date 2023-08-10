@@ -16,7 +16,7 @@ export default function AuthListener(){
                 userId: null,
                 username: null,
                 role: null
-            }))
+            }));
         }else{
             if(session.user.id && userSelector.userId !== session.user.id){
                 supabaseClient.from('profile').select().eq('id', session.user.id).single().then(res => {

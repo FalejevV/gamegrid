@@ -101,3 +101,8 @@ body{
 .animate-fade-in {
   animation: fadeIn 0.15s ease-out forwards;
 }
+
+.h-dvh{
+  height:100vh;
+  height:100dvh;
+}
