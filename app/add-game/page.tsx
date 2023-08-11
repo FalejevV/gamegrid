@@ -1,8 +1,11 @@
+
+import AddGameForm from "@/layout/AddGameForm";
+import { getIGDBByGameName } from "@/utils/idgbFetching";
 import supabaseServer from "@/utils/supabaseServer";
-import Link from "next/link";
 
-export default async function Collection(){
 
+
+export default async function AddGame(){
     const supabase = supabaseServer()
     const {data} = await supabase.auth.getUser();
 
@@ -14,9 +17,11 @@ export default async function Collection(){
         )
     }
     
+
+
     return (
-        <div className="w-full flex flex-col gap-[40px] items-center justify-center pt-[50px]">
-           <Link href="/add-game" className="bg-hi textcol-main py-[5px] px-[10px] text-[23px] font-medium">Add Game</Link> 
-        </div>
-      )
+        <div className="w-full flex justify-center pt-[50px]">
+            <AddGameForm />
+       </div>
+    )
 }

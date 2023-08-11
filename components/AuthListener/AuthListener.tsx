@@ -21,9 +21,9 @@ export default function AuthListener(){
             if(session.user.id && userSelector.userId !== session.user.id){
                 supabaseClient.from('profile').select().eq('id', session.user.id).single().then(res => {
                     dispatch(setUser({
-                        userId: res.data.id,
-                        username: res.data.username,
-                        role: res.data.role
+                        userId: res.data?.id,
+                        username: res.data?.username,
+                        role: res.data?.role
                     }))
                 });
             }

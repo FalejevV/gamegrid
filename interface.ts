@@ -73,3 +73,16 @@ export interface FilterQueryParams{
     developer:string | undefined,
     amount:number,
 }
+export interface IGDBTagIdName{
+    id:string,
+    name:string,
+}
+export interface IGDBGameFetch{
+    cover:{
+        url:string,
+    },
+    first_release_date: number,
+    genres: IGDBTagIdName[]
+    name:string,
+    themes: IGDBTagIdName[]
+}
