@@ -15,7 +15,7 @@ export async function getIGDBByGameName(name: string) {
             "Authorization": "Bearer " + token.data,
             "Content-Type": "application/json"
         },
-        body: `fields name, total_rating, total_rating_count, genres.name, themes.name, first_release_date, cover.url; where name ~ *"${name}"* & total_rating_count > 3; sort total_rating_count desc; limit 10;`
+        body: `fields name, total_rating, total_rating_count, genres.name, themes.name, first_release_date, cover.url, platforms.name, involved_companies.company ;where name ~ *"${name}"* & total_rating_count > 3; sort total_rating_count desc; limit 50;`
     })
         .then(response => response.json())
     return result;

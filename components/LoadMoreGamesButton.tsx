@@ -1,7 +1,6 @@
 "use client"
 
 import { FilterQueryParams } from "@/interface";
-import { fetchFilteredGames } from "@/utils/gameFetching";
 
 
 export default function LoadMoreGamesButton({searchParams}:{
