@@ -77,6 +77,7 @@ export interface IGDBTagIdName{
     id:string,
     name:string,
 }
+
 export interface IGDBGameFetch{
     cover:{
         url:string,
@@ -84,7 +85,7 @@ export interface IGDBGameFetch{
     first_release_date: number,
     genres: IGDBTagIdName[]
     name:string,
-    themes: IGDBTagIdName[]
+    themes: IGDBTagIdName[],
 }
 
 export interface DataError{

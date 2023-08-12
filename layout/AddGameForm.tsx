@@ -17,7 +17,6 @@ export default function AddGameForm() {
         e.preventDefault();
         if (search.trim()) {
             let fetchResult: DataError = await fetchIGDBGameByName(search);
-            console.log(fetchResult);
             if (fetchResult.error) {
                 setError(fetchResult.error)
             }else{
@@ -35,7 +34,9 @@ export default function AddGameForm() {
             </div>
         )
     }
+
     console.log(games);
+
     return (
         <div className="w-full max-w-[500px]">
             <form className="w-full h-fit flex flex-col gap-[15px] relative" onSubmit={gameSearch}>

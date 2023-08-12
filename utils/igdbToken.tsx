@@ -15,13 +15,10 @@ export default async function () {
     }
     if (result?.status) {
         formattedResult.error = result?.message || ""
-
-        console.log("token", formattedResult);
         return formattedResult;
     } else {
         if (result.access_token) {
             formattedResult.data = result.access_token;
-            console.log("token", formattedResult);
             return formattedResult;
         }
     }

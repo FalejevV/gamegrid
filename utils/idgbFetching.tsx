@@ -1,4 +1,4 @@
-import { DataError } from "@/interface";
+import { DataError, IGDBGameFetch } from "@/interface";
 import igdbToken from "./igdbToken";
 
 
@@ -15,15 +15,15 @@ export async function getIGDBByGameName(name: string) {
             "Authorization": "Bearer " + token.data,
             "Content-Type": "application/json"
         },
-        body: `fields name, genres.name, themes.name, first_release_date, cover.url; where name ~ *"${name}"*; sort first_release_date asc; limit 10;`
+        body: `fields name, total_rating, total_rating_count, genres.name, themes.name, first_release_date, cover.url; where name ~ *"${name}"* & total_rating_count > 3; sort total_rating_count desc; limit 10;`
     })
         .then(response => response.json())
-    console.log(result);
     return result;
 }
 
+
 export async function fetchIGDBGameByName(search: string):Promise<DataError> {
-    return await fetch('/api/igdb-game-search', {
+    const result =  await fetch('/api/igdb-game-search', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -44,4 +44,6 @@ export async function fetchIGDBGameByName(search: string):Promise<DataError> {
             return result;
         }
     });
+
+    return result;
 }
