@@ -86,3 +86,8 @@ export interface IGDBGameFetch{
     name:string,
     themes: IGDBTagIdName[]
 }
+
+export interface DataError{
+    data:string | null | IGDBGameFetch[],
+    error: string | null,
+}

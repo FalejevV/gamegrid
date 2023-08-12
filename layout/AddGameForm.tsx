@@ -4,40 +4,34 @@ import InputField from "@/components/InputField/InputField"
 import React, { useState } from "react";
 import Image from "next/image";
 import GameSearchItem from "@/components/GameSearchItem/GameSearchItem";
-import { IGDBGameFetch } from "@/interface";
+import { DataError, IGDBGameFetch } from "@/interface";
+import { fetchIGDBGameByName } from "@/utils/idgbFetching";
+
 
 export default function AddGameForm() {
     const [search, setSearch] = useState("");
     const [games, setGames] = useState<IGDBGameFetch[]>([]);
     const [error, setError] = useState("");
 
-    function gameSearch(e: React.FormEvent) {
+    async function gameSearch(e: React.FormEvent) {
         e.preventDefault();
         if (search.trim()) {
-            fetch('/api/igdb-game-search', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name: search
-                }),
-            }).then(res => res.json()).then(data => {
-                if (data.error) {
-                    setError(data.error);
-                    return;
-                } else {
-                    setGames(data.data)
+            let fetchResult: DataError = await fetchIGDBGameByName(search);
+            console.log(fetchResult);
+            if (fetchResult.error) {
+                setError(fetchResult.error)
+            }else{
+                if(Array.isArray(fetchResult.data)){
+                    setGames(fetchResult.data);
                 }
-            });
-
+            }
         }
     }
 
     function gameList() {
         return (
             <div className="flex flex-col gap-[15px] w-full h-fit">
-                {games.map((item: IGDBGameFetch) => <GameSearchItem key={item.first_release_date+item.name} image={item.cover?.url} name={item.name} date={item.first_release_date} />)}
+                {games.map((item: IGDBGameFetch) => <GameSearchItem key={item.first_release_date + item.name} image={item.cover?.url} name={item.name} date={item.first_release_date} />)}
             </div>
         )
     }
@@ -51,6 +45,7 @@ export default function AddGameForm() {
                         <Image src={"/icons/Search.svg"} alt={"Search icon"} width={20} height={20} className="w-[20px] h-[20px]" />
                     </div>
                 </div>
+                {error && <p className="textcol-main">{error}</p>}
             </form>
             {games.length > 0 && gameList()}
         </div>
