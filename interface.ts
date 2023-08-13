@@ -1,21 +1,21 @@
 import { PostgrestError } from "@supabase/supabase-js"
 
-export interface Game{
-    id:string
-    name:string,
-    developer:{
-        developer:string
+export interface Game {
+    id: string
+    name: string,
+    developer: {
+        developer: string
     }
-    release_date:Date,
+    release_date: Date,
     tags: TagItem[]
-    description:string,
-    image:string,
-    score:AverageScoreItem
+    description: string,
+    image: string,
+    score: AverageScoreItem
 }
 
-export interface AverageScoreItem{
-    id:number,
-    game_id:number,
+export interface AverageScoreItem {
+    id: number,
+    game_id: number,
     graphics_avg: number,
     sound_avg: number,
     gameplay_avg: number,
@@ -27,21 +27,21 @@ export interface AverageScoreItem{
     customization_avg: number,
     microtransactions_avg: number,
     support_avg: number,
-    total:number
+    total: number
 }
 
-export interface TagItem{
-    Tag:{
-        tag:string
+export interface TagItem {
+    Tag: {
+        tag: string
     }
 }
 
-export interface ScoreItem{
-    title:string,
-    value:number
+export interface ScoreItem {
+    title: string,
+    value: number
 }
 
-export interface ScoreNameList{
+export interface ScoreNameList {
     graphics: string,
     sound: string,
     gameplay: string,
@@ -55,40 +55,56 @@ export interface ScoreNameList{
     support: string,
 }
 
-export interface GameSortFilterParams{
-    sort:"string"
+export interface GameSortFilterParams {
+    sort: "string"
 }
 
-export interface FilteredIDPromise{
-    data:number[],
-    error:PostgrestError | null
+export interface FilteredIDPromise {
+    data: number[],
+    error: PostgrestError | null
 }
 
 
-export interface FilterQueryParams{
-    order:string | undefined,
-    tags:string[] | undefined,
-    platforms:string[] | undefined,
-    players:string | undefined,
-    developer:string | undefined,
-    amount:number,
+export interface FilterQueryParams {
+    order: string | undefined,
+    tags: string[] | undefined,
+    platforms: string[] | undefined,
+    players: string | undefined,
+    developer: string | undefined,
+    amount: number,
 }
-export interface IGDBTagIdName{
-    id:string,
-    name:string,
+export interface IGDBTagIdName {
+    id: string,
+    name: string,
 }
 
-export interface IGDBGameFetch{
-    cover:{
-        url:string,
+export interface IGDBGameFetch {
+    id:number,
+    cover: {
+        url: string,
     },
     first_release_date: number,
     genres: IGDBTagIdName[]
-    name:string,
+    name: string,
     themes: IGDBTagIdName[],
 }
 
-export interface DataError{
-    data:string | null | IGDBGameFetch[],
+export interface DataError {
+    data: string | null | IGDBGameFetch[],
     error: string | null,
+}
+
+export interface ScoreList {
+    graphics_avg: number,
+    sound_avg: number,
+    gameplay_avg: number,
+    level_avg: number,
+    balance_avg: number,
+    story_avg: number,
+    performance_avg: number,
+    original_avg: number,
+    customization_avg: number,
+    microtransactions_avg: number,
+    support_avg: number,
+    total: number
 }

@@ -3,12 +3,14 @@ import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux"
 import userAuth from "./features/userAuth"
 import window from "./features/window"
 import sortFilter from "./features/sortFilter"
+import gameCreation from "./features/gameCreation"
 
 export const store = configureStore({
   reducer: {
     userAuth:userAuth,
     window:window,
-    sortFilter:sortFilter
+    sortFilter:sortFilter,
+    gameCreation: gameCreation
   }
 })
 
