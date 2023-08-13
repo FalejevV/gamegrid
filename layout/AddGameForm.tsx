@@ -6,6 +6,7 @@ import Image from "next/image";
 import GameSearchItem from "@/components/GameSearchItem/GameSearchItem";
 import { DataError, IGDBGameFetch } from "@/interface";
 import { fetchIGDBGameByName } from "@/utils/idgbFetching";
+import { fetchedIGDBGamesDuplicateFilter } from "@/utils/formatter";
 
 
 export default function AddGameForm() {
@@ -27,7 +28,7 @@ export default function AddGameForm() {
                 setError(fetchResult.error)
             } else {
                 if (Array.isArray(fetchResult.data)) {
-                    setGames(fetchResult.data);
+                    setGames(fetchedIGDBGamesDuplicateFilter(fetchResult.data));
                 }
             }
         }
@@ -83,7 +84,6 @@ export default function AddGameForm() {
         )
     }
 
-    console.log(games);
     return (
         <div className="w-full max-w-[500px]">
             <form className="w-full h-fit flex flex-col gap-[15px] relative" onSubmit={gameSearch}>
