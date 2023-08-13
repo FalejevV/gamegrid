@@ -43,3 +43,14 @@ export function fetchedIGDBGamesDuplicateFilter(games: IGDBGameFetch[]): IGDBGam
     })
     return filteredGames;
 }
+
+//images.igdb.com/igdb/image/upload/t_thumb/co49x5.jpg
+export function toCoverLargeFormat(cover:string):string{
+    if(!cover.trim()) return "";
+
+    let coverSplit = cover.split("/");
+    let imageFormat = "t_original";
+    coverSplit[coverSplit.length - 2] = imageFormat;
+    
+    return "https:"+coverSplit.join("/");
+}

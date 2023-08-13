@@ -7,6 +7,7 @@ import GameSearchItem from "@/components/GameSearchItem/GameSearchItem";
 import { DataError, IGDBGameFetch } from "@/interface";
 import { fetchIGDBGameByName } from "@/utils/idgbFetching";
 import { fetchedIGDBGamesDuplicateFilter } from "@/utils/formatter";
+import GamePickPreview from "@/components/GamePickPreview/GamePickPreview";
 
 
 export default function AddGameForm() {
@@ -18,9 +19,9 @@ export default function AddGameForm() {
     const [isFetching, setIsFetching] = useState<boolean>(false);
 
     async function gameSearch(e: React.FormEvent) {
-        if(isFetching) return;
+        if (isFetching) return;
         else setIsFetching(true)
-
+        setSelectedGame(undefined);
         e.preventDefault();
         if (search.trim()) {
             let fetchResult: DataError = await fetchIGDBGameByName(search);
@@ -49,22 +50,9 @@ export default function AddGameForm() {
         )
     }
 
-    function gamePreview() {
-        if (!selectedGame) return;
-        return (
-            <div className="w-full h-fit flex flex-col textcol-main pt-[20px] gap-[20px]">
-                <p>You picked</p>
-                <div className="w-full flex items-center justify-between gap-[30px] bg-dimm p-[10px] ">
-                    <p>{selectedGame.name}</p>
-                    <Image src={"https:" + selectedGame.cover.url} alt={"selected game"} className="w-full max-w-[100px] h-[100px]" width={100} height={100} />
-                </div>
-            </div>
-        )
-    }
-
     function gameSearchPage() {
         return (
-            <div className="flexgap flex-col">
+            <div className="flexgap flex-col relative">
                 <div className="flex w-full items-center h-[fit] relative">
                     <InputField bgColor="bg-dimm" label={"Add a Game"} name={"search"} placeholder={"Game search..."} value={search} setValue={setSearch} />
                     <div className={`h-[45px] w-[70px] absolute bottom-0 right-0  flex items-center justify-center bg-mid hover:brightness-105 cursor-pointer
@@ -74,9 +62,12 @@ export default function AddGameForm() {
                     </div>
 
                 </div>
-                {selectedGame && gamePreview()}
+                {selectedGame && <>
+                    <GamePickPreview game={selectedGame} />
+                    <button className="w-full textcol-main text-center bg-hi text-[22px] p-[10px] hover:brightness-110">NEXT</button>
+                </>}
                 {games.length > 0 &&
-                    <div className="w-full h-fit max-h-[300px] bg-dimm overflow-y-scroll p-[10px]">
+                    <div className="w-full h-fit max-h-[300px] bg-dimm overflow-y-scroll p-[10px] left-0 top-[90px] z-10">
                         {games.length > 0 && gameList()}
                     </div>
                 }
