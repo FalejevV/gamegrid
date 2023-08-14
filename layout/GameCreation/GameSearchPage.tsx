@@ -9,7 +9,8 @@ import { fetchedIGDBGamesDuplicateFilter } from "@/utils/formatter";
 import { fetchIGDBGameByName } from "@/utils/idgbFetching";
 import { useState } from "react";
 import Image from "next/image";
-import { setGameCreationFetchedGames, setGameCreationGameData, setGameCreationSearchInput } from "@/store/features/gameCreation";
+import { setGameCreationFetchedGames, setGameCreationGameData, setGameCreationMemoData, setGameCreationPage, setGameCreationSearchInput } from "@/store/features/gameCreation";
+import AlertText from "@/components/AlertText/AlertText";
 
 
 
@@ -28,7 +29,11 @@ export default function GameSearchPage() {
         if (gameCreationSelector.gameSearchInput.trim()) {
             let fetchResult: DataError = await fetchIGDBGameByName(gameCreationSelector.gameSearchInput);
             if (fetchResult.error) {
-                setError(fetchResult.error)
+                if(typeof fetchResult.error === "string"){
+                    setError(fetchResult.error);
+                }else{
+                    setError("Fetching error :/  Please try again after some time. Sorry");
+                }
             } else {
                 if (Array.isArray(fetchResult.data)) {
                     dispatch(setGameCreationFetchedGames(fetchedIGDBGamesDuplicateFilter(fetchResult.data)));
@@ -56,6 +61,17 @@ export default function GameSearchPage() {
         dispatch(setGameCreationFetchedGames([]));
     }
 
+    function proceedToNextPage(){
+        if(gameCreationSelector.gameInfo.gameId < 0) return;
+        
+        if(gameCreationSelector.gameInfo.gameId === gameCreationSelector.memoGame.gameId){
+            dispatch(setGameCreationPage(1));
+        }else if (gameCreationSelector.gameInfo.gameId !== gameCreationSelector.memoGame.gameId){
+            setGameCreationMemoData(gameCreationSelector.gameInfo);
+            dispatch(setGameCreationPage(1));
+        }
+    }
+
 
 
     return (
@@ -69,15 +85,23 @@ export default function GameSearchPage() {
                 </div>
 
             </div>
+
+
+            {error && <AlertText alertText={error} />}
+
+
             {gameCreationSelector.gameInfo.name && <>
                 <GamePickPreview game={gameCreationSelector.gameInfo} />
-                <button className="w-full textcol-main text-center bg-hi text-[22px] p-[10px] hover:brightness-110">NEXT</button>
+                <button className="w-full textcol-main text-center bg-hi text-[22px] p-[10px] hover:brightness-110" onClick={proceedToNextPage}>NEXT</button>
             </>}
+
+
             {gameCreationSelector.fetchedGames.length > 0 &&
                 <div className="w-full h-fit max-h-[300px] bg-dimm overflow-y-scroll p-[10px] left-0 top-[90px] z-10">
                     {gameCreationSelector.fetchedGames.length > 0 && gameList()}
                 </div>
             }
+            
         </div>
     )
 }

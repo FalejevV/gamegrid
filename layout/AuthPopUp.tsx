@@ -158,8 +158,8 @@ export default function AuthPopUp(){
     function InputSignInForm(){
         return(
             <form className="flex flex-col gap-[15px]" onSubmit={formSubmit}>
-                <InputField value={email} setValue={setEmail} type="email" label={"E-Mail"} name={"email"} placeholder="Email goes here"/>
-                <InputField value={password} setValue={setPassword} type="password" label={"Password"} name={"password"} placeholder="Password here"/>
+                <InputField bgColor="bg-mid"  value={email} setValue={setEmail} type="email" label={"E-Mail"} name={"email"} placeholder="Email goes here"/>
+                <InputField bgColor="bg-mid" value={password} setValue={setPassword} type="password" label={"Password"} name={"password"} placeholder="Password here"/>
                 {ForgotPasswordButton()}
                 <FormAuthButton name={"Sign in"} processing={processing} />
             </form>

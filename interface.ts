@@ -89,8 +89,8 @@ export interface IGDBGameFetch {
     themes: IGDBTagIdName[],
 }
 
-export interface DataError {
-    data: string | null | IGDBGameFetch[],
+export interface StringDataError {
+    data: string | null,
     error: string | null,
 }
 

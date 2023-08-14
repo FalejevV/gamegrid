@@ -1,55 +1,55 @@
-import { FilterQueryParams, FilteredIDPromise, Game } from "@/interface";
+import {FilterQueryParams, FilteredIDPromise, Game, StringDataError } from "@/interface";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import supabaseServer from "./supabaseServer";
 
 let amountDefault = 3;
 
 
-function generateOrderByType(order:string):[orderBy:string, ascending:{ascending:boolean}, isAspect:boolean, itTotal:boolean]{
+function generateOrderByType(order: string): [orderBy: string, ascending: { ascending: boolean }, isAspect: boolean, itTotal: boolean] {
     let orderBy = "id";
     let ascending = false
     let isAspect = false;
     let isTotal = false;
-    switch (order){
+    switch (order) {
         case "": {
             let orderBy = "id";
             let ascending = false
         }
-        case "Recent post" : {
+        case "Recent post": {
             orderBy = "id"
             ascending = false;
             break;
         }
-        case "Old post" : {
+        case "Old post": {
             orderBy = "id"
             ascending = true;
             break;
         }
-        case "Game: New":{
+        case "Game: New": {
             orderBy = "release_date"
             ascending = false;
             break;
         }
-        case "Game: Old":{
+        case "Game: Old": {
             orderBy = "release_date"
             ascending = true;
             break;
         }
-        case "Most rated":{
+        case "Most rated": {
             orderBy = "total"
             ascending = false;
             isAspect = true;
             isTotal = true;
             break;
         }
-        case "Least rated":{
+        case "Least rated": {
             orderBy = "total"
             ascending = true;
             isAspect = true;
             isTotal = true;
             break;
         }
-        default:{
+        default: {
             orderBy = `${order.toLowerCase().split(" ")[0]}_avg`;
             ascending = false;
             isAspect = true;
@@ -58,125 +58,125 @@ function generateOrderByType(order:string):[orderBy:string, ascending:{ascending
     }
 
 
-    return [orderBy, {ascending},isAspect, isTotal]
+    return [orderBy, { ascending }, isAspect, isTotal]
 }
 
 /// Accepts array of Tags. Returns array of games, that have these tags.
-async function filterByTags(supabase:SupabaseClient, tags:string[]):Promise<FilteredIDPromise>{
-    if(typeof tags === "string") tags = [tags];
+async function filterByTags(supabase: SupabaseClient, tags: string[]): Promise<FilteredIDPromise> {
+    if (typeof tags === "string") tags = [tags];
     let { data, error } = await supabase.rpc('get_games_by_tags', { tags })
-    let resultArray:number[] = [];
-    if(data){
-        data.forEach((filteredItem:{id:number}) => resultArray.push(filteredItem.id));
+    let resultArray: number[] = [];
+    if (data) {
+        data.forEach((filteredItem: { id: number }) => resultArray.push(filteredItem.id));
     }
-    return { data:resultArray, error};
+    return { data: resultArray, error };
 }
 
 // Accepts arraof Platforms, returns array of games, that have these platforms
-async function filterByPlatforms(supabase:SupabaseClient, platforms:string[], gameids:number[]):Promise<FilteredIDPromise>{
-    if(typeof platforms === "string") platforms = [platforms];
+async function filterByPlatforms(supabase: SupabaseClient, platforms: string[], gameids: number[]): Promise<FilteredIDPromise> {
+    if (typeof platforms === "string") platforms = [platforms];
     const { data, error } = await supabase.rpc('get_games_by_any_platforms', { platform_names: platforms, game_ids: gameids })
-    let resultArray:number[] = [];
-    if(data){
-        data.forEach((filteredItem:{game_id:number}) => resultArray.push(filteredItem.game_id));
+    let resultArray: number[] = [];
+    if (data) {
+        data.forEach((filteredItem: { game_id: number }) => resultArray.push(filteredItem.game_id));
     }
-    return { data:resultArray, error};
+    return { data: resultArray, error };
 }
 // Accepts arraof Players, returns array of games, that have these players
-async function filterByPlayers(supabase:SupabaseClient, players:string, gameids:number[]):Promise<FilteredIDPromise>{
+async function filterByPlayers(supabase: SupabaseClient, players: string, gameids: number[]): Promise<FilteredIDPromise> {
     const { data, error } = await supabase.rpc('get_games_by_one_player', { player_name: players, game_ids: gameids })
-    let resultArray:number[] = [];
-    if(data){
-        data.forEach((filteredItem:{game_id:number}) => resultArray.push(filteredItem.game_id));
+    let resultArray: number[] = [];
+    if (data) {
+        data.forEach((filteredItem: { game_id: number }) => resultArray.push(filteredItem.game_id));
     }
-    return { data:resultArray, error};
+    return { data: resultArray, error };
 }
 
-async function filterByDevelopers(supabase:SupabaseClient, developer:string, gameids:number[]):Promise<FilteredIDPromise>{
-    const { data, error } = await supabase.rpc('get_games_by_developer', { developer_name: developer, game_ids: gameids})
-    let resultArray:number[] = [];
-    if(data){
-        data.forEach((filteredItem:{game_id:number}) => resultArray.push(filteredItem.game_id));
+async function filterByDevelopers(supabase: SupabaseClient, developer: string, gameids: number[]): Promise<FilteredIDPromise> {
+    const { data, error } = await supabase.rpc('get_games_by_developer', { developer_name: developer, game_ids: gameids })
+    let resultArray: number[] = [];
+    if (data) {
+        data.forEach((filteredItem: { game_id: number }) => resultArray.push(filteredItem.game_id));
     }
-    return {data:resultArray, error};
+    return { data: resultArray, error };
 }
 
-async function sortByAspect(supabase:SupabaseClient, aspect:string, gameids:number[] | null, sort: "asc" | "desc"):Promise<FilteredIDPromise>{
-    if(gameids && gameids.length === 0){
+async function sortByAspect(supabase: SupabaseClient, aspect: string, gameids: number[] | null, sort: "asc" | "desc"): Promise<FilteredIDPromise> {
+    if (gameids && gameids.length === 0) {
         gameids = null
     }
     const { data, error } = await supabase.rpc('get_review_game_ids_by_aspect_and_game_ids', { aspect, gameids, sort }).limit(amountDefault)
-    return {data, error};
+    return { data, error };
 }
 
 
 
-export async function fetchFilteredGames(filters:FilterQueryParams, offset: number = 0):Promise<{
-    data:Game[] | null,
-    error:PostgrestError | null
-}>{
+export async function fetchFilteredGames(filters: FilterQueryParams, offset: number = 0): Promise<{
+    data: Game[] | null,
+    error: PostgrestError | null
+}> {
     const supabase = supabaseServer();
-    let gameIds:number[] = [];
-    let anyError:PostgrestError | null = null;
-    let sortedByAspect:boolean = false;
+    let gameIds: number[] = [];
+    let anyError: PostgrestError | null = null;
+    let sortedByAspect: boolean = false;
     let nothingFoundOnPrevQuery = false;
     amountDefault = filters.amount || 3;
 
     // If tags are selected, fint games by these tags
-    if(filters.tags && filters.tags.length > 0){
+    if (filters.tags && filters.tags.length > 0) {
         const tagResponse = await filterByTags(supabase, filters.tags);
         gameIds = tagResponse.data || [];
-        if(gameIds.length === 0) nothingFoundOnPrevQuery = true;
+        if (gameIds.length === 0) nothingFoundOnPrevQuery = true;
 
-        if(nothingFoundOnPrevQuery){
-            return {data:[], error:null};
+        if (nothingFoundOnPrevQuery) {
+            return { data: [], error: null };
         }
         anyError = tagResponse.error;
     }
 
     // If platforms are selected, fint games by these platforms
-    if(!anyError && filters.platforms && filters.platforms.length > 0){
+    if (!anyError && filters.platforms && filters.platforms.length > 0) {
         const platformResponse = await filterByPlatforms(supabase, filters.platforms, gameIds);
         gameIds = platformResponse.data || [];
-        if(gameIds.length === 0) nothingFoundOnPrevQuery = true;
+        if (gameIds.length === 0) nothingFoundOnPrevQuery = true;
 
-        if(nothingFoundOnPrevQuery){
-            return {data:[], error:null};
+        if (nothingFoundOnPrevQuery) {
+            return { data: [], error: null };
         }
         anyError = platformResponse.error;
     }
 
     // If player type is selected, fint games by player type
-    if(!anyError && filters.players && filters.players.length > 0){
+    if (!anyError && filters.players && filters.players.length > 0) {
         const playersResponse = await filterByPlayers(supabase, filters.players, gameIds);
         gameIds = playersResponse.data || [];
-        if(gameIds.length === 0) nothingFoundOnPrevQuery = true;
-        if(nothingFoundOnPrevQuery){
-            return {data:[], error:null};
+        if (gameIds.length === 0) nothingFoundOnPrevQuery = true;
+        if (nothingFoundOnPrevQuery) {
+            return { data: [], error: null };
         }
         anyError = playersResponse.error;
     }
 
-    
-    if(!anyError && filters.developer){
+
+    if (!anyError && filters.developer) {
         const developerResponse = await filterByDevelopers(supabase, filters.developer, gameIds);
         gameIds = developerResponse.data || [];
-        if(gameIds.length === 0) nothingFoundOnPrevQuery = true;
-        if(nothingFoundOnPrevQuery){
-            return {data:[], error:null};
+        if (gameIds.length === 0) nothingFoundOnPrevQuery = true;
+        if (nothingFoundOnPrevQuery) {
+            return { data: [], error: null };
         }
         anyError = developerResponse.error;
     }
 
-    let [orderBy, ascending,isAspect, isTotal] = generateOrderByType(filters.order || "");
-    if(isAspect && !anyError && filters.order){
+    let [orderBy, ascending, isAspect, isTotal] = generateOrderByType(filters.order || "");
+    if (isAspect && !anyError && filters.order) {
         let orderType: "asc" | "desc" = ascending.ascending ? "asc" : "desc";
         const aspectResponse = await sortByAspect(supabase, orderBy, gameIds, orderType);
 
         gameIds = aspectResponse.data || [];
-        if(gameIds.length === 0) nothingFoundOnPrevQuery = true;
-        if(nothingFoundOnPrevQuery){
-            return {data:[], error:null};
+        if (gameIds.length === 0) nothingFoundOnPrevQuery = true;
+        if (nothingFoundOnPrevQuery) {
+            return { data: [], error: null };
         }
         anyError = aspectResponse.error;
     }
@@ -190,29 +190,41 @@ export async function fetchFilteredGames(filters:FilterQueryParams, offset: numb
                 ),
                 score:AverageReview(*)
     `);
-    
-    if(gameIds.length > 0) query.in("id", gameIds);
-    if(!isAspect) {
+
+    if (gameIds.length > 0) query.in("id", gameIds);
+    if (!isAspect) {
         query.order(orderBy, ascending);
         query.range(offset, offset + amountDefault - 1);
-    }else{
+    } else {
         query.order('id', ascending)
     }
 
-    let {data, error} = await query;
+    let { data, error } = await query;
 
 
-    
-    if(isTotal){
-        let result:Game[] = [];
-        result= gameIds.map((id) => {
-            if(data){
+
+    if (isTotal) {
+        let result: Game[] = [];
+        result = gameIds.map((id) => {
+            if (data) {
                 return data.find((game) => game.id === id)
             }
         }).slice(0, amountDefault)
-        return {data: result, error};
+        return { data: result, error };
     }
-    return {data, error};
-    
+    return { data, error };
+
 }
 
+
+export async function getGameIdFromName(name: string):Promise<StringDataError> {
+    const supabase = supabaseServer();
+
+    let { data, error } = await supabase.from("Game").select("id").eq("name", name);
+
+    if(data && data[0]){
+        return {data:data[0].id, error:error?.message || null}
+    }
+
+    return {data: null, error:error?.message || null};
+}

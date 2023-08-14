@@ -26,31 +26,35 @@ export function fetchedIGDBGamesDuplicateFilter(games: IGDBGameFetch[]): IGDBGam
     }
 
     function appendSimmilarGames(index: number, game: IGDBGameFetch) {
-        if(filteredGames[index]){
-            game.genres.forEach((genre:IGDBTagIdName) => {
-                filteredGames[index].genres.push(genre);
-            })
-            game.themes.forEach((theme:IGDBTagIdName) => {
-                filteredGames[index].themes.push(theme);
-            })
+        if (filteredGames[index]) {
+            if (game.genres) {
+                game.genres.forEach((genre: IGDBTagIdName) => {
+                    filteredGames[index].genres.push(genre);
+                })
+            }
+            if (game.themes) {
+                game.themes.forEach((theme: IGDBTagIdName) => {
+                    filteredGames[index].themes.push(theme);
+                })
+            }
         }
     }
 
     games.forEach((game: IGDBGameFetch) => {
         let foundIndex = searchForExistingGame(game);
-        if(foundIndex > -1) appendSimmilarGames(foundIndex, game);
+        if (foundIndex > -1) appendSimmilarGames(foundIndex, game);
         else filteredGames.push(game);
     })
     return filteredGames;
 }
 
 //images.igdb.com/igdb/image/upload/t_thumb/co49x5.jpg
-export function toCoverLargeFormat(cover:string):string{
-    if(!cover.trim()) return "";
+export function toCoverLargeFormat(cover: string): string {
+    if (!cover.trim()) return "";
 
     let coverSplit = cover.split("/");
     let imageFormat = "t_original";
     coverSplit[coverSplit.length - 2] = imageFormat;
-    
-    return "https:"+coverSplit.join("/");
+
+    return "https:" + coverSplit.join("/");
 }

@@ -7,7 +7,8 @@ export interface GameCreation {
     gameSearchInput:string,
     gameInfo: GameCreationGameInfo,
     scores: ScoreList,
-    fetchedGames: IGDBGameFetch[]
+    fetchedGames: IGDBGameFetch[],
+    memoGame:GameCreationGameInfo
 }
 
 export interface GameCreationGameInfo {
@@ -23,6 +24,11 @@ let initialState: GameCreation = {
         gameId: -1,
         name: "",
         image: "",
+    },
+    memoGame: {
+        gameId: -10,
+        name: "memo",
+        image: "memo"
     },
     scores: {
         graphics_avg: -1,
@@ -51,11 +57,17 @@ const gameCreationSlice = createSlice({
         setGameCreationGameData: ((state: GameCreation, action: PayloadAction<GameCreationGameInfo>) => {
             state.gameInfo = {...action.payload}
         }),
+        setGameCreationMemoData: ((state: GameCreation, action: PayloadAction<GameCreationGameInfo>) => {
+            state.memoGame = {...action.payload};
+        }),
         setGameCreationSearchInput: ((state:GameCreation, action:PayloadAction<string>) => {
             state.gameSearchInput = action.payload;
         }),
         setGameCreationFetchedGames: ((state:GameCreation, action:PayloadAction<IGDBGameFetch[]>) => {
             state.fetchedGames = action.payload 
+        }),
+        clearGameCreationAll:((state:GameCreation) => {
+           return initialState 
         })
     }
 })
@@ -65,7 +77,7 @@ const gameCreationSlice = createSlice({
 
 export default gameCreationSlice.reducer;
 
-export const {setGameCreationPage, setGameCreationGameData, setGameCreationSearchInput, setGameCreationFetchedGames} = gameCreationSlice.actions;
+export const {setGameCreationPage, setGameCreationGameData, setGameCreationSearchInput, setGameCreationFetchedGames, setGameCreationMemoData, clearGameCreationAll} = gameCreationSlice.actions;
 
 
 
