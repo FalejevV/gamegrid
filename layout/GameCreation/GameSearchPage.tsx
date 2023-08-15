@@ -3,7 +3,7 @@
 import GamePickPreview from "@/components/GamePickPreview/GamePickPreview";
 import GameSearchItem from "@/components/GameSearchItem/GameSearchItem";
 import InputField from "@/components/InputField/InputField";
-import { DataError, IGDBGameFetch } from "@/interface";
+import { StringDataError, IGDBGameFetch } from "@/interface";
 import { useAppSelector, RootState, useAppDispatch } from "@/store/store";
 import { fetchedIGDBGamesDuplicateFilter } from "@/utils/formatter";
 import { fetchIGDBGameByName } from "@/utils/idgbFetching";
@@ -27,7 +27,7 @@ export default function GameSearchPage() {
         dispatch(setGameCreationFetchedGames([]));
         e.preventDefault();
         if (gameCreationSelector.gameSearchInput.trim()) {
-            let fetchResult: DataError = await fetchIGDBGameByName(gameCreationSelector.gameSearchInput);
+            let fetchResult: StringDataError = await fetchIGDBGameByName(gameCreationSelector.gameSearchInput);
             if (fetchResult.error) {
                 if(typeof fetchResult.error === "string"){
                     setError(fetchResult.error);
