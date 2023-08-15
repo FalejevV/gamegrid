@@ -76,15 +76,15 @@ export default function GameSearchPage() {
 
     return (
         <div className="flexgap flex-col relative">
-            <div className="flex w-full items-center h-[fit] relative">
+            <form onSubmit={gameSearch} className="flex w-full items-center h-[fit] relative">
                 <InputField bgColor="bg-dimm" label={"Add a Game"} name={"search"} placeholder={"Game search..."} value={gameCreationSelector.gameSearchInput} setValue={(value:string) => dispatch(setGameCreationSearchInput(value)) } />
-                <div className={`h-[45px] w-[70px] absolute bottom-0 right-0  flex items-center justify-center bg-mid hover:brightness-105 cursor-pointer
+                <button className={`h-[45px] w-[70px] absolute bottom-0 right-0  flex items-center justify-center bg-mid hover:brightness-105 cursor-pointer
                         ${isFetching && "opacity-50"} 
-                    `} onClick={gameSearch} >
+                    `} >
                     <Image src={"/icons/Search.svg"} alt={"Search icon"} width={20} height={20} className="w-[20px] h-[20px]" />
-                </div>
+                </button>
 
-            </div>
+            </form>
 
 
             {error && <AlertText alertText={error} />}

@@ -1,4 +1,5 @@
-import { getIGDBByGameName } from "@/utils/idgbFetching";
+import { StringDataError } from "@/interface";
+import { getIGDBByGameName } from "@/utils/fetching";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
 }
 
 
-export async function POST(request: Request) {
+export async function POST(request: Request):Promise<NextResponse<StringDataError>> {
     const res = await request.json()
 
     let result = await getIGDBByGameName(res.name);

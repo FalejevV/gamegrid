@@ -12,7 +12,6 @@ export default function AddGameForm() {
 
     const gameCreationSelector = useAppSelector((state: RootState) => state.gameCreation);
 
-    console.log(gameCreationSelector.page);
     return (
         <div className="w-full max-w-[500px]">
             <div role="form" className="w-full h-fit flex flex-col gap-[15px] relative" >

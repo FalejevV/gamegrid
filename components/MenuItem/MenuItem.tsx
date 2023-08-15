@@ -11,6 +11,7 @@ export default function MenuItem(props:{
     width?:number,
     mobile?:boolean,
     title:string,
+    selectable?:boolean
 }){
 
     const pathname = usePathname();
@@ -18,7 +19,7 @@ export default function MenuItem(props:{
 
     if(props.mobile){
         return(
-            <Link href={props.href} className={`w-full flex justify-center items-center text-[25px]
+            <Link href={props.href} tabIndex={props.selectable ? 1 : -1} className={`w-full flex justify-center items-center text-[25px]
             ${pathname !== props.href ? "textcol-dimm" :"textcol-main"}
             `}
             onClick={() => dispatch(toggleDropdownMenu(false))}
@@ -31,7 +32,7 @@ export default function MenuItem(props:{
     const windowSidebarSelector = useAppSelector((state:RootState) => state.window.sidebarHovered);
 
     return(
-        <Link href={props.href} className={`w-full flex items-center gap-[15px] transition-all duration-150
+        <Link href={props.href} tabIndex={props.selectable ? 1 : -1} className={`w-full flex items-center gap-[15px] transition-all duration-150
             hover:scale-105 hover:brightness-125
         `}> 
             <div className="max-w-[35px] min-w-[35px] min-h-[35px] max-h-[35px] flex items-start justify-start">

@@ -8,13 +8,21 @@ export interface GameCreation {
     gameInfo: GameCreationGameInfo,
     scores: ScoreList,
     fetchedGames: IGDBGameFetch[],
-    memoGame:GameCreationGameInfo
+    memoGame:GameCreationGameInfo,
+    questions:GameCreationQuestions
 }
 
 export interface GameCreationGameInfo {
     gameId: number,
     name: string,
     image: string
+}
+
+export interface GameCreationQuestions{
+    finished:boolean,
+    hours:string,
+    platform:string,
+    comment:string,
 }
 
 let initialState: GameCreation = {
@@ -44,7 +52,13 @@ let initialState: GameCreation = {
         support_avg: -1,
         total: -1
     },
-    fetchedGames: []
+    fetchedGames: [],
+    questions: {
+        finished: false,
+        hours: "",
+        platform: "",
+        comment: ""
+    }
 }
 
 const gameCreationSlice = createSlice({
@@ -68,6 +82,18 @@ const gameCreationSlice = createSlice({
         }),
         clearGameCreationAll:((state:GameCreation) => {
            return initialState 
+        }),
+        setGameCreationFinished: ((state:GameCreation, action: PayloadAction<boolean>) => {
+            state.questions.finished = action.payload   
+        }),
+        setGameCreationHours: ((state:GameCreation, action: PayloadAction<string>) => {
+            state.questions.hours = action.payload;
+        }),
+        setGameCreationPlatform: ((state:GameCreation, action: PayloadAction<string>) => {
+            state.questions.platform = action.payload   
+        }),
+        setGameCreationComment : ((state:GameCreation, action: PayloadAction<string>) => {
+            state.questions.comment = action.payload
         })
     }
 })
@@ -77,7 +103,7 @@ const gameCreationSlice = createSlice({
 
 export default gameCreationSlice.reducer;
 
-export const {setGameCreationPage, setGameCreationGameData, setGameCreationSearchInput, setGameCreationFetchedGames, setGameCreationMemoData, clearGameCreationAll} = gameCreationSlice.actions;
+export const {setGameCreationPage, setGameCreationGameData, setGameCreationSearchInput, setGameCreationFetchedGames, setGameCreationMemoData, clearGameCreationAll, setGameCreationComment, setGameCreationFinished, setGameCreationHours, setGameCreationPlatform} = gameCreationSlice.actions;
 
 
 
