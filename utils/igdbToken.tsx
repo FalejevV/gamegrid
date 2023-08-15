@@ -1,4 +1,4 @@
-import { DataError } from "@/interface";
+import { StringDataError } from "@/interface";
 
 export default async function () {
     const result: {
@@ -9,7 +9,7 @@ export default async function () {
         method: "POST",
     })
         .then(response => response.json())
-    let formattedResult: DataError= {
+    let formattedResult: StringDataError= {
         data: null,
         error: null,
     }

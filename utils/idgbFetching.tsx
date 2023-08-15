@@ -1,4 +1,4 @@
-import { DataError, IGDBGameFetch } from "@/interface";
+import { StringDataError, IGDBGameFetch } from "@/interface";
 import igdbToken from "./igdbToken";
 
 
@@ -22,7 +22,7 @@ export async function getIGDBByGameName(name: string) {
 }
 
 
-export async function fetchIGDBGameByName(search: string):Promise<DataError> {
+export async function fetchIGDBGameByName(search: string):Promise<StringDataError> {
     const result =  await fetch('/api/igdb-game-search', {
         method: 'POST',
         headers: {
@@ -32,7 +32,7 @@ export async function fetchIGDBGameByName(search: string):Promise<DataError> {
             name: search
         }),
     }).then(res => res.json()).then(data => {
-        let result: DataError = {
+        let result: StringDataError = {
             data: null,
             error: null
         }
