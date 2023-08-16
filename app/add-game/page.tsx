@@ -1,8 +1,6 @@
 
 import AddGameForm from "@/layout/AddGameForm";
-import { getIGDBByGameName } from "@/utils/idgbFetching";
 import supabaseServer from "@/utils/supabaseServer";
-
 
 
 export default async function AddGame(){
