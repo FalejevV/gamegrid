@@ -7,7 +7,7 @@ import InputField from "@/components/InputField/InputField";
 import { StringDataError } from "@/interface";
 import { setGameCreationFinished, setGameCreationHours, setGameCreationPlatform } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
-import { getSupabaseGameByName } from "@/utils/fetching";
+import { APICallSupabaseGameInsertByName, getSupabaseGameByName } from "@/utils/fetching";
 import { useEffect, useState } from "react";
 
 
@@ -18,6 +18,8 @@ export default function GameReviewPage() {
     const [gameInfoGathered, setGameInfoGathered] = useState(false);
     const [gameDatabaseId, setGameDatabaseId] = useState(-1);
     const dispatch = useAppDispatch();
+
+
     async function supabaseGameSearch() {
         if (gameCreationSelector.gameInfo.gameId === gameCreationSelector.memoGame.gameId) return;
 
@@ -26,13 +28,24 @@ export default function GameReviewPage() {
         setGameInfoGathered(true);
     }
 
+    async function supabaseGameInsert() {
+        console.log("call");
+        if(gameDatabaseId === -1 && gameInfoGathered) return;
+        const result:StringDataError = await APICallSupabaseGameInsertByName(gameCreationSelector.gameInfo.name);
+        console.log(result);
+    }
+
     useEffect(() => {
         supabaseGameSearch();
     }, []);
 
+    useEffect(() => {
+        supabaseGameInsert();
+    },[gameInfoGathered, gameDatabaseId]);
+
 
     return (
-        <div className="flexgap w-full flex-col">
+        <div className="flex gap-[20px] w-full flex-col">
           <InputCheckbox question={"Did you finish the game?"} name={"finished"} onChange={(value:boolean) => dispatch(setGameCreationFinished(value))} value={gameCreationSelector.questions.finished} />  
           <InlineInputField title={"How many hours have you played?"} name={"hours"} onChange={(value:string) => dispatch(setGameCreationHours(value))} value={gameCreationSelector.questions.hours.toString()} placeholder={"Hours"} />
           <DropdownInput options={["One", "Two", "Three", "Four", "Five"]} value={gameCreationSelector.questions.platform} onChange={(value:string) => dispatch(setGameCreationPlatform(value))} title={"What platform did you play on?"} name={"platform"} />

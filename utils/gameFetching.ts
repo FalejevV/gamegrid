@@ -1,6 +1,7 @@
 import {FilterQueryParams, FilteredIDPromise, Game, StringDataError } from "@/interface";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import supabaseServer from "./supabaseServer";
+import { getIGDBFullGameInfo } from "./fetching";
 
 let amountDefault = 3;
 
@@ -217,7 +218,7 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
 }
 
 
-export async function getGameIdFromName(name: string):Promise<StringDataError> {
+export async function getSupabaseGameIdFromName(name: string):Promise<StringDataError> {
     const supabase = supabaseServer();
 
     let { data, error } = await supabase.from("Game").select("id").eq("name", name);
@@ -227,4 +228,27 @@ export async function getGameIdFromName(name: string):Promise<StringDataError> {
     }
 
     return {data: null, error:error?.message || null};
+}
+
+
+export async function supabaseGameInsertByName(name:string):Promise<StringDataError>{
+    const supabase = supabaseServer();
+
+    // checking if game name already exists in supabase table.
+    let { data, error } = await supabase.from("Game").select("*").eq("name", name);
+    if(data && data[0]) return{
+        data:null,
+        error:null
+    }
+    if(error) return {data:null, error:error.message};
+
+    let IGDBStringFetch = await getIGDBFullGameInfo(name);
+    
+    // fetching from IGDB return error object instead of games array.
+    if(!Array.isArray(IGDBStringFetch)){
+        return {data:null, error:IGDBStringFetch};
+    }
+
+
+    return {data:IGDBStringFetch, error:null}
 }

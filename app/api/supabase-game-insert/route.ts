@@ -1,5 +1,5 @@
 import { StringDataError } from "@/interface";
-import { getIGDBByGameName } from "@/utils/fetching";
+import { supabaseGameInsertByName } from "@/utils/gameFetching";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -16,13 +16,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: Request):Promise<NextResponse<StringDataError>> {
     const res = await request.json()
 
-    let result = await getIGDBByGameName(res.name);
-
+    let result = await supabaseGameInsertByName(res.name);
+    
     return new NextResponse(JSON.stringify({
-        data: Array.isArray(result) && result,
-        error: !Array.isArray(result) && result 
+        data: result.data, 
+        error: result.error 
     }), {
         status: 200,
         headers: { "Content-Type": "application/json" },
     });
 }
+

@@ -22,16 +22,68 @@ export async function getIGDBByGameName(name: string) {
 }
 
 
-export async function getSupabaseGameByName(name:string):Promise<StringDataError> {
-    const result:StringDataError = await fetch('/api/game-by-name', {
+export async function getSupabaseGameByName(name: string): Promise<StringDataError> {
+    const result: StringDataError = await fetch('/api/igdb-game-by-name', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            name: name 
+            name: name
         }),
     }).then(res => res.json())
-    
+
     return result;
 }
+
+
+export async function APICallSupabaseGameInsertByName(name: string): Promise<StringDataError> {
+    const result: StringDataError = await fetch('/api/supabase-game-insert', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: name
+        }),
+    }).then(res => res.json())
+    return result;
+}
+
+
+export async function getIGDBFullGameInfo(name: string): Promise<string>{
+    const token = await igdbToken();
+    if (token.error) return token.error;
+
+    const result = await fetch("https://api.igdb.com/v4/games", {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Client-ID": process.env.NEXT_TWITCH_CLIENT_ID || "",
+            "Authorization": "Bearer " + token.data,
+            "Content-Type": "application/json"
+        },
+        body: `fields name,platforms,genres,themes,cover,involved_companies,total_rating_count, first_release_date; where name ~ "${name}" & total_rating_count > 1; sort total_rating_count desc; limit 10;`
+    })
+        .then(response => response.json())
+
+    return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

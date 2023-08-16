@@ -1,7 +1,7 @@
-import { StringDataError} from "@/interface";
+import { StringDataError } from "@/interface";
 
-export async function fetchIGDBGameByName(search: string):Promise<StringDataError> {
-    const result =  await fetch('/api/igdb-game-search', {
+export async function fetchIGDBGameByName(search: string): Promise<StringDataError> {
+    const result = await fetch('/api/igdb-game-search', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -25,3 +25,5 @@ export async function fetchIGDBGameByName(search: string):Promise<StringDataErro
 
     return result;
 }
+
+

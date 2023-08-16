@@ -1,4 +1,4 @@
-import { getGameIdFromName } from "@/utils/gameFetching";
+import { getSupabaseGameIdFromName } from "@/utils/gameFetching";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: Request) {
   const res = await request.json()
   
-  let {data, error} = await getGameIdFromName(res.name);
+  let {data, error} = await getSupabaseGameIdFromName(res.name);
 
   return new NextResponse(JSON.stringify({
     data:data,
