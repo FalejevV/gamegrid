@@ -2,7 +2,7 @@ import GamePreviewItem from "@/components/GamePreviewItem/GamePreviewItem";
 import LoadMoreGamesButton from "@/components/LoadMoreGamesButton";
 import { FilterQueryParams, Game } from "@/interface";
 import SortFilterTab from "@/layout/SortFilter/SortFilterTab";
-import { fetchFilteredGames } from "@/utils/gameFetching";
+import { fetchFilteredGames } from "@/utils/supabaseFetching";
 import { PostgrestError } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
 

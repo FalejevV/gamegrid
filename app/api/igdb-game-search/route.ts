@@ -1,5 +1,5 @@
 import { StringDataError } from "@/interface";
-import { getIGDBByGameName } from "@/utils/fetching";
+import { getIGDBByGameName } from "@/utils/apiFetching";
 import { NextRequest, NextResponse } from "next/server";
 
 

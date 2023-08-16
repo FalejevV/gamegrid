@@ -1,4 +1,4 @@
-import { getSupabaseGameIdFromName } from "@/utils/gameFetching";
+import { getSupabaseGameIdFromName } from "@/utils/supabaseFetching";
 import { NextRequest, NextResponse } from "next/server";
 
 

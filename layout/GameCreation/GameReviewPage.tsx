@@ -3,11 +3,11 @@
 import DropdownInput from "@/components/DropdownInput/DropdownInput";
 import InlineInputField from "@/components/InlineInputField/InlineInputField";
 import InputCheckbox from "@/components/InputCheckbox/InputCheckbox";
-import InputField from "@/components/InputField/InputField";
-import { StringDataError } from "@/interface";
+import { IGDBFullGameInfoDataError, StringDataError } from "@/interface";
 import { setGameCreationFinished, setGameCreationHours, setGameCreationPlatform } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
-import { APICallSupabaseGameInsertByName, getSupabaseGameByName } from "@/utils/fetching";
+import { APICallSupabaseGameInsertByName, getSupabaseGameByName } from "@/utils/apiFetching";
+import { IGDBDuplicateGamesJoin, fetchedIGDBGamesDuplicateFilter } from "@/utils/formatter";
 import { useEffect, useState } from "react";
 
 
@@ -29,10 +29,13 @@ export default function GameReviewPage() {
     }
 
     async function supabaseGameInsert() {
-        console.log("call");
         if(gameDatabaseId === -1 && gameInfoGathered) return;
-        const result:StringDataError = await APICallSupabaseGameInsertByName(gameCreationSelector.gameInfo.name);
-        console.log(result);
+        console.log("fetching all IGDB game info...")
+        const result:IGDBFullGameInfoDataError = await APICallSupabaseGameInsertByName(gameCreationSelector.gameInfo.name);
+        if(result.data){
+            const combinedGames = IGDBDuplicateGamesJoin(result.data);
+            console.log(combinedGames);
+        }
     }
 
     useEffect(() => {

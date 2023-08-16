@@ -1,5 +1,5 @@
 import { StringDataError } from "@/interface";
-import { supabaseGameInsertByName } from "@/utils/gameFetching";
+import { supabaseGameInsertByName } from "@/utils/supabaseFetching";
 import { NextRequest, NextResponse } from "next/server";
 
 

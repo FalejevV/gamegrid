@@ -1,7 +1,8 @@
 import {FilterQueryParams, FilteredIDPromise, Game, StringDataError } from "@/interface";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import supabaseServer from "./supabaseServer";
-import { getIGDBFullGameInfo } from "./fetching";
+import { getIGDBFullGameInfo } from "./apiFetching";
+import { IGDBDuplicateGamesJoin } from "./formatter";
 
 let amountDefault = 3;
 
@@ -249,6 +250,7 @@ export async function supabaseGameInsertByName(name:string):Promise<StringDataEr
         return {data:null, error:IGDBStringFetch};
     }
 
+    const joinedDuplicates = IGDBDuplicateGamesJoin(IGDBStringFetch);
 
-    return {data:IGDBStringFetch, error:null}
+    return {data:joinedDuplicates, error:null}
 }

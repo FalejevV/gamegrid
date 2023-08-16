@@ -1,4 +1,4 @@
-import { fetchFilteredGames } from "@/utils/gameFetching";
+import { fetchFilteredGames } from "@/utils/supabaseFetching";
 import { NextRequest, NextResponse } from "next/server";
 
 

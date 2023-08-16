@@ -1,4 +1,4 @@
-import { StringDataError } from "@/interface";
+import { IGDBFullGameInfo, IGDBFullGameInfoDataError, StringDataError } from "@/interface";
 import igdbToken from "./igdbToken";
 
 
@@ -37,8 +37,8 @@ export async function getSupabaseGameByName(name: string): Promise<StringDataErr
 }
 
 
-export async function APICallSupabaseGameInsertByName(name: string): Promise<StringDataError> {
-    const result: StringDataError = await fetch('/api/supabase-game-insert', {
+export async function APICallSupabaseGameInsertByName(name: string): Promise<IGDBFullGameInfoDataError> {
+    const result:IGDBFullGameInfoDataError = await fetch('/api/supabase-game-insert', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -63,9 +63,37 @@ export async function getIGDBFullGameInfo(name: string): Promise<string>{
             "Authorization": "Bearer " + token.data,
             "Content-Type": "application/json"
         },
-        body: `fields name,platforms,genres,themes,cover,involved_companies,total_rating_count, first_release_date; where name ~ "${name}" & total_rating_count > 1; sort total_rating_count desc; limit 10;`
+        body: `fields name,platforms.name,genres.name,themes.name,cover.url,involved_companies.company.name ,total_rating_count, first_release_date; where name ~ "${name}" & total_rating_count > 1; sort total_rating_count desc; limit 10;`
     })
         .then(response => response.json())
+
+    return result;
+}
+
+
+
+export async function fetchIGDBGameByName(search: string): Promise<StringDataError> {
+    const result = await fetch('/api/igdb-game-search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: search
+        }),
+    }).then(res => res.json()).then(data => {
+        let result: StringDataError = {
+            data: null,
+            error: null
+        }
+        if (data.error) {
+            result.error = data.error.error
+            return result;
+        } else {
+            result.data = data.data;
+            return result;
+        }
+    });
 
     return result;
 }

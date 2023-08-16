@@ -108,3 +108,25 @@ export interface ScoreList {
     support_avg: number,
     total: number
 }
+
+
+export interface IGDBFullGameInfo{
+    id:number,
+    cover: {
+        url: string,
+    },
+    first_release_date: number,
+    genres: IGDBTagIdName[]
+    name: string,
+    themes: IGDBTagIdName[],
+    companies:{
+        id:number,
+        company:string,
+    }[],
+    platfrms:IGDBTagIdName[]
+}
+
+export interface IGDBFullGameInfoDataError{
+    data: IGDBFullGameInfo[] | null,
+    error: string | null
+}

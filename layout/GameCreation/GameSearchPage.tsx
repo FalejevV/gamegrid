@@ -6,11 +6,11 @@ import InputField from "@/components/InputField/InputField";
 import { StringDataError, IGDBGameFetch } from "@/interface";
 import { useAppSelector, RootState, useAppDispatch } from "@/store/store";
 import { fetchedIGDBGamesDuplicateFilter } from "@/utils/formatter";
-import { fetchIGDBGameByName } from "@/utils/idgbFetching";
 import { useState } from "react";
 import Image from "next/image";
 import { setGameCreationFetchedGames, setGameCreationGameData, setGameCreationMemoData, setGameCreationPage, setGameCreationSearchInput } from "@/store/features/gameCreation";
 import AlertText from "@/components/AlertText/AlertText";
+import { fetchIGDBGameByName } from "@/utils/apiFetching";
 
 
 
