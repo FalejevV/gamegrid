@@ -232,25 +232,24 @@ export async function getSupabaseGameIdFromName(name: string):Promise<StringData
 }
 
 
-export async function supabaseGameInsertByName(name:string):Promise<StringDataError>{
+export async function supabaseGameInsertByName(name:string,date:number, company:string):Promise<StringDataError>{
     const supabase = supabaseServer();
-
     // checking if game name already exists in supabase table.
-    let { data, error } = await supabase.from("Game").select("*").eq("name", name);
+    let { data, error } = await supabase.from("Game").select("*").eq("name", name).eq("release_date", new Date(date * 1000).toISOString());
     if(data && data[0]) return{
         data:null,
         error:null
     }
     if(error) return {data:null, error:error.message};
 
-    let IGDBStringFetch = await getIGDBFullGameInfo(name);
+    let IGDBStringFetch = await getIGDBFullGameInfo(name,company);
     
     // fetching from IGDB return error object instead of games array.
     if(!Array.isArray(IGDBStringFetch)){
         return {data:null, error:IGDBStringFetch};
     }
 
-    const joinedDuplicates = IGDBDuplicateGamesJoin(IGDBStringFetch);
+    const combinedDuplicateGame = IGDBDuplicateGamesJoin(IGDBStringFetch);
 
-    return {data:joinedDuplicates, error:null}
+    return {data:combinedDuplicateGame, error:null}
 }

@@ -15,7 +15,7 @@ export async function getIGDBByGameName(name: string) {
             "Authorization": "Bearer " + token.data,
             "Content-Type": "application/json"
         },
-        body: `fields name, total_rating, total_rating_count, genres.name, themes.name, first_release_date, cover.url, platforms.name, involved_companies.company ;where name ~ *"${name}"* & total_rating_count > 3; sort total_rating_count desc; limit 50;`
+        body: `fields name, total_rating, total_rating_count, genres.name, themes.name, first_release_date, cover.url, platforms.name, involved_companies.company.name ;where name ~ *"${name}"* & total_rating_count > 3; sort total_rating_count desc; limit 50;`
     })
         .then(response => response.json())
     return result;
@@ -37,21 +37,23 @@ export async function getSupabaseGameByName(name: string): Promise<StringDataErr
 }
 
 
-export async function APICallSupabaseGameInsertByName(name: string): Promise<IGDBFullGameInfoDataError> {
+export async function APICallSupabaseGameInsertByName(name: string,date:number, company:string): Promise<IGDBFullGameInfoDataError> {
     const result:IGDBFullGameInfoDataError = await fetch('/api/supabase-game-insert', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            name: name
+            name: name,
+            date:date,
+            company:company
         }),
     }).then(res => res.json())
     return result;
 }
 
 
-export async function getIGDBFullGameInfo(name: string): Promise<string>{
+export async function getIGDBFullGameInfo(name: string, company:string): Promise<string>{
     const token = await igdbToken();
     if (token.error) return token.error;
 
@@ -63,7 +65,7 @@ export async function getIGDBFullGameInfo(name: string): Promise<string>{
             "Authorization": "Bearer " + token.data,
             "Content-Type": "application/json"
         },
-        body: `fields name,platforms.name,genres.name,themes.name,cover.url,involved_companies.company.name ,total_rating_count, first_release_date; where name ~ "${name}" & total_rating_count > 1; sort total_rating_count desc; limit 10;`
+        body: `fields name,platforms.name,genres.name,themes.name,cover.url,involved_companies.company.name ,total_rating_count, first_release_date; where name ~ "${name}" & total_rating_count > 1 & involved_companies.company.name ~ "${company}"; sort total_rating_count desc; limit 10;`
     })
         .then(response => response.json())
 

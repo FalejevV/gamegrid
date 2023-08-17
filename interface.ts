@@ -87,6 +87,9 @@ export interface IGDBGameFetch {
     genres: IGDBTagIdName[]
     name: string,
     themes: IGDBTagIdName[],
+    involved_companies: {
+        company: IGDBTagIdName
+    }[]
 }
 
 export interface StringDataError {

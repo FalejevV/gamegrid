@@ -1,3 +1,4 @@
+import { getIGDBByGameName } from "@/utils/apiFetching";
 import { getSupabaseGameIdFromName } from "@/utils/supabaseFetching";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: Request) {
   const res = await request.json()
   
-  let {data, error} = await getSupabaseGameIdFromName(res.name);
+  let {data, error} = await getIGDBByGameName(res.name);
 
   return new NextResponse(JSON.stringify({
     data:data,

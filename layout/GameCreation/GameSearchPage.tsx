@@ -56,7 +56,9 @@ export default function GameSearchPage() {
         dispatch(setGameCreationGameData({
             gameId: game.id,
             name: game.name, 
-            image: game.cover.url 
+            image: game.cover.url,
+            date: game.first_release_date,
+            company: game.involved_companies[0].company.name
         }))
         dispatch(setGameCreationFetchedGames([]));
     }

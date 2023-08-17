@@ -15,7 +15,9 @@ export interface GameCreation {
 export interface GameCreationGameInfo {
     gameId: number,
     name: string,
-    image: string
+    image: string,
+    date:number,
+    company:string,
 }
 
 export interface GameCreationQuestions{
@@ -32,11 +34,15 @@ let initialState: GameCreation = {
         gameId: -1,
         name: "",
         image: "",
+        date:-1,
+        company:""
     },
     memoGame: {
         gameId: -10,
         name: "memo",
-        image: "memo"
+        image: "memo",
+        date:-1,
+        company:""
     },
     scores: {
         graphics_avg: -1,

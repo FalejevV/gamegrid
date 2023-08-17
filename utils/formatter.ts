@@ -6,8 +6,7 @@ export function dateToText(date: number): string {
     return dateParse.getFullYear() + '-' + (dateParse.getMonth() > 8 ? (dateParse.getMonth() + 1) : "0" + (dateParse.getMonth() + 1)) + "-" + (dateParse.getDate() > 9 ? dateParse.getDate() : "0" + dateParse.getDate());
 }
 
-// There are siturations when IGDB has duplicate games. This function joins all the tags together into a single game object.
-// RETURNS ONE GAME OBJECT
+
 export function IGDBDuplicateGamesJoin<T>(games: T) {
     if (!Array.isArray(games)) return games;
     if (games.length === 0) return games[0];
@@ -81,6 +80,7 @@ export function IGDBDuplicateGamesJoin<T>(games: T) {
 
     return primaryGame;
 }
+
 
 // If IGSB query returns simmilar games, it combines them into one and in the result returns a list of unique games
 export function fetchedIGDBGamesDuplicateFilter(games: IGDBGameFetch[]): IGDBGameFetch[] {

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: Request):Promise<NextResponse<StringDataError>> {
     const res = await request.json()
 
-    let result = await supabaseGameInsertByName(res.name);
+    let result = await supabaseGameInsertByName(res.name, res.date, res.company);
     
     return new NextResponse(JSON.stringify({
         data: result.data, 
