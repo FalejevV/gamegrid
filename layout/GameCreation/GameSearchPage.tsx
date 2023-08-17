@@ -11,6 +11,7 @@ import Image from "next/image";
 import { setGameCreationFetchedGames, setGameCreationGameData, setGameCreationMemoData, setGameCreationPage, setGameCreationSearchInput } from "@/store/features/gameCreation";
 import AlertText from "@/components/AlertText/AlertText";
 import { fetchIGDBGameByName } from "@/utils/apiFetching";
+import WideActionButton from "@/components/Buttons/WideActionButton/WideActionButton";
 
 
 
@@ -23,7 +24,14 @@ export default function GameSearchPage() {
 
     async function gameSearch(e: React.FormEvent) {
         if (isFetching) return;
-        else setIsFetching(true)
+        else setIsFetching(true);
+        dispatch(setGameCreationGameData({
+            gameId: 0,
+            name: "",
+            image: "",
+            date: 0,
+            company: ""
+        }));
         dispatch(setGameCreationFetchedGames([]));
         e.preventDefault();
         if (gameCreationSelector.gameSearchInput.trim()) {
@@ -63,6 +71,7 @@ export default function GameSearchPage() {
         dispatch(setGameCreationFetchedGames([]));
     }
 
+
     function proceedToNextPage(){
         if(gameCreationSelector.gameInfo.gameId < 0) return;
         
@@ -94,7 +103,7 @@ export default function GameSearchPage() {
 
             {gameCreationSelector.gameInfo.name && <>
                 <GamePickPreview game={gameCreationSelector.gameInfo} />
-                <button className="w-full textcol-main text-center bg-hi text-[22px] p-[10px] hover:brightness-110" onClick={proceedToNextPage}>NEXT</button>
+                <WideActionButton onClick={proceedToNextPage} text={"NEXT"} />
             </>}
 
 

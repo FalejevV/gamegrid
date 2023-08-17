@@ -1,4 +1,4 @@
-import { IGDBFullGameInfo, IGDBFullGameInfoDataError, StringDataError } from "@/interface";
+import { IGDBFullGameInfoDataError, StringDataError } from "@/interface";
 import igdbToken from "./igdbToken";
 
 
@@ -20,59 +20,6 @@ export async function getIGDBByGameName(name: string) {
         .then(response => response.json())
     return result;
 }
-
-
-export async function getSupabaseGameByName(name: string): Promise<StringDataError> {
-    const result: StringDataError = await fetch('/api/igdb-game-by-name', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            name: name
-        }),
-    }).then(res => res.json())
-
-    return result;
-}
-
-
-export async function APICallSupabaseGameInsertByName(name: string,date:number, company:string): Promise<IGDBFullGameInfoDataError> {
-    const result:IGDBFullGameInfoDataError = await fetch('/api/supabase-game-insert', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            name: name,
-            date:date,
-            company:company
-        }),
-    }).then(res => res.json())
-    return result;
-}
-
-
-export async function getIGDBFullGameInfo(name: string, company:string): Promise<string>{
-    const token = await igdbToken();
-    if (token.error) return token.error;
-
-    const result = await fetch("https://api.igdb.com/v4/games", {
-        method: "POST",
-        headers: {
-            "Accept": "application/json",
-            "Client-ID": process.env.NEXT_TWITCH_CLIENT_ID || "",
-            "Authorization": "Bearer " + token.data,
-            "Content-Type": "application/json"
-        },
-        body: `fields name,platforms.name,genres.name,themes.name,cover.url,involved_companies.company.name ,total_rating_count, first_release_date; where name ~ "${name}" & total_rating_count > 1 & involved_companies.company.name ~ "${company}"; sort total_rating_count desc; limit 10;`
-    })
-        .then(response => response.json())
-
-    return result;
-}
-
-
 
 export async function fetchIGDBGameByName(search: string): Promise<StringDataError> {
     const result = await fetch('/api/igdb-game-search', {
@@ -104,6 +51,56 @@ export async function fetchIGDBGameByName(search: string): Promise<StringDataErr
 
 
 
+export async function APICallSupabaseGameInsertByName(name: string, date: number, company: string): Promise<IGDBFullGameInfoDataError> {
+    const result: IGDBFullGameInfoDataError = await fetch('/api/supabase-game-insert', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: name,
+            date: date,
+            company: company
+        }),
+    }).then(res => res.json())
+    return result;
+}
+
+
+export async function getIGDBFullGameInfo(name: string, company: string): Promise<string> {
+    const token = await igdbToken();
+    if (token.error) return token.error;
+
+    const result = await fetch("https://api.igdb.com/v4/games", {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Client-ID": process.env.NEXT_TWITCH_CLIENT_ID || "",
+            "Authorization": "Bearer " + token.data,
+            "Content-Type": "application/json"
+        },
+        body: `fields name,platforms.name,genres.name,themes.name,cover.url,involved_companies.company.name ,total_rating_count, first_release_date; where name ~ "${name}" & total_rating_count > 1 & involved_companies.company.name ~ "${company}"; sort total_rating_count desc; limit 10;`
+    })
+        .then(response => response.json())
+
+    return result;
+}
+
+
+export async function getSupabaseGameFromNameAndDate(name: string, date: number) {
+    const result: IGDBFullGameInfoDataError = await fetch('/api/supabase-game-by-name-and-date', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: name,
+            date: date,
+        }),
+    }).then(res => res.json())
+    console.log("supabase game fetch", result);
+    return result;
+}
 
 
 

@@ -1,4 +1,4 @@
-import {FilterQueryParams, FilteredIDPromise, Game, StringDataError } from "@/interface";
+import { FilterQueryParams, FilteredIDPromise, Game, StringDataError, SupabaseGameCreationRequiredInfoDataError } from "@/interface";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import supabaseServer from "./supabaseServer";
 import { getIGDBFullGameInfo } from "./apiFetching";
@@ -219,37 +219,45 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
 }
 
 
-export async function getSupabaseGameIdFromName(name: string):Promise<StringDataError> {
+export async function getSupabaseGameFromNameAndDate(name: string, date: number): Promise<SupabaseGameCreationRequiredInfoDataError> {
     const supabase = supabaseServer();
 
-    let { data, error } = await supabase.from("Game").select("id").eq("name", name);
-
-    if(data && data[0]){
-        return {data:data[0].id, error:error?.message || null}
+    let { data, error } = await supabase.from("Game").select("*").eq("name", name).eq("release_date", new Date(date * 1000).toISOString());
+    if(error){
+        return {
+            data:null,
+            error:error.message
+        }
+    }
+    if(data?.length && data.length > 0){
+        return { data:data[0], error: null};
     }
 
-    return {data: null, error:error?.message || null};
+    return {
+        data:null,
+        error:null,
+    }
 }
 
 
-export async function supabaseGameInsertByName(name:string,date:number, company:string):Promise<StringDataError>{
-    const supabase = supabaseServer();
+export async function supabaseGameInsertByName(name: string, date: number, company: string): Promise<StringDataError> {
     // checking if game name already exists in supabase table.
-    let { data, error } = await supabase.from("Game").select("*").eq("name", name).eq("release_date", new Date(date * 1000).toISOString());
-    if(data && data[0]) return{
-        data:null,
-        error:null
-    }
-    if(error) return {data:null, error:error.message};
+    let {data, error} = await getSupabaseGameFromNameAndDate(name,date); 
 
-    let IGDBStringFetch = await getIGDBFullGameInfo(name,company);
-    
+    if (data) return {
+        data: null,
+        error: null
+    }
+    if (error) return { data: null, error: error };
+
+    let IGDBStringFetch = await getIGDBFullGameInfo(name, company);
+
     // fetching from IGDB return error object instead of games array.
-    if(!Array.isArray(IGDBStringFetch)){
-        return {data:null, error:IGDBStringFetch};
+    if (!Array.isArray(IGDBStringFetch)) {
+        return { data: null, error: IGDBStringFetch };
     }
 
     const combinedDuplicateGame = IGDBDuplicateGamesJoin(IGDBStringFetch);
 
-    return {data:combinedDuplicateGame, error:null}
+    return { data: combinedDuplicateGame, error: null }
 }

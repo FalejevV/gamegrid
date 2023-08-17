@@ -119,17 +119,28 @@ export interface IGDBFullGameInfo{
         url: string,
     },
     first_release_date: number,
-    genres: IGDBTagIdName[]
+    genres: string[], 
     name: string,
-    themes: IGDBTagIdName[],
+    themes: string[],
     companies:{
         id:number,
         company:string,
     }[],
-    platfrms:IGDBTagIdName[]
+    platforms:string[]
 }
 
 export interface IGDBFullGameInfoDataError{
-    data: IGDBFullGameInfo[] | null,
+    data: IGDBFullGameInfo | null,
     error: string | null
+}
+
+export interface GameCreationRequiredInfo{
+    name:string,
+    platforms:string[],
+    id:number,
+} 
+
+export interface GameCreationRequiredInfoDataError{
+    data: GameCreationRequiredInfo | null,
+    error: string | null    
 }

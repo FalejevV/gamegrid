@@ -1,5 +1,4 @@
 import { getIGDBByGameName } from "@/utils/apiFetching";
-import { getSupabaseGameIdFromName } from "@/utils/supabaseFetching";
 import { NextRequest, NextResponse } from "next/server";
 
 

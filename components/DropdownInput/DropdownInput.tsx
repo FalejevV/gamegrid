@@ -22,11 +22,12 @@ export default function DropdownInput(props: {
     const [toggleDropdown, setToggleDropdown] = useState(false);
 
 
-
+    if(props.options.length === 0) return;
+    
     function dropdownList() {
         return (
             <div className="absolute right-0 top-[45px] w-[160px] h-fit max-h-[200px] overflow-y-scroll bg-dimm">
-                {props.options.map((option: string) => <DropdownOption onClick={() => props.onChange(option)} title={option} />)}
+                {props.options.map((option: string) => <DropdownOption key={option} onClick={() => props.onChange(option)} title={option} />)}
             </div>
         )
     }
