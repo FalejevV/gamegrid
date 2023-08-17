@@ -1,4 +1,4 @@
-import { FilterQueryParams, FilteredIDPromise, Game, StringDataError, SupabaseGameCreationRequiredInfoDataError } from "@/interface";
+import { FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfoDataError, StringDataError} from "@/interface";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import supabaseServer from "./supabaseServer";
 import { getIGDBFullGameInfo } from "./apiFetching";
@@ -219,7 +219,7 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
 }
 
 
-export async function getSupabaseGameFromNameAndDate(name: string, date: number): Promise<SupabaseGameCreationRequiredInfoDataError> {
+export async function getSupabaseGameFromNameAndDate(name: string, date: number): Promise<GameCreationRequiredInfoDataError> {
     const supabase = supabaseServer();
 
     let { data, error } = await supabase.from("Game").select("*").eq("name", name).eq("release_date", new Date(date * 1000).toISOString());
