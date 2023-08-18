@@ -7,7 +7,7 @@ export function dateToText(date: number): string {
 }
 
 
-export function IGDBDuplicateGamesJoin<T>(games: T) {
+export function IGDBDuplicateGamesJoin<T>(games: T): T {
     if (!Array.isArray(games)) return games;
     if (games.length === 0) return games[0];
 

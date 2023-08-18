@@ -1,8 +1,9 @@
-import { FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, GameCreationRequiredInfoDataError, StringDataError } from "@/interface";
+import { FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, GameCreationRequiredInfoDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringDataError } from "@/interface";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import supabaseServer from "./supabaseServer";
 import { getIGDBFullGameInfo } from "./apiFetching";
 import { IGDBDuplicateGamesJoin } from "./formatter";
+import supabaseRootClient from "./supabaseRootClient";
 
 let amountDefault = 3;
 
@@ -62,6 +63,7 @@ function generateOrderByType(order: string): [orderBy: string, ascending: { asce
 
     return [orderBy, { ascending }, isAspect, isTotal]
 }
+
 
 /// Accepts array of Tags. Returns array of games, that have these tags.
 async function filterByTags(supabase: SupabaseClient, tags: string[]): Promise<FilteredIDPromise> {
@@ -218,7 +220,8 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
 
 }
 
-export async function supabaseGameInsertByNameDateCompany(name: string, date: number, company: string): Promise<StringDataError> {
+export async function supabaseGameInsertByNameDateCompany(name: string, date: number, company: string): Promise<IGDBFullGameInfoDataError>{
+
     // checking if game name already exists in supabase table.
     let { data, error } = await getSupabaseGameByNameAndDate(name, date);
     if (data) return {
@@ -227,14 +230,23 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
     }
     if (error) return { data: null, error: error };
 
+    // if game doesn't exist in supabase table, fetch it from IGDB to insert into supabase table
     let IGDBStringFetch = await getIGDBFullGameInfo(name, company);
     // fetching from IGDB return error object instead of games array.
     if (!Array.isArray(IGDBStringFetch)) {
         return { data: null, error: IGDBStringFetch };
     }
 
-    const combinedDuplicateGame = IGDBDuplicateGamesJoin(IGDBStringFetch);
+    let combinedDuplicateGame = IGDBDuplicateGamesJoin(IGDBStringFetch) as IGDBFullGameInfo | IGDBFullGameInfo[];
+    if (Array.isArray(combinedDuplicateGame)) combinedDuplicateGame = { ...combinedDuplicateGame[0] };
 
+    let promisesResult = await Promise.all([
+        insertSupabasePlatforms(combinedDuplicateGame.platforms),
+        insertSupabaseTags([...combinedDuplicateGame.genres, ...combinedDuplicateGame.themes])
+    ])
+
+
+    
     return { data: combinedDuplicateGame, error: null }
 }
 
@@ -251,7 +263,7 @@ export async function getSupabaseGameByNameAndDate(name: string, date: number): 
     let errorString = error?.message || null;
 
     if (data.length > 0) {
-        let game:GameCreationRequiredInfo = {...data[0], platforms: [data[0].platform]};
+        let game: GameCreationRequiredInfo = { ...data[0], platforms: [data[0].platform] };
 
         data.forEach((item: { platform: string }, index: number) => {
             if (index !== 0) {
@@ -266,4 +278,27 @@ export async function getSupabaseGameByNameAndDate(name: string, date: number): 
         )
     }
     return { data: null, error: errorString };
+}
+
+
+export async function insertSupabasePlatforms(platforms: string[]): Promise<StringDataError> {
+    const supabase = supabaseRootClient(); 
+    const { data, error } = await supabase.rpc("insert_platforms", { platform_names: platforms });
+
+    if (error?.message) {
+        return { data: null, error: error.message };
+    }
+
+    return { data: "OK", error: error?.message || null };
+}
+
+export async function insertSupabaseTags(tags: string[]): Promise<StringDataError> {
+    const supabase = supabaseRootClient();
+    const { data, error } = await supabase.rpc("insert_tags", { tag_names: tags });
+
+    if (error?.message) {
+        return { data: null, error: error.message };
+    }
+
+    return { data: "OK", error: error?.message || null };
 }

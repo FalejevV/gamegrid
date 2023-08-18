@@ -64,6 +64,9 @@ export default function GameReviewPage() {
 
     }, [gameInfo, gameInfoGathered, gameDatabaseId]);
 
+    console.log(gameInfo);
+
+    
     function proceedToNextPage() {
 
     }
