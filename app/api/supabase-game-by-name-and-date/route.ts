@@ -1,5 +1,5 @@
-import { StringDataError } from "@/interface";
-import { getSupabaseGameFromNameAndDate, supabaseGameInsertByName } from "@/utils/supabaseFetching";
+import { GameCreationRequiredInfoDataError, StringDataError } from "@/interface";
+import { getSupabaseGameByNameAndDate} from "@/utils/supabaseFetching";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -13,11 +13,11 @@ export async function GET(request: NextRequest) {
 }
 
 
-export async function POST(request: Request):Promise<NextResponse<StringDataError>> {
+export async function POST(request: Request):Promise<NextResponse<GameCreationRequiredInfoDataError>> {
     const res = await request.json()
 
-    let result = await getSupabaseGameFromNameAndDate(res.name, res.date);
-    console.log("API", result); 
+    let result: GameCreationRequiredInfoDataError = await getSupabaseGameByNameAndDate(res.name, res.date);
+    
     return new NextResponse(JSON.stringify({
         data: result.data, 
         error: result.error 

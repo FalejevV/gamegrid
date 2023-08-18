@@ -138,6 +138,7 @@ export interface GameCreationRequiredInfo{
     name:string,
     platforms:string[],
     id:number,
+    image:string,
 } 
 
 export interface GameCreationRequiredInfoDataError{

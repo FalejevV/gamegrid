@@ -4,7 +4,7 @@ import WideActionButton from "@/components/Buttons/WideActionButton/WideActionBu
 import DropdownInput from "@/components/DropdownInput/DropdownInput";
 import InlineInputField from "@/components/InlineInputField/InlineInputField";
 import InputCheckbox from "@/components/InputCheckbox/InputCheckbox";
-import { GameCreationRequiredInfo, GameCreationRequiredInfoDataError, IGDBFullGameInfoDataError } from "@/interface";
+import { GameCreationRequiredInfo, GameCreationRequiredInfoDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError } from "@/interface";
 import { setGameCreationFinished, setGameCreationHours, setGameCreationPlatform } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
 import { APICallSupabaseGameInsertByName, getSupabaseGameFromNameAndDate } from "@/utils/apiFetching";
@@ -18,7 +18,7 @@ export default function GameReviewPage() {
     const [gameInfoGathered, setGameInfoGathered] = useState(false);
     const [gameDatabaseId, setGameDatabaseId] = useState(-1);
     const dispatch = useAppDispatch();
-    const [gameInfo, setGameInfo] = useState<GameCreationRequiredInfo | null>(null);
+    const [gameInfo, setGameInfo] = useState<GameCreationRequiredInfo | null | IGDBFullGameInfo>(null);
     const [error, setError] = useState("");
 
     async function supabaseGameSearch() {
@@ -37,7 +37,6 @@ export default function GameReviewPage() {
         console.log("fetching all IGDB game info...")
         const result: IGDBFullGameInfoDataError = await APICallSupabaseGameInsertByName(gameCreationSelector.gameInfo.name, gameCreationSelector.gameInfo.date, gameCreationSelector.gameInfo.company);
         if (result.data) {
-            console.log(result.data);
             setGameInfo(result.data);
             return;
         }
@@ -71,23 +70,19 @@ export default function GameReviewPage() {
 
 
     function inputFields() {
-        if (gameInfoGathered)
-
-
-            return (
-                <>
-                    <InputCheckbox question={"Did you finish the game?"} name={"finished"} onChange={(value: boolean) => dispatch(setGameCreationFinished(value))} value={gameCreationSelector.questions.finished} />
-                    <InlineInputField title={"How many hours have you played?"} name={"hours"} onChange={(value: string) => dispatch(setGameCreationHours(value))} value={gameCreationSelector.questions.hours.toString()} placeholder={"Hours"} />
-                    <DropdownInput options={gameInfo?.platforms || []} value={gameCreationSelector.questions.platform} onChange={(value: string) => dispatch(setGameCreationPlatform(value))} title={"What platform did you play on?"} name={"platform"} />
-                    <WideActionButton onClick={proceedToNextPage} text={"NEXT"} />
-                </>
-            )
+        return (
+            <>
+                <InputCheckbox question={"Did you finish the game?"} name={"finished"} onChange={(value: boolean) => dispatch(setGameCreationFinished(value))} value={gameCreationSelector.questions.finished} />
+                <InlineInputField title={"How many hours have you played?"} name={"hours"} onChange={(value: string) => dispatch(setGameCreationHours(value))} value={gameCreationSelector.questions.hours.toString()} placeholder={"Hours"} />
+                <DropdownInput options={gameInfo?.platforms || []} value={gameCreationSelector.questions.platform} onChange={(value: string) => dispatch(setGameCreationPlatform(value))} title={"What platform did you play on?"} name={"platform"} />
+                <WideActionButton onClick={proceedToNextPage} text={"NEXT"} />
+            </>
+        )
     }
-
     return (
-        <div className="flex gap-[20px] w-full flex-col">
-            {!gameInfoGathered && <p className="textcol-main">Loading...</p>}
-            {inputFields()}
+        <div className="flex gap-[25px] w-full flex-col">
+            {!gameInfo?.platforms && <p className="textcol-main">Loading...</p>}
+            {gameInfo?.platforms && inputFields()}
             {!gameInfoGathered && error && <p className="textcol-main text-[24px]">{error}</p>}
         </div>
     )

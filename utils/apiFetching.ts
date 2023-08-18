@@ -1,4 +1,4 @@
-import { IGDBFullGameInfoDataError, StringDataError } from "@/interface";
+import { GameCreationRequiredInfo, GameCreationRequiredInfoDataError, IGDBFullGameInfoDataError, StringDataError } from "@/interface";
 import igdbToken from "./igdbToken";
 
 
@@ -87,8 +87,8 @@ export async function getIGDBFullGameInfo(name: string, company: string): Promis
 }
 
 
-export async function getSupabaseGameFromNameAndDate(name: string, date: number) {
-    const result: IGDBFullGameInfoDataError = await fetch('/api/supabase-game-by-name-and-date', {
+export async function getSupabaseGameFromNameAndDate(name: string, date: number):Promise<GameCreationRequiredInfoDataError> {
+    const result: GameCreationRequiredInfoDataError = await fetch('/api/supabase-game-by-name-and-date', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -98,7 +98,6 @@ export async function getSupabaseGameFromNameAndDate(name: string, date: number)
             date: date,
         }),
     }).then(res => res.json())
-    console.log("supabase game fetch", result);
     return result;
 }
 

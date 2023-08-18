@@ -1,5 +1,5 @@
 import { StringDataError } from "@/interface";
-import { supabaseGameInsertByName } from "@/utils/supabaseFetching";
+import { supabaseGameInsertByNameDateCompany } from "@/utils/supabaseFetching";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: Request):Promise<NextResponse<StringDataError>> {
     const res = await request.json()
 
-    let result = await supabaseGameInsertByName(res.name, res.date, res.company);
+    let result = await supabaseGameInsertByNameDateCompany(res.name, res.date, res.company);
     
     return new NextResponse(JSON.stringify({
         data: result.data, 
