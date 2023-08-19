@@ -1,4 +1,4 @@
-import { GameCreationRequiredInfo, GameCreationRequiredInfoDataError, IGDBFullGameInfoDataError, StringDataError } from "@/interface";
+import { GameCreationRequiredInfo, GameCreationRequiredInfoDataError, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
 import igdbToken from "./igdbToken";
 
 
@@ -66,6 +66,20 @@ export async function APICallSupabaseGameInsertByName(name: string, date: number
     return result;
 }
 
+export async function APICallIGDBGameDevelopersByNameDate(name: string, date: number) {
+    const result: IGDBFullGameInfoDataError = await fetch('/api/igdb-game-developers-by-name-and-date', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: name,
+            date: date,
+        }),
+    }).then(res => res.json())
+    return result;
+}
+
 
 export async function getIGDBFullGameInfo(name: string, company: string): Promise<string> {
     const token = await igdbToken();
@@ -87,7 +101,7 @@ export async function getIGDBFullGameInfo(name: string, company: string): Promis
 }
 
 
-export async function getSupabaseGameFromNameAndDate(name: string, date: number):Promise<GameCreationRequiredInfoDataError> {
+export async function getSupabaseGameFromNameAndDate(name: string, date: number): Promise<GameCreationRequiredInfoDataError> {
     const result: GameCreationRequiredInfoDataError = await fetch('/api/supabase-game-by-name-and-date', {
         method: 'POST',
         headers: {
@@ -102,7 +116,60 @@ export async function getSupabaseGameFromNameAndDate(name: string, date: number)
 }
 
 
+export async function getIGDBGameDevelopersByNameAndDate(name: string, date: number): Promise<StringArrayDataError> {
 
+    const token = await igdbToken();
+    if (token.error) return { data: null, error: token.error };
+
+    const gameResponse = await fetch("https://api.igdb.com/v4/games", {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Client-ID": process.env.NEXT_TWITCH_CLIENT_ID || "",
+            "Authorization": "Bearer " + token.data,
+            "Content-Type": "application/json"
+        },
+        body: `fields name,involved_companies, first_release_date; where name ~ "${name}" & total_rating_count > 1 & first_release_date = ${date}; limit 10;`
+    })
+
+
+    const gameData = await gameResponse.json();
+
+    if (!gameData[0] || !gameData[0].involved_companies) {
+        return { data: null, error: null };
+    }
+
+    const involvedCompaniesResponse = await fetch("https://api.igdb.com/v4/involved_companies", {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Client-ID": process.env.NEXT_TWITCH_CLIENT_ID || "",
+            "Authorization": "Bearer " + token.data,
+            "Content-Type": "application/json"
+        },
+        body: `fields company; where id=(${gameData[0].involved_companies.join(",")}); sort created_at desc;`
+    })
+    const involvedCompaniesData = await involvedCompaniesResponse.json();
+
+    // Filter out developer companies
+    const developerCompanyIds = involvedCompaniesData
+        .map((company:{company:number}) => company.company);
+
+    const companiesResponse = await fetch("https://api.igdb.com/v4/companies", {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Client-ID": process.env.NEXT_TWITCH_CLIENT_ID || "",
+            "Authorization": "Bearer " + token.data,
+            "Content-Type": "application/json"
+        },
+        body: `fields name; where id=(${developerCompanyIds.join(",")});`
+    })
+
+    const companiesData = await companiesResponse.json();
+    const developerNames = companiesData.map((company: {name:string}) => company.name);
+    return { data: developerNames, error: null };
+}
 
 
 

@@ -137,9 +137,15 @@ export interface GameCreationRequiredInfo{
     platforms:string[],
     id:number,
     image:string,
+    first_release_date:number
 } 
 
 export interface GameCreationRequiredInfoDataError{
     data: GameCreationRequiredInfo | null,
     error: string | null    
+}
+
+export interface StringArrayDataError{
+    data:string[] | null,
+    error:string | null,
 }

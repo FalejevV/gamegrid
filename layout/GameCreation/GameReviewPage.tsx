@@ -7,7 +7,7 @@ import InputCheckbox from "@/components/InputCheckbox/InputCheckbox";
 import { GameCreationRequiredInfo, GameCreationRequiredInfoDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError } from "@/interface";
 import { setGameCreationFinished, setGameCreationHours, setGameCreationPlatform } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
-import { APICallSupabaseGameInsertByName, getSupabaseGameFromNameAndDate } from "@/utils/apiFetching";
+import { APICallIGDBGameDevelopersByNameDate, APICallSupabaseGameInsertByName, getSupabaseGameFromNameAndDate } from "@/utils/apiFetching";
 import supabaseClient from "@/utils/supabaseClient";
 import { getTableList } from "@/utils/tableFetching";
 import { useEffect, useState } from "react";
@@ -70,13 +70,11 @@ export default function GameReviewPage() {
 
     useEffect(() => {
         if (!gameInfo) return;
-
+        
         if (gameDatabaseId === -1) {
             console.log("GAME NOT FOUND. INSERT GAME INTO DB");
         }
-
-
-    }, [gameInfo, gameInfoGathered, gameDatabaseId]);
+   }, [gameInfo, gameInfoGathered, gameDatabaseId]);
 
     console.log(gameInfo);
 
