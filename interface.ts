@@ -122,10 +122,7 @@ export interface IGDBFullGameInfo{
     genres: string[], 
     name: string,
     themes: string[],
-    companies:{
-        id:number,
-        company:string,
-    }[],
+    involved_companies: string[],
     platforms:string[],
     game_modes:string[],
 }

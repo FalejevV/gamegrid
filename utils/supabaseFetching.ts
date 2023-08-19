@@ -7,7 +7,7 @@ import supabaseRootClient from "./supabaseRootClient";
 
 let amountDefault = 3;
 
-
+const supabaseRoot = supabaseRootClient();
 function generateOrderByType(order: string): [orderBy: string, ascending: { ascending: boolean }, isAspect: boolean, itTotal: boolean] {
     let orderBy = "id";
     let ascending = false
@@ -220,7 +220,7 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
 
 }
 
-export async function supabaseGameInsertByNameDateCompany(name: string, date: number, company: string): Promise<IGDBFullGameInfoDataError>{
+export async function supabaseGameInsertByNameDateCompany(name: string, date: number, company: string): Promise<IGDBFullGameInfoDataError> {
 
     // checking if game name already exists in supabase table.
     let { data, error } = await getSupabaseGameByNameAndDate(name, date);
@@ -242,11 +242,22 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
 
     let promisesResult = await Promise.all([
         insertSupabasePlatforms(combinedDuplicateGame.platforms),
-        insertSupabaseTags([...combinedDuplicateGame.genres, ...combinedDuplicateGame.themes])
+        insertSupabaseTags([...combinedDuplicateGame.genres, ...combinedDuplicateGame.themes]),
+        insertSupabaseDevelopers(combinedDuplicateGame.involved_companies),
+        insertSupabasePlayers(combinedDuplicateGame.game_modes)
     ])
 
 
-    
+    error = null;
+    promisesResult.forEach((result: StringDataError) => {
+        if(error) return;
+        if(result.error) {
+            error = result.error
+        }
+    })
+    if(error) return { error, data:null}
+
+
     return { data: combinedDuplicateGame, error: null }
 }
 
@@ -282,8 +293,7 @@ export async function getSupabaseGameByNameAndDate(name: string, date: number): 
 
 
 export async function insertSupabasePlatforms(platforms: string[]): Promise<StringDataError> {
-    const supabase = supabaseRootClient(); 
-    const { data, error } = await supabase.rpc("insert_platforms", { platform_names: platforms });
+    const { data, error } = await supabaseRoot.rpc("insert_platforms", { platform_names: platforms });
 
     if (error?.message) {
         return { data: null, error: error.message };
@@ -293,8 +303,7 @@ export async function insertSupabasePlatforms(platforms: string[]): Promise<Stri
 }
 
 export async function insertSupabaseTags(tags: string[]): Promise<StringDataError> {
-    const supabase = supabaseRootClient();
-    const { data, error } = await supabase.rpc("insert_tags", { tag_names: tags });
+    const { data, error } = await supabaseRoot.rpc("insert_tags", { tag_names: tags });
 
     if (error?.message) {
         return { data: null, error: error.message };
@@ -302,3 +311,25 @@ export async function insertSupabaseTags(tags: string[]): Promise<StringDataErro
 
     return { data: "OK", error: error?.message || null };
 }
+
+
+export async function insertSupabaseDevelopers(developers: string[]): Promise<StringDataError> {
+    const { data, error } = await supabaseRoot.rpc('insert_developers', { developer_names: developers });
+
+    if (error?.message) {
+        return { data: null, error: error.message };
+    }
+
+    return { data: "OK", error: error?.message || null };
+}
+
+export async function insertSupabasePlayers(players: string[]): Promise<StringDataError> {
+const { data, error } = await supabaseRoot.rpc('insert_game_modes', { game_mode_names: players});
+
+    if (error?.message) {
+        return { data: null, error: error.message };
+    }
+
+    return { data: "OK", error: error?.message || null };
+}
+

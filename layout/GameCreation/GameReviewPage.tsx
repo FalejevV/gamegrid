@@ -8,6 +8,8 @@ import { GameCreationRequiredInfo, GameCreationRequiredInfoDataError, IGDBFullGa
 import { setGameCreationFinished, setGameCreationHours, setGameCreationPlatform } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
 import { APICallSupabaseGameInsertByName, getSupabaseGameFromNameAndDate } from "@/utils/apiFetching";
+import supabaseClient from "@/utils/supabaseClient";
+import { getTableList } from "@/utils/tableFetching";
 import { useEffect, useState } from "react";
 
 
@@ -20,6 +22,7 @@ export default function GameReviewPage() {
     const dispatch = useAppDispatch();
     const [gameInfo, setGameInfo] = useState<GameCreationRequiredInfo | null | IGDBFullGameInfo>(null);
     const [error, setError] = useState("");
+    const [allPlatformsFetch, setAllPlatformsFetch] = useState<string[]>([]);
 
     async function supabaseGameSearch() {
         if (gameCreationSelector.gameInfo.gameId === gameCreationSelector.memoGame.gameId) return;
@@ -48,6 +51,17 @@ export default function GameReviewPage() {
 
     useEffect(() => {
         supabaseGameSearch();
+        const supabase= supabaseClient;
+
+        getTableList(supabase, "Platform").then((res) => {
+            if(res.error){
+                setError(res.error.message);
+                return;
+            }
+            if(res.data){
+                setAllPlatformsFetch(res.data);
+            }
+        });
     }, []);
 
     useEffect(() => {
@@ -77,16 +91,26 @@ export default function GameReviewPage() {
             <>
                 <InputCheckbox question={"Did you finish the game?"} name={"finished"} onChange={(value: boolean) => dispatch(setGameCreationFinished(value))} value={gameCreationSelector.questions.finished} />
                 <InlineInputField title={"How many hours have you played?"} name={"hours"} onChange={(value: string) => dispatch(setGameCreationHours(value))} value={gameCreationSelector.questions.hours.toString()} placeholder={"Hours"} />
-                <DropdownInput options={gameInfo?.platforms || []} value={gameCreationSelector.questions.platform} onChange={(value: string) => dispatch(setGameCreationPlatform(value))} title={"What platform did you play on?"} name={"platform"} />
+                <DropdownInput additionalOptions={allPlatformsFetch} options={gameInfo?.platforms || []} value={gameCreationSelector.questions.platform} onChange={(value: string) => dispatch(setGameCreationPlatform(value))} title={"What platform did you play on?"} name={"platform"} />
                 <WideActionButton onClick={proceedToNextPage} text={"NEXT"} />
             </>
         )
     }
+    
+    function errorMessage(){
+        return(
+            <div className="flex flex-col gap-[30px] textcol-main">
+                <p>An error acquired white loading game info from database</p>
+                <p>Error: {error}</p>
+            </div>
+        )
+    }
+
     return (
         <div className="flex gap-[25px] w-full flex-col">
-            {!gameInfo?.platforms && <p className="textcol-main">Loading...</p>}
+            {!gameInfo?.platforms && !error && <p className="textcol-main">Loading...</p>}
             {gameInfo?.platforms && inputFields()}
-            {!gameInfoGathered && error && <p className="textcol-main text-[24px]">{error}</p>}
+            {gameInfoGathered && error && errorMessage()}
         </div>
     )
 }

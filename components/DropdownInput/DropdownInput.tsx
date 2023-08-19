@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 
-function DropdownOption(props:{
-    onClick:Function,
-    title:string,
+function DropdownOption(props: {
+    onClick: Function,
+    title: string,
 }) {
     return (
         <p className="w-full h-[45px] cursor-pointer flex items-center justify-center bg-dimm hover:brightness-110 textcol-main" onClick={() => props.onClick()}>
@@ -17,17 +17,23 @@ export default function DropdownInput(props: {
     value: string,
     onChange: Function,
     title: string,
-    name: string
+    name: string,
+    additionalOptions?: string[]
 }) {
     const [toggleDropdown, setToggleDropdown] = useState(false);
 
 
-    if(props.options.length === 0) return;
-    
+    if (props.options.length === 0) return;
+
+
     function dropdownList() {
         return (
-            <div className="absolute right-0 top-[45px] w-[160px] h-fit max-h-[200px] overflow-y-scroll bg-dimm">
+            <div className="absolute right-0 top-[45px] w-[230px] h-fit max-h-[300px] overflow-y-scroll bg-dimm z-[20]">
                 {props.options.map((option: string) => <DropdownOption key={option} onClick={() => props.onChange(option)} title={option} />)}
+                {props.additionalOptions && <div className="w-full">
+                    <p className="textcol-main py-[20px] w-full bg-mid text-center"> - - - - Other options  - - - -</p>
+                    {props.additionalOptions.map((option: string, index:number) => <DropdownOption key={option+index} onClick={() => props.onChange(option)} title={option} />)}
+                </div>}
             </div>
         )
     }
