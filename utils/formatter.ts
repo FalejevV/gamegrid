@@ -1,5 +1,5 @@
 import { IGDBGameFetch, IGDBTagIdName } from "@/interface";
-
+import fetch from "node-fetch"
 
 export function dateToText(date: number): string {
     let dateParse = new Date(date * 1000);
@@ -41,17 +41,17 @@ export function IGDBDuplicateGamesJoin<T>(games: T): T {
             // if item is an array, loop through each array object and extract the name;
             if (Array.isArray(game[key])) {
                 game[key].forEach((item: IGDBTagIdName) => {
-                    if(!item.name){
-                     // if the name is not fount, it means that it might be nested into another object   //
-                     // pickicn each item key and checking it it contains a "name" property. if it is => rewrite item and proceed extraction
-                        let tryItem = {...item} as any;
+                    if (!item.name) {
+                        // if the name is not fount, it means that it might be nested into another object   //
+                        // pickicn each item key and checking it it contains a "name" property. if it is => rewrite item and proceed extraction
+                        let tryItem = { ...item } as any;
                         let itemKeys: (keyof T)[] = Object.keys(item) as (keyof T)[];
                         itemKeys.forEach((itemKey: keyof T) => {
-                            if(tryItem.name) return;
-                            if(typeof tryItem[itemKey] !== "object") return;
-                            tryItem = {...tryItem[itemKey]};
+                            if (tryItem.name) return;
+                            if (typeof tryItem[itemKey] !== "object") return;
+                            tryItem = { ...tryItem[itemKey] };
                         })
-                        if(tryItem.name){
+                        if (tryItem.name) {
                             item = tryItem as IGDBTagIdName;
                         }
                     }
@@ -59,7 +59,7 @@ export function IGDBDuplicateGamesJoin<T>(games: T): T {
 
                     if (extractedName.length > 40) return;
                     extractedName = extractedName.split("(")[0];
-                    if(!primaryGame) return;
+                    if (!primaryGame) return;
 
                     if (!primaryGame?.[key]) {
                         primaryGame![key] = [] as any;
@@ -68,8 +68,8 @@ export function IGDBDuplicateGamesJoin<T>(games: T): T {
                         (primaryGame[key] as string[]).push(extractedName);
                     }
                 })
-            }else{
-                if(!primaryGame || primaryGame[key]) return;
+            } else {
+                if (!primaryGame || primaryGame[key]) return;
                 primaryGame[key] = game[key];
             }
         })
@@ -133,3 +133,4 @@ export function toCoverLargeFormat(cover: string): string {
 
     return "https:" + coverSplit.join("/");
 }
+

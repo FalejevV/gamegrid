@@ -4,6 +4,7 @@ import supabaseServer from "./supabaseServer";
 import { getIGDBFullGameInfo, getIGDBGameDevelopersByNameAndDate } from "./apiFetching";
 import { IGDBDuplicateGamesJoin } from "./formatter";
 import supabaseRootClient from "./supabaseRootClient";
+import { fetchImage } from "./imageFormat";
 
 let amountDefault = 3;
 
@@ -220,6 +221,8 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
 
 }
 
+// Function checks by name date and company is a game exists in a supabase.
+// If not, it fetches the game from the IGDB, then processes it and inserts it into the supabase table.
 export async function supabaseGameInsertByNameDateCompany(name: string, date: number, company: string): Promise<IGDBFullGameInfoDataError> {
 
     // checking if game name already exists in supabase table.
@@ -229,7 +232,7 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
         error: null
     }
     if (error) return { data: null, error: error };
-    const developersResponse:StringArrayDataError = await(getIGDBGameDevelopersByNameAndDate(name, date));
+    const developersResponse: StringArrayDataError = await (getIGDBGameDevelopersByNameAndDate(name, date));
     const developersList = developersResponse.data || [] as string[];
     // if game doesn't exist in supabase table, fetch it from IGDB to insert into supabase table
     let IGDBStringFetch = await getIGDBFullGameInfo(name, company);
@@ -239,7 +242,7 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
     }
 
     let combinedDuplicateGame = IGDBDuplicateGamesJoin(IGDBStringFetch) as IGDBFullGameInfo | IGDBFullGameInfo[];
-    
+
     if (Array.isArray(combinedDuplicateGame)) combinedDuplicateGame = { ...combinedDuplicateGame[0] };
 
     let promisesResult = await Promise.all([
@@ -248,16 +251,25 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
         insertSupabaseDevelopers(developersList),
         insertSupabasePlayers(combinedDuplicateGame.game_modes)
     ])
-    
-
     error = null;
     promisesResult.forEach((result: StringDataError) => {
-        if(error) return;
-        if(result.error) {
+        if (error) return;
+        if (result.error) {
             error = result.error
         }
     })
-    if(error) return { error, data:null}
+    if (error) return { error, data: null }
+
+    let { data: imageData, error: imageError } = await uploadSupabaseImage(combinedDuplicateGame.cover.url, combinedDuplicateGame.name + combinedDuplicateGame.first_release_date);
+    if (imageError) return {
+        data: null,
+        error: "Could not upload game image to server." + imageError
+    }
+    console.log("Image info", imageData, imageError);
+
+    let insertGameError = await insertSupabaseGame(combinedDuplicateGame, imageData || "");
+
+    if (imageError) return { data: null, error: imageError }
 
 
 
@@ -295,7 +307,7 @@ export async function getSupabaseGameByNameAndDate(name: string, date: number): 
 }
 
 
-export async function insertSupabasePlatforms(platforms: string[]): Promise<StringDataError> {
+async function insertSupabasePlatforms(platforms: string[]): Promise<StringDataError> {
     const { data, error } = await supabaseRoot.rpc("insert_platforms", { platform_names: platforms });
 
     if (error?.message) {
@@ -305,7 +317,7 @@ export async function insertSupabasePlatforms(platforms: string[]): Promise<Stri
     return { data: "OK", error: error?.message || null };
 }
 
-export async function insertSupabaseTags(tags: string[]): Promise<StringDataError> {
+async function insertSupabaseTags(tags: string[]): Promise<StringDataError> {
     const { data, error } = await supabaseRoot.rpc("insert_tags", { tag_names: tags });
 
     if (error?.message) {
@@ -316,7 +328,7 @@ export async function insertSupabaseTags(tags: string[]): Promise<StringDataErro
 }
 
 
-export async function insertSupabaseDevelopers(developers: string[]): Promise<StringDataError> {
+async function insertSupabaseDevelopers(developers: string[]): Promise<StringDataError> {
     const { data, error } = await supabaseRoot.rpc('insert_developers', { developer_names: developers });
 
     if (error?.message) {
@@ -326,8 +338,8 @@ export async function insertSupabaseDevelopers(developers: string[]): Promise<St
     return { data: "OK", error: error?.message || null };
 }
 
-export async function insertSupabasePlayers(players: string[]): Promise<StringDataError> {
-const { data, error } = await supabaseRoot.rpc('insert_game_modes', { game_mode_names: players});
+async function insertSupabasePlayers(players: string[]): Promise<StringDataError> {
+    const { data, error } = await supabaseRoot.rpc('insert_game_modes', { game_mode_names: players });
 
     if (error?.message) {
         return { data: null, error: error.message };
@@ -336,3 +348,39 @@ const { data, error } = await supabaseRoot.rpc('insert_game_modes', { game_mode_
     return { data: "OK", error: error?.message || null };
 }
 
+
+async function uploadSupabaseImage(URL: string, imageName: string) {
+    const fetchedImage = await fetchImage(URL);
+    if (!fetchedImage) {
+        return { data: null, error: "Could not convert image" }
+    }
+
+    const { data, error } = await uploadToSupabaseAction(fetchedImage, imageName);
+    return { data: data, error: error }
+}
+
+
+
+
+async function uploadToSupabaseAction(webpBuffer: Buffer, imageName: string): Promise<StringDataError> {
+    const { error } = await supabaseRoot.storage.from('gamegrid').upload(`images/${imageName}.webp`, webpBuffer, {
+        contentType: 'image/webp',
+    });
+    if (error) {
+        return { data: null, error: error.message }
+    } else {
+        return { data: `https://kvwtrzxxikuvdjmcwofc.supabase.co/storage/v1/object/public/gamegrid/images/${imageName}.webp`, error: null }
+    }
+};
+
+async function insertSupabaseGame(game: IGDBFullGameInfo, imageURL: string) {
+    const { error } = await supabaseRoot
+        .from('Game')
+        .insert({
+            name: game.name,
+            release_date: new Date(game.first_release_date * 1000).toISOString(),
+            description: game.summary,
+            image: imageURL,
+            state_id: 5
+        })
+}

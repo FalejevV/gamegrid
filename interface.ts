@@ -125,6 +125,7 @@ export interface IGDBFullGameInfo{
     involved_companies: string[],
     platforms:string[],
     game_modes:string[],
+    summary:string,
 }
 
 export interface IGDBFullGameInfoDataError{

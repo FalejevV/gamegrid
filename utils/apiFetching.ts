@@ -93,7 +93,7 @@ export async function getIGDBFullGameInfo(name: string, company: string): Promis
             "Authorization": "Bearer " + token.data,
             "Content-Type": "application/json"
         },
-        body: `fields name,platforms.name,genres.name,themes.name,cover.url,involved_companies.company.name ,total_rating_count, game_modes.name, first_release_date; where name ~ "${name}" & total_rating_count > 1 & involved_companies.company.name ~ "${company}"; sort total_rating_count desc; limit 10;`
+        body: `fields name,platforms.name,genres.name,summary,themes.name,cover.url,involved_companies.company.name ,total_rating_count, game_modes.name, first_release_date; where name ~ "${name}" & total_rating_count > 1 & involved_companies.company.name ~ "${company}"; sort total_rating_count desc; limit 10;`
     })
         .then(response => response.json())
 
