@@ -47,6 +47,10 @@ body{
   border-color:rgb(195, 8, 63);
 }
 
+.bg-loading{
+  background-color: #4d4d4d80;
+}
+
 
 .textcol-main{
   color:rgb(202, 233, 234);

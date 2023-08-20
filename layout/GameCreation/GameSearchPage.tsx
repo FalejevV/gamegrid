@@ -10,8 +10,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { setGameCreationFetchedGames, setGameCreationGameData, setGameCreationMemoData, setGameCreationPage, setGameCreationSearchInput } from "@/store/features/gameCreation";
 import AlertText from "@/components/AlertText/AlertText";
-import { fetchIGDBGameByName } from "@/utils/apiFetching";
 import WideActionButton from "@/components/Buttons/WideActionButton/WideActionButton";
+import { APIfetchIGDBGameByName } from "@/utils/apiFetching";
 
 
 
@@ -35,7 +35,7 @@ export default function GameSearchPage() {
         dispatch(setGameCreationFetchedGames([]));
         e.preventDefault();
         if (gameCreationSelector.gameSearchInput.trim()) {
-            let fetchResult: StringDataError = await fetchIGDBGameByName(gameCreationSelector.gameSearchInput);
+            let fetchResult: StringDataError = await APIfetchIGDBGameByName(gameCreationSelector.gameSearchInput);
             if (fetchResult.error) {
                 if(typeof fetchResult.error === "string"){
                     setError(fetchResult.error);

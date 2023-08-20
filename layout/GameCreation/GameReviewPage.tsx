@@ -7,10 +7,11 @@ import InputCheckbox from "@/components/InputCheckbox/InputCheckbox";
 import { GameCreationRequiredInfo, GameCreationRequiredInfoDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError } from "@/interface";
 import { setGameCreationFinished, setGameCreationHours, setGameCreationPlatform } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
-import { APICallIGDBGameDevelopersByNameDate, APICallSupabaseGameInsertByName, getSupabaseGameFromNameAndDate } from "@/utils/apiFetching";
+import { APICallSupabaseGameInsertByNameDateCompany, APIgetSupabaseGameFromNameAndDate} from "@/utils/apiFetching";
 import supabaseClient from "@/utils/supabaseClient";
 import { getTableList } from "@/utils/tableFetching";
 import { useEffect, useState } from "react";
+import GameReviewPageLoading from "./GameReviewPageLoading";
 
 
 
@@ -23,37 +24,49 @@ export default function GameReviewPage() {
     const [gameInfo, setGameInfo] = useState<GameCreationRequiredInfo | null | IGDBFullGameInfo>(null);
     const [error, setError] = useState("");
     const [allPlatformsFetch, setAllPlatformsFetch] = useState<string[]>([]);
-
+    const [newGameCreation, setNewGameCreation] = useState(false);
+    const [supabaseInsertDebounce, setSupabaseInsertDebounce] = useState(false);
+    const [supabaseSearchDebounce, setSupabaseSearchDebounce] = useState(false);
+    // search for a game in supabase.
     async function supabaseGameSearch() {
-        if (gameCreationSelector.gameInfo.gameId === gameCreationSelector.memoGame.gameId) return;
+        if(supabaseSearchDebounce) return;
+        setSupabaseSearchDebounce(true);
+        if (gameCreationSelector.gameInfo.gameId === gameCreationSelector.memoGame.gameId) {
+            setSupabaseSearchDebounce(false);
+            return;
+        }
 
-        const result: GameCreationRequiredInfoDataError = await getSupabaseGameFromNameAndDate(gameCreationSelector.gameInfo.name, gameCreationSelector.gameInfo.date);
+        const result: GameCreationRequiredInfoDataError = await APIgetSupabaseGameFromNameAndDate(gameCreationSelector.gameInfo.name, gameCreationSelector.gameInfo.date);
         if (result.data) {
             setGameDatabaseId(Number(result.data.id) || -1);
             setGameInfo(result.data);
         }
         setGameInfoGathered(true);
+        setSupabaseSearchDebounce(false);
     }
 
     async function supabaseGameInsert() {
-        if (gameDatabaseId === -1 && gameInfoGathered) return;
+        console.log("NEW GAME INSERT");
+        if (gameDatabaseId === -1 && !gameInfoGathered) return;
+        if(supabaseInsertDebounce) return;
+        setSupabaseInsertDebounce(true);
         console.log("fetching all IGDB game info...")
-        const result: IGDBFullGameInfoDataError = await APICallSupabaseGameInsertByName(gameCreationSelector.gameInfo.name, gameCreationSelector.gameInfo.date, gameCreationSelector.gameInfo.company);
+        const result: IGDBFullGameInfoDataError = await APICallSupabaseGameInsertByNameDateCompany(gameCreationSelector.gameInfo.name, gameCreationSelector.gameInfo.date, gameCreationSelector.gameInfo.company);
         if (result.data) {
             setGameInfo(result.data);
+            setSupabaseInsertDebounce(false);
             return;
         }
         if (result.error) {
             setError(result.error);
+            setSupabaseInsertDebounce(false);
             return;
         }
     }
 
     useEffect(() => {
         supabaseGameSearch();
-        const supabase= supabaseClient;
-
-        getTableList(supabase, "Platform").then((res) => {
+        getTableList(supabaseClient, "Platform").then((res) => {
             if(res.error){
                 setError(res.error.message);
                 return;
@@ -64,15 +77,11 @@ export default function GameReviewPage() {
         });
     }, []);
 
-    useEffect(() => {
-        supabaseGameInsert();
-    }, [gameInfoGathered, gameDatabaseId]);
-
-    useEffect(() => {
-        if (!gameInfo) return;
-        
-        if (gameDatabaseId === -1) {
-            console.log("GAME NOT FOUND. INSERT GAME INTO DB");
+       useEffect(() => {
+        if (gameInfo) return;
+        if (gameDatabaseId === -1 && gameInfoGathered) {
+            setNewGameCreation(true);
+            supabaseGameInsert();
         }
    }, [gameInfo, gameInfoGathered, gameDatabaseId]);
 
@@ -104,9 +113,18 @@ export default function GameReviewPage() {
         )
     }
 
+    function loadingMessage(){
+        return(
+            <div className="flex flex-col gap-[30px] textcol-main">
+                <GameReviewPageLoading />
+                {newGameCreation && <p>Game was not found in our database. Fetching game data...</p>}
+            </div>
+        )
+    }
+
     return (
         <div className="flex gap-[25px] w-full flex-col">
-            {!gameInfo?.platforms && !error && <p className="textcol-main">Loading...</p>}
+            {!gameInfo?.platforms && !error && loadingMessage()}
             {gameInfo?.platforms && inputFields()}
             {gameInfoGathered && error && errorMessage()}
         </div>
