@@ -203,9 +203,9 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
     } else {
         query.order('id', ascending)
     }
+    query.eq("state_id", 5);
 
     let { data, error } = await query;
-
 
 
     if (isTotal) {
@@ -245,32 +245,50 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
 
     if (Array.isArray(combinedDuplicateGame)) combinedDuplicateGame = { ...combinedDuplicateGame[0] };
 
+    // insert all missing information in supabase tables
     let promisesResult = await Promise.all([
         insertSupabasePlatforms(combinedDuplicateGame.platforms),
         insertSupabaseTags([...combinedDuplicateGame.genres, ...combinedDuplicateGame.themes]),
         insertSupabaseDevelopers(developersList),
         insertSupabasePlayers(combinedDuplicateGame.game_modes)
     ])
-    error = null;
+    let promiseError:null | string = null;
     promisesResult.forEach((result: StringDataError) => {
-        if (error) return;
+        if (promiseError) return;
         if (result.error) {
-            error = result.error
+            promiseError = result.error
         }
     })
     if (error) return { error, data: null }
 
+
+    // uploading supabase imagei into storage
     let { data: imageData, error: imageError } = await uploadSupabaseImage(combinedDuplicateGame.cover.url, combinedDuplicateGame.name + combinedDuplicateGame.first_release_date);
     if (imageError) return {
         data: null,
         error: "Could not upload game image to server." + imageError
     }
-    console.log("Image info", imageData, imageError);
 
-    let insertGameError = await insertSupabaseGame(combinedDuplicateGame, imageData || "");
+    // inserting a game into supabase Game table and getting its game ID.
+    let { data: gameInsertId, error: gameInsertError } = await insertSupabaseGame(combinedDuplicateGame, imageData || "");
+    if (imageError) return { data: null, error: gameInsertError }
 
-    if (imageError) return { data: null, error: imageError }
 
+    // using the game ID we are creation many to many inserts into various tables.
+    let manyToManyResult = await Promise.all([
+        insertSupabaseGameManyRelationData(Number(gameInsertId), combinedDuplicateGame.platforms, "Platform"),
+        insertSupabaseGameManyRelationData(Number(gameInsertId), [...combinedDuplicateGame.genres, ...combinedDuplicateGame.themes], "Tag"),
+        insertSupabaseGameManyRelationData(Number(gameInsertId), combinedDuplicateGame.game_modes, "Player"),
+        insertSupabaseGameManyRelationData(Number(gameInsertId), developersList, "Developer"),
+    ]);
+    let manyToManyError: null | string = null;
+    promisesResult.forEach((result: StringDataError) => {
+        if (manyToManyError ) return;
+        if (result.error) {
+            manyToManyError = result.error
+        }
+    })
+    if (manyToManyError) return { error:manyToManyError, data: null }
 
 
     return { data: combinedDuplicateGame, error: null }
@@ -365,6 +383,7 @@ async function uploadSupabaseImage(URL: string, imageName: string) {
 async function uploadToSupabaseAction(webpBuffer: Buffer, imageName: string): Promise<StringDataError> {
     const { error } = await supabaseRoot.storage.from('gamegrid').upload(`images/${imageName}.webp`, webpBuffer, {
         contentType: 'image/webp',
+        upsert: true
     });
     if (error) {
         return { data: null, error: error.message }
@@ -373,14 +392,36 @@ async function uploadToSupabaseAction(webpBuffer: Buffer, imageName: string): Pr
     }
 };
 
-async function insertSupabaseGame(game: IGDBFullGameInfo, imageURL: string) {
-    const { error } = await supabaseRoot
+async function insertSupabaseGame(game: IGDBFullGameInfo, imageURL: string): Promise<StringDataError> {
+    const { data, error } = await supabaseRoot
         .from('Game')
         .insert({
             name: game.name,
             release_date: new Date(game.first_release_date * 1000).toISOString(),
             description: game.summary,
             image: imageURL,
-            state_id: 5
-        })
+            state_id: 2
+        }).select().single()
+
+    return { data: data.id, error: error?.message || null }
+}
+
+
+async function insertSupabaseGameManyRelationData(gameId: number, platforms: string[], tableName: string): Promise<StringDataError> {
+    let supabase = supabaseServer();
+    const { data, error } = await supabase.from(tableName).select("id").in(tableName.toLowerCase(), platforms);
+    if (error) return { data: null, error: error.message };
+
+    let entries = data.map((item: { id: number }) => {
+        return {
+            game_id: gameId,
+            [`${tableName.toLowerCase()}_id`]: item.id
+        }
+    })
+
+    let { error: insertError } = await supabaseRoot.from(`Game${tableName}`).insert(entries);
+    if (insertError) return { data: null, error: insertError.message }
+
+
+    return { data: "OK", error: null };
 }
