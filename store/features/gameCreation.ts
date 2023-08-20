@@ -1,4 +1,4 @@
-import { IGDBGameFetch, ScoreList } from "@/interface";
+import { GameCreationRequiredInfo, IGDBFullGameInfo, IGDBGameFetch, ScoreList } from "@/interface";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 
@@ -9,7 +9,8 @@ export interface GameCreation {
     scores: ScoreList,
     fetchedGames: IGDBGameFetch[],
     memoGame:GameCreationGameInfo,
-    questions:GameCreationQuestions
+    questions:GameCreationQuestions,
+    gameCreationFetchedGame:GameCreationRequiredInfo | null | IGDBFullGameInfo;
 }
 
 export interface GameCreationGameInfo {
@@ -64,7 +65,8 @@ let initialState: GameCreation = {
         hours: "",
         platform: "",
         comment: ""
-    }
+    },
+    gameCreationFetchedGame: null
 }
 
 const gameCreationSlice = createSlice({
@@ -100,6 +102,9 @@ const gameCreationSlice = createSlice({
         }),
         setGameCreationComment : ((state:GameCreation, action: PayloadAction<string>) => {
             state.questions.comment = action.payload
+        }),
+        setGameCreationFetchedGame: ((state:GameCreation, action: PayloadAction<GameCreationRequiredInfo | null | IGDBFullGameInfo> ) => {
+            state.gameCreationFetchedGame = action.payload;
         })
     }
 })
@@ -109,7 +114,7 @@ const gameCreationSlice = createSlice({
 
 export default gameCreationSlice.reducer;
 
-export const {setGameCreationPage, setGameCreationGameData, setGameCreationSearchInput, setGameCreationFetchedGames, setGameCreationMemoData, clearGameCreationAll, setGameCreationComment, setGameCreationFinished, setGameCreationHours, setGameCreationPlatform} = gameCreationSlice.actions;
+export const {setGameCreationPage, setGameCreationGameData, setGameCreationSearchInput, setGameCreationFetchedGames, setGameCreationMemoData, clearGameCreationAll, setGameCreationComment, setGameCreationFinished, setGameCreationHours, setGameCreationPlatform, setGameCreationFetchedGame} = gameCreationSlice.actions;
 
 
 

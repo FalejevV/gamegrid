@@ -110,3 +110,9 @@ body{
   height:100vh;
   height:100dvh;
 }
+
+.inputheight{
+  height:45px;
+  min-height: 45px;
+  max-height: 45px;
+}

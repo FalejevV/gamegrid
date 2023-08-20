@@ -37,9 +37,9 @@ export default function GameSearchPage() {
         if (gameCreationSelector.gameSearchInput.trim()) {
             let fetchResult: StringDataError = await APIfetchIGDBGameByName(gameCreationSelector.gameSearchInput);
             if (fetchResult.error) {
-                if(typeof fetchResult.error === "string"){
+                if (typeof fetchResult.error === "string") {
                     setError(fetchResult.error);
-                }else{
+                } else {
                     setError("Fetching error :/  Please try again after some time. Sorry");
                 }
             } else {
@@ -61,9 +61,11 @@ export default function GameSearchPage() {
     }
 
     function pickAGame(game: IGDBGameFetch) {
+
+        dispatch(setGameCreationMemoData(gameCreationSelector.gameInfo));
         dispatch(setGameCreationGameData({
             gameId: game.id,
-            name: game.name, 
+            name: game.name,
             image: game.cover.url,
             date: game.first_release_date,
             company: game.involved_companies[0].company.name
@@ -72,15 +74,9 @@ export default function GameSearchPage() {
     }
 
 
-    function proceedToNextPage(){
-        if(gameCreationSelector.gameInfo.gameId < 0) return;
-        
-        if(gameCreationSelector.gameInfo.gameId === gameCreationSelector.memoGame.gameId){
-            dispatch(setGameCreationPage(1));
-        }else if (gameCreationSelector.gameInfo.gameId !== gameCreationSelector.memoGame.gameId){
-            setGameCreationMemoData(gameCreationSelector.gameInfo);
-            dispatch(setGameCreationPage(1));
-        }
+    function proceedToNextPage() {
+        if (gameCreationSelector.gameInfo.gameId < 0) return;
+        dispatch(setGameCreationPage(1));
     }
 
 
@@ -88,7 +84,7 @@ export default function GameSearchPage() {
     return (
         <div className="flexgap flex-col relative">
             <form onSubmit={gameSearch} className="flex w-full items-center h-[fit] relative">
-                <InputField bgColor="bg-dimm" label={"Add a Game"} name={"search"} placeholder={"Game search..."} value={gameCreationSelector.gameSearchInput} setValue={(value:string) => dispatch(setGameCreationSearchInput(value)) } />
+                <InputField bgColor="bg-dimm" label={"Add a Game"} name={"search"} placeholder={"Game search..."} value={gameCreationSelector.gameSearchInput} setValue={(value: string) => dispatch(setGameCreationSearchInput(value))} />
                 <button className={`h-[45px] w-[70px] absolute bottom-0 right-0  flex items-center justify-center bg-mid hover:brightness-105 cursor-pointer
                         ${isFetching && "opacity-50"} 
                     `} >
@@ -112,7 +108,7 @@ export default function GameSearchPage() {
                     {gameCreationSelector.fetchedGames.length > 0 && gameList()}
                 </div>
             }
-            
+
         </div>
     )
 }

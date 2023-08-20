@@ -35,7 +35,6 @@ export default function DropdownInput(props: {
             let current = containerRef.current as HTMLElement;
             let target = event.target as HTMLElement;
             if (!current.contains(target)) {
-                console.log("OUTSIDE");
                 setToggleDropdown(false);
             }
         }
