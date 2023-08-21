@@ -51,8 +51,8 @@ export async function APIfetchIGDBGameByName(search: string): Promise<StringData
 
 
 
-export async function APICallSupabaseGameInsertByNameDateCompany(name: string, date: number, company: string): Promise<IGDBFullGameInfoDataError> {
-    const result: IGDBFullGameInfoDataError = await fetch('/api/supabase-game-insert', {
+export async function APICallSupabaseGameInsertByNameDateCompany(name: string, date: number, company: string): Promise<GameCreationRequiredInfoDataError> {
+    const result: GameCreationRequiredInfoDataError = await fetch('/api/supabase-game-insert', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

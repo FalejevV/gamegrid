@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import GameReviewPageLoading from "./GameReviewPageLoading";
 import TextField from "@/components/TextField/TextField";
 import Button from "@/components/Buttons/WideActionButton/Button";
+import Image from "next/image";
 
 
 
@@ -57,7 +58,7 @@ export default function GameReviewPage() {
         if (supabaseInsertDebounce) return;
         setSupabaseInsertDebounce(true);
         console.log("fetching all IGDB game info...")
-        const result: IGDBFullGameInfoDataError = await APICallSupabaseGameInsertByNameDateCompany(gameCreationSelector.gameInfo.name, gameCreationSelector.gameInfo.date, gameCreationSelector.gameInfo.company);
+        const result: GameCreationRequiredInfoDataError= await APICallSupabaseGameInsertByNameDateCompany(gameCreationSelector.gameInfo.name, gameCreationSelector.gameInfo.date, gameCreationSelector.gameInfo.company);
         if (result.data) {
             dispatch(setGameCreationFetchedGame(result.data));
             setSupabaseInsertDebounce(false);
@@ -93,9 +94,7 @@ export default function GameReviewPage() {
 
     useEffect(() => {
         if (!gameInfoGathered) return;
-        console.log(gameCreationSelector.gameCreationFetchedGame);
-        console.log("game info", gameCreationSelector.gameInfo);
-        console.log("memo info", gameCreationSelector.memoGame);
+        console.log("gameFetched", gameCreationSelector.gameCreationFetchedGame);
     }, [gameInfoGathered]);
 
     function proceedToNextPage() {
@@ -106,10 +105,11 @@ export default function GameReviewPage() {
         dispatch(setGameCreationPage(0));
     }
 
-
-    function inputFields() {
+    function reviewWindow() {
         return (
-            <>
+            <div className="flex flex-col gap-[25px]">
+                <SelectedGame image={gameCreationSelector.gameCreationFetchedGame?.image || ""} name={gameCreationSelector.gameCreationFetchedGame?.name || ""} />
+                <p className="textcol-main text-[23px]">Please describe your experience</p>
                 <InputCheckbox question={"Did you finish the game?"} name={"finished"} onChange={(value: boolean) => dispatch(setGameCreationFinished(value))} value={gameCreationSelector.questions.finished} />
                 <InlineInputField title={"How many hours have you played?"} name={"hours"} onChange={(value: string) => dispatch(setGameCreationHours(value))} value={gameCreationSelector.questions.hours.toString()} placeholder={"Hours"} />
                 <DropdownInput additionalOptions={allPlatformsFetch} options={gameCreationSelector.gameCreationFetchedGame?.platforms || []} value={gameCreationSelector.questions.platform} onChange={(value: string) => dispatch(setGameCreationPlatform(value))} title={"What platform did you play on?"} name={"platform"} />
@@ -119,7 +119,19 @@ export default function GameReviewPage() {
                     <WideActionButton onClick={proceedToNextPage} text={"NEXT"} />
                 </div>
 
-            </>
+            </div>
+        )
+    }
+
+    function SelectedGame(props:{
+        image:string,
+        name:string,
+    }){
+        return(
+            <div className="flex w-full inputheight bg-dimm items-center justify-between overflow-hidden relative">
+                <Image width={200} height={45} src={props.image} alt={props.name+" title"} className="object-cover flex-auto brightness-50" />
+                <p className="textcol-main h-full p-[25px] flex items-center absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-dimm  whitespace-nowrap">{props.name}</p>
+            </div>
         )
     }
 
@@ -144,7 +156,7 @@ export default function GameReviewPage() {
     return (
         <div className="flex gap-[25px] w-full flex-col">
             {!gameCreationSelector.gameCreationFetchedGame?.platforms && !error && loadingMessage()}
-            {gameCreationSelector.gameCreationFetchedGame?.platforms && inputFields()}
+            {gameCreationSelector.gameCreationFetchedGame?.platforms && reviewWindow()}
             {gameInfoGathered && error && errorMessage()}
         </div>
     )
