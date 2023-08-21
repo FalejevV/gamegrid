@@ -20,18 +20,13 @@ export default function GameSearchPage() {
     const [isFetching, setIsFetching] = useState(false);
     const [error, setError] = useState("");
     const gameCreationSelector = useAppSelector((state: RootState) => state.gameCreation);
+    const [gamePicked, setGamePicked] = useState(false);
     const dispatch = useAppDispatch();
 
     async function gameSearch(e: React.FormEvent) {
         if (isFetching) return;
         else setIsFetching(true);
-        dispatch(setGameCreationGameData({
-            gameId: 0,
-            name: "",
-            image: "",
-            date: 0,
-            company: ""
-        }));
+        setGamePicked(false);
         dispatch(setGameCreationFetchedGames([]));
         e.preventDefault();
         if (gameCreationSelector.gameSearchInput.trim()) {
@@ -61,7 +56,7 @@ export default function GameSearchPage() {
     }
 
     function pickAGame(game: IGDBGameFetch) {
-
+        setGamePicked(true);
         dispatch(setGameCreationMemoData(gameCreationSelector.gameInfo));
         dispatch(setGameCreationGameData({
             gameId: game.id,
@@ -97,7 +92,7 @@ export default function GameSearchPage() {
             {error && <AlertText alertText={error} />}
 
 
-            {gameCreationSelector.gameInfo.name && <>
+            {gamePicked && <>
                 <GamePickPreview game={gameCreationSelector.gameInfo} />
                 <WideActionButton onClick={proceedToNextPage} text={"NEXT"} />
             </>}

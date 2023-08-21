@@ -33,10 +33,13 @@ export default function GameReviewPage() {
         if (supabaseSearchDebounce) return;
         setSupabaseSearchDebounce(true);
         if (gameCreationSelector.gameInfo.gameId === gameCreationSelector.memoGame.gameId) {
+            console.log("SAME GAME");
             setSupabaseSearchDebounce(false);
             setGameDatabaseId(gameCreationSelector.gameInfo.gameId);
             setGameInfoGathered(true);
             return;
+        }else{
+            dispatch(setGameCreationFetchedGame(null));
         }
 
         const result: GameCreationRequiredInfoDataError = await APIgetSupabaseGameFromNameAndDate(gameCreationSelector.gameInfo.name, gameCreationSelector.gameInfo.date);
@@ -89,8 +92,10 @@ export default function GameReviewPage() {
     }, [gameCreationSelector.gameCreationFetchedGame, gameInfoGathered, gameDatabaseId]);
 
     useEffect(() => {
-        if(!gameInfoGathered) return;
+        if (!gameInfoGathered) return;
         console.log(gameCreationSelector.gameCreationFetchedGame);
+        console.log("game info", gameCreationSelector.gameInfo);
+        console.log("memo info", gameCreationSelector.memoGame);
     }, [gameInfoGathered]);
 
     function proceedToNextPage() {
