@@ -1,4 +1,4 @@
-import { StringDataError } from "@/interface";
+import { IGDBFullGameInfoDataError, StringDataError } from "@/interface";
 import { supabaseGameInsertByNameDateCompany } from "@/utils/supabaseFetching";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 }
 
 
-export async function POST(request: Request):Promise<NextResponse<StringDataError>> {
+export async function POST(request: Request):Promise<NextResponse<IGDBFullGameInfoDataError>> {
     const res = await request.json()
 
     let result = await supabaseGameInsertByNameDateCompany(res.name, res.date, res.company);

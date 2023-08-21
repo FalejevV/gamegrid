@@ -12,6 +12,7 @@ import { setGameCreationFetchedGames, setGameCreationGameData, setGameCreationMe
 import AlertText from "@/components/AlertText/AlertText";
 import WideActionButton from "@/components/Buttons/WideActionButton/WideActionButton";
 import { APIfetchIGDBGameByName } from "@/utils/apiFetching";
+import Title from "@/components/Title/Title";
 
 
 
@@ -23,7 +24,7 @@ export default function GameSearchPage() {
     const [gamePicked, setGamePicked] = useState(false);
     const dispatch = useAppDispatch();
 
-    async function gameSearch(e: React.FormEvent) {
+    async function formSubmit(e: React.FormEvent) {
         if (isFetching) return;
         else setIsFetching(true);
         setGamePicked(false);
@@ -78,8 +79,9 @@ export default function GameSearchPage() {
 
     return (
         <div className="flexgap flex-col relative">
-            <form onSubmit={gameSearch} className="flex w-full items-center h-[fit] relative">
-                <InputField bgColor="bg-dimm" label={"Add a Game"} name={"search"} placeholder={"Game search..."} value={gameCreationSelector.gameSearchInput} setValue={(value: string) => dispatch(setGameCreationSearchInput(value))} />
+            <form onSubmit={formSubmit} className="flex w-full flex-col h-[fit] relative gap-[25px]">
+                <Title title={"Game creation"} /> 
+                <InputField bgColor="bg-dimm" label={"Game search"} name={"search"} placeholder={"Game search..."} value={gameCreationSelector.gameSearchInput} setValue={(value: string) => dispatch(setGameCreationSearchInput(value))} />
                 <button className={`h-[45px] w-[70px] absolute bottom-0 right-0  flex items-center justify-center bg-mid hover:brightness-105 cursor-pointer
                         ${isFetching && "opacity-50"} 
                     `} >

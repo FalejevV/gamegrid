@@ -1,4 +1,4 @@
-import { GameCreationRequiredInfoDataError, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
+import { GameCreationRequiredInfoDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
 import igdbToken from "./igdbToken";
 
 
@@ -81,9 +81,12 @@ export async function APICallIGDBGameDevelopersByNameDate(name: string, date: nu
 }
 
 
-export async function getIGDBFullGameInfo(name: string, company: string): Promise<string> {
+export async function getIGDBFullGameInfo(name: string, company: string): Promise<IGDBFullGameInfoDataError> {
     const token = await igdbToken();
-    if (token.error) return token.error;
+    if (token.error) return {
+        data:null,
+        error: token.error,
+    } 
 
     const result = await fetch("https://api.igdb.com/v4/games", {
         method: "POST",
@@ -97,7 +100,16 @@ export async function getIGDBFullGameInfo(name: string, company: string): Promis
     })
         .then(response => response.json())
 
-    return result;
+    if(result.message){
+        return{
+            data:null,
+            error:result.message
+        }
+    }
+    return {
+        data:result,
+        error:null
+    };
 }
 
 

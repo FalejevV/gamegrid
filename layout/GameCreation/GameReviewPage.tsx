@@ -10,11 +10,12 @@ import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
 import { APICallSupabaseGameInsertByNameDateCompany, APIgetSupabaseGameFromNameAndDate } from "@/utils/apiFetching";
 import supabaseClient from "@/utils/supabaseClient";
 import { getTableList } from "@/utils/tableFetching";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import GameReviewPageLoading from "./GameReviewPageLoading";
 import TextField from "@/components/TextField/TextField";
 import Button from "@/components/Buttons/WideActionButton/Button";
-import Image from "next/image";
+import AlertText from "@/components/AlertText/AlertText";
+import Title from "@/components/Title/Title";
 
 
 
@@ -29,6 +30,7 @@ export default function GameReviewPage() {
     const [newGameCreation, setNewGameCreation] = useState(false);
     const [supabaseInsertDebounce, setSupabaseInsertDebounce] = useState(false);
     const [supabaseSearchDebounce, setSupabaseSearchDebounce] = useState(false);
+
     // search for a game in supabase.
     async function supabaseGameSearch() {
         if (supabaseSearchDebounce) return;
@@ -39,7 +41,7 @@ export default function GameReviewPage() {
             setGameDatabaseId(gameCreationSelector.gameInfo.gameId);
             setGameInfoGathered(true);
             return;
-        }else{
+        } else {
             dispatch(setGameCreationFetchedGame(null));
         }
 
@@ -52,13 +54,14 @@ export default function GameReviewPage() {
         setSupabaseSearchDebounce(false);
     }
 
+    // Game is not found in our database. Fetching game from IGDB and inserting it into the supabase.
     async function supabaseGameInsert() {
         console.log("NEW GAME INSERT");
         if (gameDatabaseId === -1 && !gameInfoGathered) return;
         if (supabaseInsertDebounce) return;
         setSupabaseInsertDebounce(true);
         console.log("fetching all IGDB game info...")
-        const result: GameCreationRequiredInfoDataError= await APICallSupabaseGameInsertByNameDateCompany(gameCreationSelector.gameInfo.name, gameCreationSelector.gameInfo.date, gameCreationSelector.gameInfo.company);
+        const result: GameCreationRequiredInfoDataError = await APICallSupabaseGameInsertByNameDateCompany(gameCreationSelector.gameInfo.name, gameCreationSelector.gameInfo.date, gameCreationSelector.gameInfo.company);
         if (result.data) {
             dispatch(setGameCreationFetchedGame(result.data));
             setSupabaseInsertDebounce(false);
@@ -97,8 +100,32 @@ export default function GameReviewPage() {
         console.log("gameFetched", gameCreationSelector.gameCreationFetchedGame);
     }, [gameInfoGathered]);
 
-    function proceedToNextPage() {
+    function formSubmit(e: FormEvent) {
+        e.preventDefault();
+        setError("");
 
+        if(!Number(gameCreationSelector.questions.hours)){
+            setError("Wrong 'Hours' field data")
+            return;
+        }
+
+        if(!gameCreationSelector.questions.platform){
+            setError("Please pick platform you played on");
+            return;
+        }
+
+        if(gameCreationSelector.questions.comment.trim().length < 20){
+            setError("Please write at least 20 characters in comment section ;)");
+            return;
+        }
+
+        proceedToNextPage();
+    }
+
+    function proceedToNextPage() {
+        if(gameCreationSelector.gameCreationFetchedGame?.id){
+            dispatch(setGameCreationPage(2));
+        }
     }
 
     function proceedToPrevPage() {
@@ -107,42 +134,34 @@ export default function GameReviewPage() {
 
     function reviewWindow() {
         return (
-            <div className="flex flex-col gap-[25px]">
-                <SelectedGame image={gameCreationSelector.gameCreationFetchedGame?.image || ""} name={gameCreationSelector.gameCreationFetchedGame?.name || ""} />
-                <p className="textcol-main text-[23px]">Please describe your experience</p>
+            <form className="flex flex-col gap-[25px]" onSubmit={formSubmit}>
+                <SelectedGame gameInfo={gameCreationSelector.gameCreationFetchedGame} />
+                <Title title={"Please describe your experience"} /> 
                 <InputCheckbox question={"Did you finish the game?"} name={"finished"} onChange={(value: boolean) => dispatch(setGameCreationFinished(value))} value={gameCreationSelector.questions.finished} />
                 <InlineInputField title={"How many hours have you played?"} name={"hours"} onChange={(value: string) => dispatch(setGameCreationHours(value))} value={gameCreationSelector.questions.hours.toString()} placeholder={"Hours"} />
                 <DropdownInput additionalOptions={allPlatformsFetch} options={gameCreationSelector.gameCreationFetchedGame?.platforms || []} value={gameCreationSelector.questions.platform} onChange={(value: string) => dispatch(setGameCreationPlatform(value))} title={"What platform did you play on?"} name={"platform"} />
                 <TextField title={"Please write a short comment about this game. Even 1 sentence is enough :)"} name={"comment"} onChange={(value: string) => dispatch(setGameCreationComment(value))} value={gameCreationSelector.questions.comment} />
                 <div className="flex w-full items-center justify-between gap-[25px]">
                     <Button title={"BACK"} onClick={proceedToPrevPage} />
-                    <WideActionButton onClick={proceedToNextPage} text={"NEXT"} />
+                    <WideActionButton submit text={"NEXT"} onClick={() => {}} />
                 </div>
 
-            </div>
+            </form>
         )
     }
 
-    function SelectedGame(props:{
-        image:string,
-        name:string,
-    }){
-        return(
-            <div className="flex w-full inputheight bg-dimm items-center justify-between overflow-hidden relative">
-                <Image width={200} height={45} src={props.image} alt={props.name+" title"} className="object-cover flex-auto brightness-50" />
-                <p className="textcol-main h-full p-[25px] flex items-center absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-dimm  whitespace-nowrap">{props.name}</p>
-            </div>
-        )
-    }
+    function SelectedGame(props: {
+        gameInfo: IGDBFullGameInfo | GameCreationRequiredInfo | null
+    }) {
+        if (!props.gameInfo) return;
 
-    function errorMessage() {
         return (
-            <div className="flex flex-col gap-[30px] textcol-main">
-                <p>An error acquired white loading game info from database</p>
-                <p>Error: {error}</p>
+            <div className="flex w-full inputheight bg-dimm items-center justify-between overflow-hidden relative">
+                <p className="textcol-main h-full p-[25px] flex items-center absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-dimm  whitespace-nowrap">{props.gameInfo.name}</p>
             </div>
         )
     }
+
 
     function loadingMessage() {
         return (
@@ -157,7 +176,7 @@ export default function GameReviewPage() {
         <div className="flex gap-[25px] w-full flex-col">
             {!gameCreationSelector.gameCreationFetchedGame?.platforms && !error && loadingMessage()}
             {gameCreationSelector.gameCreationFetchedGame?.platforms && reviewWindow()}
-            {gameInfoGathered && error && errorMessage()}
+            {gameInfoGathered && error && <AlertText alertText={error} />}
         </div>
     )
 }

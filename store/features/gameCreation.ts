@@ -10,7 +10,7 @@ export interface GameCreation {
     fetchedGames: IGDBGameFetch[],
     memoGame:GameCreationGameInfo,
     questions:GameCreationQuestions,
-    gameCreationFetchedGame:GameCreationRequiredInfo | null;
+    gameCreationFetchedGame:GameCreationRequiredInfo | null | IGDBFullGameInfo;
 }
 
 export interface GameCreationGameInfo {
@@ -103,7 +103,7 @@ const gameCreationSlice = createSlice({
         setGameCreationComment : ((state:GameCreation, action: PayloadAction<string>) => {
             state.questions.comment = action.payload
         }),
-        setGameCreationFetchedGame: ((state:GameCreation, action: PayloadAction<GameCreationRequiredInfo | null> ) => {
+        setGameCreationFetchedGame: ((state:GameCreation, action: PayloadAction<GameCreationRequiredInfo | null | IGDBFullGameInfo> ) => {
             state.gameCreationFetchedGame = action.payload;
         })
     }

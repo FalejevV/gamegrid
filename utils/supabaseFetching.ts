@@ -2,7 +2,7 @@ import { FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, G
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import supabaseServer from "./supabaseServer";
 import { getIGDBFullGameInfo, getIGDBGameDevelopersByNameAndDate } from "./apiFetching";
-import { IGDBDuplicateGamesJoin } from "./formatter";
+import { IGDBDuplicateGamesJoin, toCoverLargeFormat } from "./formatter";
 import supabaseRootClient from "./supabaseRootClient";
 import { fetchImageToBuffer } from "./imageFormat";
 
@@ -238,17 +238,19 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
     const developersResponse: StringArrayDataError = await getIGDBGameDevelopersByNameAndDate(name, date);
     const developersList = developersResponse.data || [] as string[];
 
+
     // if game doesn't exist in supabase table, fetch it from IGDB.
-    let IGDBStringFetch = await getIGDBFullGameInfo(name, company);
-    // fetching from IGDB return error object instead of games array.
-    if (!Array.isArray(IGDBStringFetch)) {
-        return { data: null, error: IGDBStringFetch };
-    }
+    let IGDBFetch:IGDBFullGameInfoDataError = await getIGDBFullGameInfo(name, company);
+    // return if fetch errors
+    if(IGDBFetch.error || !IGDBFetch.data) return IGDBFetch;
+
 
     // Merging duplicate games selection
-    let combinedDuplicateGame = IGDBDuplicateGamesJoin(IGDBStringFetch) as IGDBFullGameInfo | IGDBFullGameInfo[];
+    let combinedDuplicateGame = IGDBDuplicateGamesJoin(IGDBFetch.data) as IGDBFullGameInfo | IGDBFullGameInfo[];
 
     if (Array.isArray(combinedDuplicateGame)) combinedDuplicateGame = { ...combinedDuplicateGame[0] };
+    combinedDuplicateGame.image = toCoverLargeFormat(combinedDuplicateGame.cover.url);
+
 
     // insert all missing information in supabase tables
     let promisesResult = await Promise.all([
@@ -257,6 +259,8 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
         insertSupabaseDevelopers(developersList),
         insertSupabasePlayers(combinedDuplicateGame.game_modes)
     ])
+
+
     // React errors from promiseResultArray
     let promiseError:null | string = null;
     promisesResult.forEach((result: StringDataError) => {
@@ -280,7 +284,7 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
     if (imageError) return { data: null, error: gameInsertError }
 
 
-    // using the game ID we are creation many to many inserts into various tables.
+    // using the game ID we create many to many inserts into various tables.
     let manyToManyResult = await Promise.all([
         insertSupabaseGameManyRelationData(Number(gameInsertId), combinedDuplicateGame.platforms, "Platform"),
         insertSupabaseGameManyRelationData(Number(gameInsertId), [...combinedDuplicateGame.genres, ...combinedDuplicateGame.themes], "Tag"),
@@ -296,7 +300,6 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
         }
     })
     if (manyToManyError) return { error:manyToManyError, data: null }
-
 
     return { data: combinedDuplicateGame, error: null }
 }
