@@ -6,7 +6,7 @@ function DropdownOption(props: {
     title: string,
 }) {
     return (
-        <p className="w-full h-[45px] cursor-pointer flex items-center justify-center bg-dimm hover:brightness-110 textcol-main" onClick={() => props.onClick()}>
+        <p className="w-full h-[45px] cursor-pointer flex items-center justify-center bg-dimm hover:brightness-110 textcol-main overflow-hidden" onClick={() => props.onClick()}>
             {props.title}
         </p>
     )
@@ -47,7 +47,7 @@ export default function DropdownInput(props: {
 
     function dropdownList() {
         return (
-            <div className="absolute right-0 top-[45px] w-[230px] h-fit max-h-[300px] overflow-y-scroll bg-dimm z-[20]">
+            <div className="absolute right-0 top-[45px] sm:w-[240px] w-[220px] h-fit max-h-[300px] overflow-y-scroll bg-dimm z-[20] transition-all duration-200">
                 {props.options.map((option: string) => <DropdownOption key={option} onClick={() => props.onChange(option)} title={option} />)}
                 {props.additionalOptions && <div className="w-full">
                     <p className="textcol-main py-[20px] w-full bg-mid text-center"> - - - - Other options  - - - -</p>
@@ -60,7 +60,7 @@ export default function DropdownInput(props: {
     return (
         <div ref={containerRef} className="w-full flexgap items-center justify-between h-[45px] relative select-none" onClick={() => setToggleDropdown(prev => !prev)}>
             <p className="textcol-main">{props.title}</p>
-            <div className="w-full h-full max-w-[160px] bg-dimm textcol-main flex items-center justify-center cursor-pointer">
+            <div className="sm:w-[240px] w-[140px] h-full bg-dimm textcol-main flex items-center justify-center cursor-pointer overflow-hidden whitespace-nowrap transition-all duration-200">
                 {props.value === "" ? "Platform" : props.value}
             </div>
             {toggleDropdown && dropdownList()}

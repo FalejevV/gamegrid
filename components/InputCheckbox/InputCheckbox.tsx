@@ -24,7 +24,7 @@ export default function InputCheckbox(props:{
         <div className="w-full h-fit select-none relative">
            <label htmlFor={props.name} className="textcol-main w-full flexgap items-center justify-between">
                 <p className="flex-auto">{props.question}</p>
-                <p className={`w-[80px] h-[45px] flex items-center justify-center cursor-pointer hover:brightness-110 transition-all duration-300
+                <p className={`sm:w-[120px] w-[70px] h-[45px] flex items-center justify-center cursor-pointer hover:brightness-110 transition-all duration-300
                     ${props.value ? "bg-hi textcol-main" : "bg-dimm textcol-dimm"}
                 `}>{props.value ? "Yes" : "No"}</p>
             </label> 
