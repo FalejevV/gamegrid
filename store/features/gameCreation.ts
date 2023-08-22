@@ -111,7 +111,7 @@ const gameCreationSlice = createSlice({
         setGameCreationScore: ((state: GameCreation, action: PayloadAction<{ aspect: keyof ScoreList, value: number }>) => {
             state.scores[action.payload.aspect] = action.payload.value;
         }),
-        setCurrentRatingPage: ((state: GameCreation, action: PayloadAction<number>) => {
+        setGameCreationRatingPage: ((state: GameCreation, action: PayloadAction<number>) => {
             state.currentRatingPage = action.payload
         })
     }
@@ -122,7 +122,7 @@ const gameCreationSlice = createSlice({
 
 export default gameCreationSlice.reducer;
 
-export const { setGameCreationPage, setGameCreationGameData, setCurrentRatingPage, setGameCreationSearchInput, setGameCreationFetchedGames, setGameCreationMemoData, clearGameCreationAll, setGameCreationComment, setGameCreationFinished, setGameCreationHours, setGameCreationPlatform, setGameCreationFetchedGame, setGameCreationScore } = gameCreationSlice.actions;
+export const { setGameCreationPage, setGameCreationGameData, setGameCreationRatingPage, setGameCreationSearchInput, setGameCreationFetchedGames, setGameCreationMemoData, clearGameCreationAll, setGameCreationComment, setGameCreationFinished, setGameCreationHours, setGameCreationPlatform, setGameCreationFetchedGame, setGameCreationScore } = gameCreationSlice.actions;
 
 
 
