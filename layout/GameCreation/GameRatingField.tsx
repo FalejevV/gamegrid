@@ -27,7 +27,10 @@ export default function GameRatingField() {
     }
     return (
         <div className="flex flex-col gap-[25px]">
-            <Title title={ratingAspects[ratingPageAspectNamesArray[gameCreationPageSelector]].title} />
+            <div className="flex flex-col gap-[5px]">
+                <Title title={ratingAspects[ratingPageAspectNamesArray[gameCreationPageSelector]].title} />
+                <p className="textcol-dimm text-[16px]">{ratingAspects[ratingPageAspectNamesArray[gameCreationPageSelector]].description}</p>
+            </div>
             <div className="flex items-center justify-between">
                 <RatingButton value={0} />
                 <RatingButton value={1} />

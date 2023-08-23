@@ -16,6 +16,7 @@ export const ratingNames = {
 export const ratingAspects: {
     [key in keyof ScoreList]: {
         title: string,
+        description:string,
         scale: {
             0: string,
             1: string
@@ -41,7 +42,8 @@ export const ratingAspects: {
             8: "Visual Victory",
             9: "Masterpiece Canvas",
             10: "Beyond Reality"
-        }
+        },
+        description: "Evaluate the visual quality and aesthetics of the game's design. Your rating will reflect how much the game's visuals draw you into its world and enhance your overall gaming experience."
     },
     sound_avg: {
         title: "Sounds & Music",
@@ -55,7 +57,8 @@ export const ratingAspects: {
             8: "Sonic Magic",
             9: "Sound Masterpiece",
             10: "Eargasmic Bliss"
-        }
+        },
+        description: "Assess the game's sounds and music, considering how well the audio elements contribute to your overall gaming experience and immerse you in the game's atmosphere."
     },
     gameplay_avg: {
         title: "How It Plays",
@@ -69,7 +72,8 @@ export const ratingAspects: {
             8: "Masterful Mechanics",
             9: "Thrilling Triumph",
             10: "Legendary Gameplay"
-        }
+        },
+        description: "Judge how the game plays, and how well the game mechanics engage, entertain you, and keep you coming back for more."
     },
     level_avg: {
         title: "Worlds & Levels",
@@ -83,7 +87,8 @@ export const ratingAspects: {
             8: "Masterpiece Maps",
             9: "Epic Environments",
             10: "Reality Reimagined"
-        }
+        },
+        description: "Rate the creativity and complexity of the game's worlds and levels, considering how enjoyable and captivating the game's environments are and how well they contribute to your overall enjoyment."
     },
     balance_avg: {
         title: "Fairness & Challenge",
@@ -97,7 +102,8 @@ export const ratingAspects: {
             8: "Perfect Balance",
             9: "Precision Balance",
             10: "Perfectly Balanced"
-        }
+        },
+        description: "Assess the fairness and challenge of the game, considering how well the game provides an equitable experience and maintains a satisfying level of difficulty."
     },
     story_avg: {
         title: "Plot & Story",
@@ -111,7 +117,8 @@ export const ratingAspects: {
             8: "Plot Perfection",
             9: "Legend Unfolded",
             10: "Mythic Narrative"
-        }
+        },
+        description: "Evaluate the plot and narrative quality, and how well the game's story engages, enthralls you, and adds depth to your gaming experience."
     },
     performance_avg: {
         title: "Performance & Smoothness",
@@ -125,7 +132,8 @@ export const ratingAspects: {
             8: "Flawless Flow",
             9: "Turbocharged Thrills",
             10: "Lightning Speed"
-        }
+        },
+        description: "Rate the smoothness and speed of the game, considering how well the game maintains a smooth flow and enhances your immersion."
     },
     original_avg: {
         title: "Fresh Ideas",
@@ -139,7 +147,8 @@ export const ratingAspects: {
             8: "Next-Gen Genius",
             9: "Limitless Creativity",
             10: "Visionary Vanguard"
-        }
+        },
+        description: "Judge the freshness of the game's ideas, and how innovative and exciting the game's ideas are in shaping a unique and engaging experience."
     },
     customization_avg: {
         title: "Customization. Your Style",
@@ -153,7 +162,8 @@ export const ratingAspects: {
             8: "Style Revolution",
             9: "Ultimate Uniqueness",
             10: "I AM A WALRUS NOW"
-        }
+        },
+        description: "Assess how much you can make the game your own, and whether the game lets you express your individuality by personalizing your experience."
     },
     microtransactions_avg: {
         title: "Money Matters",
@@ -167,7 +177,8 @@ export const ratingAspects: {
             8: "Money Not Required",
             9: "Cosmetics Only",
             10: "No-Pay Nirvana"
-        }
+        },
+        description: "Rate how the game handles money matters, and how well the game balances monetization with player experience, ensuring that spending money aligns with enhancing enjoyment."
     },
     support_avg: {
         title: "Game Support",
@@ -181,7 +192,8 @@ export const ratingAspects: {
             8: "Heroic Help",
             9: "Support Superstars",
             10: "Infinite Assistance"
-        }
+        },
+        description: "Evaluate how well the game creators back their creation, ensuring that the game receives the necessary care, updates, and attention to maintain a high level of quality and enjoyment over time."
     },
     total: {
         title: "You Should Not See This",
@@ -195,7 +207,8 @@ export const ratingAspects: {
             8: "I'll",
             9: "Find",
             10: "You -_-"
-        }
+        },
+        description: ""
     }
 }
 
