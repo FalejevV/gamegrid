@@ -6,6 +6,7 @@ import GameSearchPage from "./GameCreation/GameSearchPage";
 import GameReviewPage from "./GameCreation/GameReviewPage";
 import GameRatingPage from "./GameCreation/GameRatingPage";
 import GameRatingDisclamer from "./GameCreation/GameRatingDisclamer";
+import GameCreationResultPage from "./GameCreation/GameCreatiionResultPage";
 
 
 
@@ -21,6 +22,7 @@ export default function AddGameForm() {
                 {gameCreationSelector.page === 1 && <GameReviewPage />}
                 {gameCreationSelector.page === 2 && <GameRatingDisclamer />}
                 {gameCreationSelector.page === 3 && <GameRatingPage />}
+                {gameCreationSelector.page === 4 && <GameCreationResultPage />}
             </div>
         </div>
     )

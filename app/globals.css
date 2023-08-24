@@ -7,6 +7,10 @@ body{
   overflow: hidden;
 }
 
+.do-scroll{
+  overflow: auto !important;
+}
+
 .bg-gray{
   background-color: rgb(26, 26, 28);
 }
