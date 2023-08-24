@@ -3,7 +3,7 @@ import WideActionButton from "@/components/Buttons/WideActionButton/WideActionBu
 import RatingButton from "@/components/RatingButton/RatingButton";
 import Title from "@/components/Title/Title";
 import { ratingAspects, ratingPageAspectNamesArray } from "@/rating";
-import { setGameCreationPage, setGameCreationRatingPage } from "@/store/features/gameCreation";
+import gameCreation, { setGameCreationPage, setGameCreationRatingPage } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store";
 
 
@@ -13,11 +13,14 @@ export default function GameRatingField() {
     const gameCreationRatingPageSelector = useAppSelector((state: RootState) => state.gameCreation.currentRatingPage);
     const gameCreationPageSelector = useAppSelector((state: RootState) => state.gameCreation.page);
     const gameCreationRatingScore = useAppSelector((state: RootState) => state.gameCreation.scores[ratingPageAspectNamesArray[gameCreationRatingPageSelector]]);
+    const gameCreationGameInfoSelector = useAppSelector((state: RootState) => state.gameCreation.gameInfo);
     const dispatch = useAppDispatch();
 
     function nextQuestion() {
         if (gameCreationRatingPageSelector <= 9) {
             dispatch(setGameCreationRatingPage(gameCreationRatingPageSelector + 1));
+        } else {
+            nextPage();
         }
     }
 
@@ -27,16 +30,20 @@ export default function GameRatingField() {
         }
     }
 
-    function nextPage(){
-        if(gameCreationRatingPageSelector === 10){
+    function nextPage() {
+        if (gameCreationRatingPageSelector === 10) {
             dispatch(setGameCreationPage(gameCreationPageSelector + 1))
         }
     }
     return (
-        <div className="flex flex-col gap-[25px]">
-            <div className="flex flex-col gap-[5px]">
-                <Title title={ratingAspects[ratingPageAspectNamesArray[gameCreationRatingPageSelector]].title} />
-                <p className="textcol-dimm sm:text-[16px] text-[15px]">{ratingAspects[ratingPageAspectNamesArray[gameCreationRatingPageSelector]].description}</p>
+        <div className="flex flex-col gap-[10px]">
+            <div className="flex flex-col gap-[10px]">
+                <p className="w-full inputheight bg-dimm flex items-center justify-center textcol-main mb-[15px]">{gameCreationGameInfoSelector.name}</p>
+                <div className="flex items-center justify-between flexgap">
+                    <Title title={`${ratingAspects[ratingPageAspectNamesArray[gameCreationRatingPageSelector]].title}`} />
+                    <p className="textcol-dimm text-[15px]">Question ( {gameCreationRatingPageSelector + 1} / 11 )</p>
+                </div>
+                <p className="textcol-dimm sm:text-[16px] text-[15px] h-[90px]">{ratingAspects[ratingPageAspectNamesArray[gameCreationRatingPageSelector]].description}</p>
             </div>
             <div className="flex items-center justify-between">
                 <RatingButton value={0} />
@@ -49,9 +56,9 @@ export default function GameRatingField() {
                 <RatingButton value={9} />
                 <RatingButton value={10} />
             </div>
-            <div className="flex items-center justify-between flexgap pt-[70px]">
+            <div className="flex items-center justify-between flexgap pt-[50px]">
                 {gameCreationRatingPageSelector >= 0 && <Button title={"Previous Question"} onClick={previousQuestion} />}
-                {gameCreationRatingScore >= 0 && gameCreationRatingPageSelector < 10 ? <WideActionButton onClick={nextQuestion} text={"Next Question"} /> : <WideActionButton onClick={nextPage} text={"Finish!"} /> }
+                <WideActionButton onClick={nextQuestion} text={gameCreationRatingPageSelector < 10 ? "Next Question" : "Finish!"} disabled={gameCreationRatingScore < 0} />
             </div>
         </div>
     )

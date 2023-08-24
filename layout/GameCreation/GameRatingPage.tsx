@@ -14,7 +14,7 @@ export default function GameRatingPage() {
 
 
             <GameRatingField />
-            <Button title={"Back"} onClick={() => dispatch(setGameCreationPage(2))} />
+            <Button title={"Go Back"} onClick={() => dispatch(setGameCreationPage(2))} />
         </div>
     )
 }

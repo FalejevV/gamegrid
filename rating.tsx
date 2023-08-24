@@ -16,7 +16,7 @@ export const ratingNames = {
 export const ratingAspects: {
     [key in keyof ScoreList]: {
         title: string,
-        description:string,
+        description: string,
         scale: {
             0: string,
             1: string
@@ -26,174 +26,174 @@ export const ratingAspects: {
             7: string,
             8: string,
             9: string,
-            10:string
+            10: string
         }
     }
 } = {
     graphics_avg: {
         title: "Looks & Visuals",
         scale: {
-            0: "Visual Catastrophe",
-            1: "Dull Palette",
-            2: "Low-Res World",
-            3: "Bland Landscapes",
-            5: "Neutral Nexus",
-            7: "Spectacular Scenes",
-            8: "Visual Victory",
-            9: "Masterpiece Canvas",
-            10: "Beyond Reality"
+            0: "Oops!",
+            1: "Bit off",
+            2: "Blurry",
+            3: "So-so",
+            5: "Decent",
+            7: "Pretty good",
+            8: "Impressive",
+            9: "Almost perfect",
+            10: "Top-notch!"
         },
-        description: "Evaluate the visual quality and aesthetics of the game's design. Your rating will reflect how much the game's visuals draw you into its world and enhance your overall gaming experience."
+        description: "How much do the game's visuals WOW you and draw you in?"
     },
     sound_avg: {
         title: "Sounds & Music",
         scale: {
-            0: "Audio Nightmare",
-            1: "Toneless Tunes",
-            2: "Muffled Melodies",
-            3: "Aural Adventures",
-            5: "Harmonious Hub",
-            7: "Ear Candy",
-            8: "Sonic Magic",
-            9: "Sound Masterpiece",
-            10: "Eargasmic Bliss"
+            0: "Ouch, my ears!",
+            1: "Kinda flat",
+            2: "Bit muffled",
+            3: "Average tunes",
+            5: "Catchy beats",
+            7: "Nice vibes",
+            8: "Really good",
+            9: "Almost flawless",
+            10: "Music to my ears!"
         },
-        description: "Assess the game's sounds and music, considering how well the audio elements contribute to your overall gaming experience and immerse you in the game's atmosphere."
+        description: "How do the game's sounds and music make you feel more into the game's vibe?"
     },
     gameplay_avg: {
         title: "How It Plays",
         scale: {
-            0: "Playable Pain?",
-            1: "Frustration Fest",
-            2: "Clunky Controls",
-            3: "Playful Playthrough",
-            5: "Playability Plateau",
-            7: "Gameplay Glory",
-            8: "Masterful Mechanics",
-            9: "Thrilling Triumph",
-            10: "Legendary Gameplay"
+            0: "Hard to play",
+            1: "Bit frustrating",
+            2: "Awkward controls",
+            3: "It's okay",
+            5: "Pretty smooth",
+            7: "Fun gameplay",
+            8: "Really engaging",
+            9: "Almost perfect",
+            10: "Top-tier fun!"
         },
         description: "Judge how the game plays, and how well the game mechanics engage, entertain you, and keep you coming back for more."
     },
     level_avg: {
         title: "Worlds & Levels",
         scale: {
-            0: "Design Disaster",
-            1: "Chaotic Chambers",
-            2: "Basic Boredom",
-            3: "So-So Stages",
-            5: "OK Terrain",
-            7: "Adventure Awaits",
-            8: "Masterpiece Maps",
-            9: "Epic Environments",
-            10: "Reality Reimagined"
+            0: "Not great",
+            1: "Bit messy",
+            2: "Kinda plain",
+            3: "Average",
+            5: "Decent design",
+            7: "Fun to explore",
+            8: "Well-crafted",
+            9: "Super immersive",
+            10: "Absolutely amazing"
         },
-        description: "Rate the creativity and complexity of the game's worlds and levels, considering how enjoyable and captivating the game's environments are and how well they contribute to your overall enjoyment."
+        description: "Are the game's worlds and levels creative enough to keep you hooked?"
     },
     balance_avg: {
         title: "Fairness & Challenge",
         scale: {
-            0: "Unfair Nightmare",
-            1: "Fiasco",
-            2: "Uneven Odds",
-            3: "Skewed Struggles",
-            5: "Equilibrium Achieved",
-            7: "Harmony in Play",
-            8: "Perfect Balance",
-            9: "Precision Balance",
-            10: "Perfectly Balanced"
+            0: "Totally unbalanced",
+            1: "Feels off",
+            2: "Leaning one way",
+            3: "Slightly skewed",
+            5: "Middle ground",
+            7: "Balanced fun",
+            8: "Almost perfect",
+            9: "Just the right challenge",
+            10: "Perfectly balanced"
         },
-        description: "Assess the fairness and challenge of the game, considering how well the game provides an equitable experience and maintains a satisfying level of difficulty."
+        description: "Does the game feel fair and challenging enough to keep you engaged?"
     },
     story_avg: {
         title: "Plot & Story",
         scale: {
-            0: "Plotless Abyss",
-            1: "Confusing Chronicles",
-            2: "Forgettable Tale",
-            3: "So-So Storytelling",
-            5: "Seems Ok",
-            7: "Narration Nirvana",
-            8: "Plot Perfection",
-            9: "Legend Unfolded",
-            10: "Mythic Narrative"
+            0: "What plot?",
+            1: "Bit confusing",
+            2: "Easy to forget",
+            3: "Average story",
+            5: "Decent tale",
+            7: "Really engaging",
+            8: "Great plot",
+            9: "Almost legendary",
+            10: "Epic story!"
         },
-        description: "Evaluate the plot and narrative quality, and how well the game's story engages, enthralls you, and adds depth to your gaming experience."
+        description: "How hooked are you by the game's story and plot?"
     },
     performance_avg: {
         title: "Performance & Smoothness",
         scale: {
-            0: "Laggy Nightmare",
-            1: "Slow-Mo Struggles",
-            2: "Computer Heats Up",
-            3: "I See Some Problems",
-            5: "Playable Performance",
-            7: "Seamless Speed",
-            8: "Flawless Flow",
-            9: "Turbocharged Thrills",
-            10: "Lightning Speed"
+            0: "Super laggy",
+            1: "Kinda slow",
+            2: "Some hiccups",
+            3: "A bit off",
+            5: "Runs okay",
+            7: "Pretty smooth",
+            8: "No issues",
+            9: "Super fast",
+            10: "Instant response"
         },
-        description: "Rate the smoothness and speed of the game, considering how well the game maintains a smooth flow and enhances your immersion."
+        description: "How smooth and fast does the game feel to you?"
     },
     original_avg: {
         title: "Fresh Ideas",
         scale: {
-            0: "Innovation Void",
-            1: "Copycat Catastrophe",
-            2: "Been There, Done That",
-            3: "Common Concepts",
-            5: "Idea Intersection",
-            7: "Trailblazing Triumph",
-            8: "Next-Gen Genius",
-            9: "Limitless Creativity",
-            10: "Visionary Vanguard"
+            0: "Nothing new",
+            1: "Feels familiar",
+            2: "Some old ideas",
+            3: "A bit typical",
+            5: "Mix of old and new",
+            7: "Pretty innovative",
+            8: "Very fresh",
+            9: "Super creative",
+            10: "Never seen before!"
         },
-        description: "Judge the freshness of the game's ideas, and how innovative and exciting the game's ideas are in shaping a unique and engaging experience."
+        description: "How fresh and unique do the game's ideas feel to you?"
     },
     customization_avg: {
         title: "Customization. Your Style",
         scale: {
             0: "What?",
-            1: "Limited Looks",
-            2: "So-So Selection",
-            3: "Couple Good Options",
-            5: "Some Style Spectrum",
-            7: "Tailored Trends",
-            8: "Style Revolution",
-            9: "Ultimate Uniqueness",
-            10: "I AM A WALRUS NOW"
+            1: "Few options",
+            2: "It's okay",
+            3: "Some cool choices",
+            5: "Variety of styles",
+            7: "Lots to choose from",
+            8: "Make it yours",
+            9: "Endless options",
+            10: "Totally unique!"
         },
-        description: "Assess how much you can make the game your own, and whether the game lets you express your individuality by personalizing your experience."
+        description: "How much does the game let you add your own touch and express yourself?"
     },
     microtransactions_avg: {
         title: "Money Matters",
         scale: {
-            0: "Greed Epidemic",
-            1: "Greedy Tricks",
-            2: "Sensible Spending",
-            3: "Purchase Puzzles",
-            5: "Balanced Buys",
-            7: "Maybe Sometimes...",
-            8: "Money Not Required",
-            9: "Cosmetics Only",
-            10: "No-Pay Nirvana"
+            0: "Feels greedy",
+            1: "Too many buys",
+            2: "Okay spending",
+            3: "Some purchase pressure",
+            5: "Fair pricing",
+            7: "Optional buys",
+            8: "Mostly free",
+            9: "Just for looks",
+            10: "No need to spend"
         },
-        description: "Rate how the game handles money matters, and how well the game balances monetization with player experience, ensuring that spending money aligns with enhancing enjoyment."
+        description: "Do you feel the in-game purchases are fair and add to the fun?"
     },
     support_avg: {
         title: "Game Support",
         scale: {
-            0: "Abandoned Abyss",
-            1: "Helpless Halt",
-            2: "You Are Making It Worse",
-            3: "Some Good Support",
-            5: "Community Compass",
-            7: "Community Care",
-            8: "Heroic Help",
-            9: "Support Superstars",
-            10: "Infinite Assistance"
+            0: "Feels abandoned",
+            1: "Limited help",
+            2: "Could be better",
+            3: "Decent support",
+            5: "Community driven",
+            7: "Active updates",
+            8: "Quick fixes",
+            9: "Always there to help",
+            10: "Top-tier support"
         },
-        description: "Evaluate how well the game creators back their creation, ensuring that the game receives the necessary care, updates, and attention to maintain a high level of quality and enjoyment over time."
+        description: "Do you think the game creators keep improving and caring for the game to keep it fun over time?"
     },
     total: {
         title: "You Should Not See This",

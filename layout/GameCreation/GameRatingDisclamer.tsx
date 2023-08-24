@@ -35,7 +35,7 @@ export default function GameRagingDisclamer() {
             <div className="flexgap flex-col items-center">
                 <div className="flex flex-col itemx-center w-full">
                     <div className="flex justify-center gap-[20px]">
-                        <Image src={"/Rating Dog.png"} alt={"Rating dog"} width={200} height={240} className="sm:w-[200px] sm:h-[240px] w-[150px] h-[180px]" />
+                        <Image src={"/Rating Dog.webp"} alt={"Rating dog"} width={200} height={240} className="sm:w-[200px] sm:h-[240px] w-[150px] h-[180px]" />
                         <p className="h-full textcol-main sm:text-[30px] text-[23px]">It's Rating Time!</p>
                     </div>
                     <div className="w-full h-[30px] bg-dimm flex items-center pt-[2px] justify-start gap-[5px] px-[15px] overflow-hidden textcol-dimm">

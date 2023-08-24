@@ -1,12 +1,3 @@
-[
-    "Action",
-    "RPG",
-    "Strategy",
-    "Racing",
-    "Survival",
-    "Simulator"
-]
-
 
 export interface PrimaryItem{
     title:string,

@@ -10,7 +10,6 @@ import GameCreationResultPage from "./GameCreation/GameCreatiionResultPage";
 
 
 
-
 export default function AddGameForm() {
 
     const gameCreationSelector = useAppSelector((state: RootState) => state.gameCreation);

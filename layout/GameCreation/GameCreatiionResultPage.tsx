@@ -60,7 +60,7 @@ export default function GameCreationResultPage() {
             <p>Total score: {gameCreationSelector.scores.total} / 100</p>
 
             <div className="flexgap items-center justify-between">
-                <Button title={"Back"} onClick={previousPage} />
+                <Button title={"Go Back"} onClick={previousPage} />
                 <WideActionButton onClick={() => {}} text={"Save My Review"} />
             </div>
         </div>
