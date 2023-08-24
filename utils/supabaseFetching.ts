@@ -1,4 +1,4 @@
-import { FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, GameCreationRequiredInfoDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
+import { FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, GameCreationRequiredInfoDataError, GameReviewData, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import supabaseServer from "./supabaseServer";
 import { getIGDBFullGameInfo, getIGDBGameDevelopersByNameAndDate } from "./apiFetching";
@@ -240,9 +240,9 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
 
 
     // if game doesn't exist in supabase table, fetch it from IGDB.
-    let IGDBFetch:IGDBFullGameInfoDataError = await getIGDBFullGameInfo(name, company);
+    let IGDBFetch: IGDBFullGameInfoDataError = await getIGDBFullGameInfo(name, company);
     // return if fetch errors
-    if(IGDBFetch.error || !IGDBFetch.data) return IGDBFetch;
+    if (IGDBFetch.error || !IGDBFetch.data) return IGDBFetch;
 
 
     // Merging duplicate games selection
@@ -262,7 +262,7 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
 
 
     // React errors from promiseResultArray
-    let promiseError:null | string = null;
+    let promiseError: null | string = null;
     promisesResult.forEach((result: StringDataError) => {
         if (promiseError) return;
         if (result.error) {
@@ -294,12 +294,12 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
     // Cheking for promise manyToManyResult errors
     let manyToManyError: null | string = null;
     promisesResult.forEach((result: StringDataError) => {
-        if (manyToManyError ) return;
+        if (manyToManyError) return;
         if (result.error) {
             manyToManyError = result.error
         }
     })
-    if (manyToManyError) return { error:manyToManyError, data: null }
+    if (manyToManyError) return { error: manyToManyError, data: null }
 
     return { data: combinedDuplicateGame, error: null }
 }
@@ -436,4 +436,84 @@ async function insertSupabaseGameManyRelationData(gameId: number, items: string[
 
 
     return { data: "OK", error: null };
+}
+
+async function getSupabasePlatformIdByPlatformName(platformName: string = ""): Promise<StringDataError>{
+
+    const { data, error } = await supabaseRoot.from("Platform").select("id").eq("platform", platformName).single();
+    
+
+
+    return {
+        data:data?.id || null,
+        error: error?.message || null
+    }
+}
+
+async function supabaseUserIdByUserUID(userId: string): Promise<StringDataError> {
+    if (!userId) return {
+        data: null,
+        error: "Auth error"
+    }
+
+    const { data, error } = await supabaseRoot
+        .from('profile')
+        .select('user_id')
+        .eq('id', userId)
+        .single();
+
+    if (error) {
+        return {
+            data: null,
+            error: error.message
+        }
+    }
+
+    if (!data.user_id) return {
+        data: null,
+        error: "user_id not found in database"
+    }
+
+    return {
+        data: data.user_id,
+        error: null
+    }
+
+}
+
+export async function insertSupabaseReview(userId: string, game: GameReviewData): Promise<StringDataError> {
+    let userRequest: StringDataError = await supabaseUserIdByUserUID(userId);
+    if (userRequest.error && !userRequest.data) return {
+        data: null,
+        error: userRequest.error
+    }
+    
+    console.log(game.game_id);
+    if(!game.platform_played){
+        return{
+            data:null,
+            error: "platform is not provided"
+        }
+    }
+    let platformRequest = await getSupabasePlatformIdByPlatformName(game.platform_played);
+    if(platformRequest.error && !platformRequest.data) return {
+        data:null,
+        error: "could not find platform in supabase. Sorry..."
+    }
+
+    game.platform_id = Number(platformRequest.data) || 0;
+    game.user_id = userId;
+
+    delete game.platform_played;
+
+    const { data, error } = await supabaseRoot
+        .from('Review')
+        .upsert(game);
+
+
+
+    return {
+        data: data || "OK",
+        error: error?.message || null
+    }
 }

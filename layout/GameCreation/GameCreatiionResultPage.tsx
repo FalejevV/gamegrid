@@ -1,9 +1,11 @@
 import Button from "@/components/Buttons/WideActionButton/Button";
 import WideActionButton from "@/components/Buttons/WideActionButton/WideActionButton";
 import Title from "@/components/Title/Title";
-import { ScoreList } from "@/interface";
+import { GameReviewData, ScoreList, StringDataError } from "@/interface";
 import gameCreation, { setGameCreationPage, setGameCreationScore } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
+import { APIputGameReview } from "@/utils/apiFetching";
+import supabaseClient from "@/utils/supabaseClient";
 import { useEffect } from "react";
 
 
@@ -36,8 +38,39 @@ export default function GameCreationResultPage() {
         getTotalScore();
     }, []);
 
-    function previousPage(){
-        dispatch(setGameCreationPage(gameCreationSelector.page -1));
+    function previousPage() {
+        dispatch(setGameCreationPage(gameCreationSelector.page - 1));
+    }
+
+    async function saveReview() {
+        let game: GameReviewData = {
+            user_id: "-1",
+            game_id: gameCreationSelector.gameCreationFetchedGame?.id || 0,
+            user_comment: gameCreationSelector.questions.comment,
+            graphics_score: gameCreationSelector.scores.graphics_avg * 10,
+            sound_score: gameCreationSelector.scores.sound_avg * 10,
+            gameplay_score: gameCreationSelector.scores.gameplay_avg * 10,
+            level_score: gameCreationSelector.scores.level_avg * 10,
+            balance_score: gameCreationSelector.scores.balance_avg * 10,
+            story_score: gameCreationSelector.scores.story_avg * 10,
+            performance_score: gameCreationSelector.scores.performance_avg * 10,
+            original_score: gameCreationSelector.scores.original_avg * 10,
+            customization_score: gameCreationSelector.scores.customization_avg * 10,
+            microtransactions_score: gameCreationSelector.scores.microtransactions_avg * 10,
+            support_score: gameCreationSelector.scores.support_avg * 10,
+            state_id: 5,
+            hours_spent: Number(gameCreationSelector.questions.hours) || 0,
+            platform_played: gameCreationSelector.questions.platform,
+            total_score: gameCreationSelector.scores.total,
+            platform_id: 0
+        }
+        let result:StringDataError = await APIputGameReview(game);
+        
+        if(result.data === "OK"){
+            alert("Review SAVED. You cant see it though. I did not implement review yet -_-");
+        }else if(result.error){
+            alert(result.error);
+        }
     }
 
 
@@ -61,7 +94,7 @@ export default function GameCreationResultPage() {
 
             <div className="flexgap items-center justify-between">
                 <Button title={"Go Back"} onClick={previousPage} />
-                <WideActionButton onClick={() => {}} text={"Save My Review"} />
+                <WideActionButton onClick={saveReview} text={"Save My Review"} />
             </div>
         </div>
     )

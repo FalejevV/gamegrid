@@ -153,3 +153,25 @@ export interface StringArrayDataError{
 }
 
 export type RatingNumber = 0 | 1 | 2 | 3 | 5 | 7 | 8 | 9 | 10
+
+export interface GameReviewData{
+    user_id:string,
+    game_id:number,
+    user_comment:string,
+    graphics_score:number,
+    sound_score:number,
+    gameplay_score:number,
+    level_score:number,
+    balance_score:number,
+    story_score:number,
+    performance_score:number,
+    original_score:number,
+    customization_score:number,
+    microtransactions_score:number,
+    support_score:number,
+    state_id:number,
+    hours_spent:number,
+    platform_played?:string,
+    platform_id:number,
+    total_score:number,
+}

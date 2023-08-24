@@ -1,5 +1,7 @@
-import { GameCreationRequiredInfoDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
+import { GameCreationRequiredInfoDataError, GameReviewData, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
 import igdbToken from "./igdbToken";
+import supabaseServer from "./supabaseServer";
+import supabaseClient from "./supabaseClient";
 
 
 export async function getIGDBByGameName(name: string) {
@@ -84,9 +86,9 @@ export async function APICallIGDBGameDevelopersByNameDate(name: string, date: nu
 export async function getIGDBFullGameInfo(name: string, company: string): Promise<IGDBFullGameInfoDataError> {
     const token = await igdbToken();
     if (token.error) return {
-        data:null,
+        data: null,
         error: token.error,
-    } 
+    }
 
     const result = await fetch("https://api.igdb.com/v4/games", {
         method: "POST",
@@ -100,15 +102,15 @@ export async function getIGDBFullGameInfo(name: string, company: string): Promis
     })
         .then(response => response.json())
 
-    if(result.message){
-        return{
-            data:null,
-            error:result.message
+    if (result.message) {
+        return {
+            data: null,
+            error: result.message
         }
     }
     return {
-        data:result,
-        error:null
+        data: result,
+        error: null
     };
 }
 
@@ -127,6 +129,34 @@ export async function APIgetSupabaseGameFromNameAndDate(name: string, date: numb
     return result;
 }
 
+
+export async function APIputGameReview(game: GameReviewData):Promise<StringDataError> {
+    let userId = "";
+    await supabaseClient.auth.getUser().then(res => {
+        if (res.data && res.data.user) {
+            userId = res.data.user.id.toString();
+        }
+    })
+    if(userId === ""){
+        return {
+            data:null,
+            error: "Auth error"
+        }
+    }
+
+    const result:StringDataError = await fetch("/api/game-review-put", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userId,
+            game
+        }),
+    }).then(res => res.json())
+
+    return result;
+}
 
 export async function getIGDBGameDevelopersByNameAndDate(name: string, date: number): Promise<StringArrayDataError> {
 
@@ -165,7 +195,7 @@ export async function getIGDBGameDevelopersByNameAndDate(name: string, date: num
 
     // Filter out developer companies
     const developerCompanyIds = involvedCompaniesData
-        .map((company:{company:number}) => company.company);
+        .map((company: { company: number }) => company.company);
 
     const companiesResponse = await fetch("https://api.igdb.com/v4/companies", {
         method: "POST",
@@ -179,7 +209,7 @@ export async function getIGDBGameDevelopersByNameAndDate(name: string, date: num
     })
 
     const companiesData = await companiesResponse.json();
-    const developerNames = companiesData.map((company: {name:string}) => company.name);
+    const developerNames = companiesData.map((company: { name: string }) => company.name);
     return { data: developerNames, error: null };
 }
 
