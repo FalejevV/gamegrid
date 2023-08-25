@@ -131,7 +131,7 @@ export default function GamePreviewItem(props:{
         let mostValue = 0;
         let sum = 0;
         keys.forEach((key: keyof AverageScoreItem) => {
-            if(key !== "id" && key !== "game_id"){
+            if(key !== "game_id"){
                 let scoreValue = props.gameData.score[key];
                 if(scoreValue < leastValue){
                     leastValue = scoreValue;
