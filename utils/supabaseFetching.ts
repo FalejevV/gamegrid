@@ -1,8 +1,8 @@
-import { FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, GameCreationRequiredInfoDataError, GameReviewData, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
+import { AverageScoreItem, FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, GameCreationRequiredInfoDataError, GameReviewData, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import supabaseServer from "./supabaseServer";
 import { getIGDBFullGameInfo, getIGDBGameDevelopersByNameAndDate } from "./apiFetching";
-import { IGDBDuplicateGamesJoin, toCoverLargeFormat } from "./formatter";
+import { IGDBDuplicateGamesJoin, toAverageScore, toCoverLargeFormat } from "./formatter";
 import supabaseRootClient from "./supabaseRootClient";
 import { fetchImageToBuffer } from "./imageFormat";
 
@@ -438,14 +438,14 @@ async function insertSupabaseGameManyRelationData(gameId: number, items: string[
     return { data: "OK", error: null };
 }
 
-async function getSupabasePlatformIdByPlatformName(platformName: string = ""): Promise<StringDataError>{
+async function getSupabasePlatformIdByPlatformName(platformName: string = ""): Promise<StringDataError> {
 
     const { data, error } = await supabaseRoot.from("Platform").select("id").eq("platform", platformName).single();
-    
+
 
 
     return {
-        data:data?.id || null,
+        data: data?.id || null,
         error: error?.message || null
     }
 }
@@ -487,17 +487,16 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
         data: null,
         error: userRequest.error
     }
-    
-    console.log(game.game_id);
-    if(!game.platform_played){
-        return{
-            data:null,
+
+    if (!game.platform_played) {
+        return {
+            data: null,
             error: "platform is not provided"
         }
     }
     let platformRequest = await getSupabasePlatformIdByPlatformName(game.platform_played);
-    if(platformRequest.error && !platformRequest.data) return {
-        data:null,
+    if (platformRequest.error && !platformRequest.data) return {
+        data: null,
         error: "could not find platform in supabase. Sorry..."
     }
 
@@ -510,10 +509,31 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
         .from('Review')
         .upsert(game);
 
-
+    if (!data && !error) {
+        updateAverageReviewData(game.game_id);
+    }
 
     return {
         data: data || "OK",
+        error: error?.message || null
+    }
+}
+
+
+
+async function updateAverageReviewData(gameId: number) {
+    const { data, error } = await supabaseRoot.from("Review").select("*").eq("game_id", gameId);
+    
+    if(data){
+        const averageReview:AverageScoreItem = toAverageScore(data);
+        if(averageReview){
+            supabaseRoot.from("AverageReview")
+            .upsert(averageReview).then(res => {});
+        }
+    }
+
+    return{
+        data:data || null,
         error: error?.message || null
     }
 }

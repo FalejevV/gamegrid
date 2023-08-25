@@ -6,7 +6,7 @@ import gameCreation, { setGameCreationPage, setGameCreationScore } from "@/store
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
 import { APIputGameReview } from "@/utils/apiFetching";
 import supabaseClient from "@/utils/supabaseClient";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 
@@ -16,6 +16,7 @@ import { useEffect } from "react";
 export default function GameCreationResultPage() {
     const gameCreationSelector = useAppSelector((state: RootState) => state.gameCreation);
     const dispatch = useAppDispatch();
+    const [isFetching, setIsFetching] = useState(false);
 
     function getTotalScore() {
         let sum = 0;
@@ -43,6 +44,8 @@ export default function GameCreationResultPage() {
     }
 
     async function saveReview() {
+        if (isFetching) return;
+        setIsFetching(true);
         let game: GameReviewData = {
             user_id: "-1",
             game_id: gameCreationSelector.gameCreationFetchedGame?.id || 0,
@@ -64,13 +67,14 @@ export default function GameCreationResultPage() {
             total_score: gameCreationSelector.scores.total,
             platform_id: 0
         }
-        let result:StringDataError = await APIputGameReview(game);
-        
-        if(result.data === "OK"){
+        let result: StringDataError = await APIputGameReview(game);
+
+        if (result.data === "OK") {
             alert("Review SAVED. You cant see it though. I did not implement review yet -_-");
-        }else if(result.error){
+        } else if (result.error) {
             alert(result.error);
         }
+        setIsFetching(false);
     }
 
 
@@ -94,7 +98,7 @@ export default function GameCreationResultPage() {
 
             <div className="flexgap items-center justify-between">
                 <Button title={"Go Back"} onClick={previousPage} />
-                <WideActionButton onClick={saveReview} text={"Save My Review"} />
+                <WideActionButton disabled={isFetching} onClick={saveReview} text={"Save My Review"} />
             </div>
         </div>
     )

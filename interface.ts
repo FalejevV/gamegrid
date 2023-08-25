@@ -14,7 +14,6 @@ export interface Game {
 }
 
 export interface AverageScoreItem {
-    id: number,
     game_id: number,
     graphics_avg: number,
     sound_avg: number,
@@ -175,3 +174,4 @@ export interface GameReviewData{
     platform_id:number,
     total_score:number,
 }
+

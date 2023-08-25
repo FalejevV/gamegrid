@@ -1,4 +1,4 @@
-import { IGDBGameFetch, IGDBTagIdName } from "@/interface";
+import { AverageScoreItem, GameReviewData, IGDBGameFetch, IGDBTagIdName } from "@/interface";
 import fetch from "node-fetch"
 
 export function dateToText(date: number): string {
@@ -133,3 +133,52 @@ export function toCoverLargeFormat(cover: string): string {
     return "https:" + coverSplit.join("/");
 }
 
+
+export function toAverageScore(games: GameReviewData[]): AverageScoreItem {
+    let resultGame: AverageScoreItem = {
+        game_id: 0,
+        graphics_avg: 0,
+        sound_avg: 0,
+        gameplay_avg: 0,
+        level_avg: 0,
+        balance_avg: 0,
+        story_avg: 0,
+        performance_avg: 0,
+        original_avg: 0,
+        customization_avg: 0,
+        microtransactions_avg: 0,
+        support_avg: 0,
+        total: 0
+    };
+
+    games.forEach((game: GameReviewData) => {
+        resultGame.game_id = game.game_id;
+        resultGame.graphics_avg += game.graphics_score;
+        resultGame.sound_avg += game.sound_score;
+        resultGame.gameplay_avg += game.gameplay_score;
+        resultGame.level_avg += game.level_score;
+        resultGame.balance_avg += game.balance_score;
+        resultGame.story_avg += game.story_score;
+        resultGame.performance_avg += game.performance_score;
+        resultGame.original_avg += game.original_score;
+        resultGame.customization_avg += game.customization_score;
+        resultGame.microtransactions_avg += game.microtransactions_score;
+        resultGame.support_avg += game.support_score;
+        resultGame.total += game.total_score;
+    });
+
+    resultGame.graphics_avg = Math.floor(resultGame.graphics_avg / games.length);
+    resultGame.sound_avg = Math.floor(resultGame.sound_avg / games.length);
+    resultGame.gameplay_avg = Math.floor(resultGame.gameplay_avg / games.length);
+    resultGame.level_avg = Math.floor(resultGame.level_avg / games.length);
+    resultGame.balance_avg = Math.floor(resultGame.balance_avg / games.length);
+    resultGame.story_avg = Math.floor(resultGame.story_avg / games.length);
+    resultGame.performance_avg = Math.floor(resultGame.performance_avg / games.length);
+    resultGame.original_avg = Math.floor(resultGame.original_avg / games.length);
+    resultGame.customization_avg = Math.floor(resultGame.customization_avg / games.length);
+    resultGame.microtransactions_avg = Math.floor(resultGame.microtransactions_avg / games.length);
+    resultGame.support_avg = Math.floor(resultGame.support_avg / games.length);
+    resultGame.total = Math.floor(resultGame.total / games.length);
+    
+    return resultGame;
+}
