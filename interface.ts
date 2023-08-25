@@ -173,5 +173,10 @@ export interface GameReviewData{
     platform_played?:string,
     platform_id:number,
     total_score:number,
+    finished:boolean,
 }
 
+export interface GameReviewDataError{
+    data: GameReviewData | null,
+    error: string |null
+}

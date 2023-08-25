@@ -1,7 +1,8 @@
-import { GameCreationRequiredInfoDataError, GameReviewData, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
+import { GameCreationRequiredInfoDataError, GameReviewData, GameReviewDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
 import igdbToken from "./igdbToken";
 import supabaseServer from "./supabaseServer";
 import supabaseClient from "./supabaseClient";
+import { error } from "console";
 
 
 export async function getIGDBByGameName(name: string) {
@@ -129,22 +130,41 @@ export async function APIgetSupabaseGameFromNameAndDate(name: string, date: numb
     return result;
 }
 
+export async function APIgetUserReviewByGameNameAndDate(userId: string, gameId: number): Promise<GameReviewDataError> {
 
-export async function APIputGameReview(game: GameReviewData):Promise<StringDataError> {
+    const result: GameReviewDataError = await fetch('/api/supabase-get-review-by-name-and-date', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userId, 
+            gameId 
+        }),
+    }).then(res => res.json())
+    
+    return {
+        data: result.data || null,
+        error: result.error || null 
+    }
+}
+
+
+export async function APIputGameReview(game: GameReviewData): Promise<StringDataError> {
     let userId = "";
     await supabaseClient.auth.getUser().then(res => {
         if (res.data && res.data.user) {
             userId = res.data.user.id.toString();
         }
     })
-    if(userId === ""){
+    if (userId === "") {
         return {
-            data:null,
+            data: null,
             error: "Auth error"
         }
     }
 
-    const result:StringDataError = await fetch("/api/game-review-put", {
+    const result: StringDataError = await fetch("/api/game-review-put", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

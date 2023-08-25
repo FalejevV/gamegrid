@@ -1,4 +1,4 @@
-import { AverageScoreItem, FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, GameCreationRequiredInfoDataError, GameReviewData, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
+import { AverageScoreItem, FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, GameCreationRequiredInfoDataError, GameReviewData, GameReviewDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import supabaseServer from "./supabaseServer";
 import { getIGDBFullGameInfo, getIGDBGameDevelopersByNameAndDate } from "./apiFetching";
@@ -227,9 +227,11 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
 
     // checking if game name already exists in supabase table.
     let { data, error } = await getSupabaseGameByNameAndDate(name, date);
-    if (data) return {
-        data: null,
-        error: null
+    if (data) {
+        return {
+            data: null,
+            error: null
+        }
     }
     if (error) return { data: null, error: error };
 
@@ -442,10 +444,17 @@ async function getSupabasePlatformIdByPlatformName(platformName: string = ""): P
 
     const { data, error } = await supabaseRoot.from("Platform").select("id").eq("platform", platformName).single();
 
-
-
     return {
         data: data?.id || null,
+        error: error?.message || null
+    }
+}
+
+export async function getSupabasePlatformNameByPlatformId(platformId: number): Promise<StringDataError>{
+    const {data, error} = await supabaseRoot.from("Platform").select("platform").eq("id", platformId).single();
+
+    return {
+        data: data?.platform || null,
         error: error?.message || null
     }
 }
@@ -483,7 +492,7 @@ async function supabaseUserIdByUserUID(userId: string): Promise<StringDataError>
 
 export async function insertSupabaseReview(userId: string, game: GameReviewData): Promise<StringDataError> {
     let userRequest: StringDataError = await supabaseUserIdByUserUID(userId);
-    if (userRequest.error && !userRequest.data) return {
+    if (userRequest.error || !userRequest.data) return {
         data: null,
         error: userRequest.error
     }
@@ -502,6 +511,7 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
 
     game.platform_id = Number(platformRequest.data) || 0;
     game.user_id = userId;
+    
 
     delete game.platform_played;
 
@@ -523,17 +533,25 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
 
 async function updateAverageReviewData(gameId: number) {
     const { data, error } = await supabaseRoot.from("Review").select("*").eq("game_id", gameId);
-    
-    if(data){
-        const averageReview:AverageScoreItem = toAverageScore(data);
-        if(averageReview){
+    if (data) {
+        const averageReview: AverageScoreItem = toAverageScore(data);
+        if (averageReview) {
             supabaseRoot.from("AverageReview")
-            .upsert(averageReview).then(res => {});
+                .upsert(averageReview).then(res => { });
         }
     }
 
-    return{
-        data:data || null,
+    return {
+        data: data || null,
         error: error?.message || null
+    }
+}
+
+export default async function getSupabaseUserGameReview(userId: string, gameId: number): Promise<GameReviewDataError> {
+    const result = await supabaseRoot.from("Review").select("*").eq("user_id", userId).eq("game_id", gameId).single();
+
+    return {
+        data: result.data || null,
+        error: result.error?.message || null 
     }
 }

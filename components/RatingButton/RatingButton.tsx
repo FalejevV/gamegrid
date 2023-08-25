@@ -15,6 +15,7 @@ export default function RatingButton(props: {
     return (
         <button className={`h-[50px] bg-dimm textcol-main text-[16px] transition-all duration-200 hover:brightness-110 relative
             ${gameCreationScoreSelector === props.value && "bg-mid scale-110"}
+            ${gameCreationScoreSelector !== props.value && "bg-dimm scale-100"}
             ${props.middle && "w-[100px]"}
             ${!props.middle && "w-[50px]"}
         `} onClick={() => dispatch(setGameCreationScore({
@@ -23,7 +24,7 @@ export default function RatingButton(props: {
         }))}>
             {ratingNames[props.value]}
 
-            <p className={`absolute lg:left-[50%] top-[75px] textcol-main lg:right-auto text-[18px] translate-y-[-50%] lg:translate-x-[-50%] transition-all duration-150 user-select-none pointer-events-none whitespace-nowrap
+            <p className={`absolute lg:left-[50%] top-[75px] textcol-main lg:right-auto text-[18px] translate-y-[-50%] lg:translate-x-[-50%] user-select-none pointer-events-none whitespace-nowrap
             ${props.value < 5 && "left-0 translate-x-0 right-auto"}
             ${props.value > 5 && "right-0 translate-x-0 left-auto"}
             ${props.value === 5 && "left-[50%] translate-x-[-50%] right-auto"}

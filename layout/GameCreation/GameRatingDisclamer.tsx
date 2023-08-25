@@ -1,7 +1,7 @@
 import Button from "@/components/Buttons/WideActionButton/Button";
 import WideActionButton from "@/components/Buttons/WideActionButton/WideActionButton";
 import Title from "@/components/Title/Title";
-import { setGameCreationPage, setGameCreationRatingPage } from "@/store/features/gameCreation";
+import { setGameCreationMemoData, setGameCreationPage, setGameCreationRatingPage } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store";
 import Image from "next/image";
 
@@ -19,6 +19,7 @@ export default function GameRagingDisclamer() {
 
     function previousQuestion() {
         if (gameCreationSelector.page > 0) {
+            dispatch(setGameCreationMemoData({...gameCreationSelector.gameInfo}))
             dispatch(setGameCreationPage(gameCreationSelector.page - 1));
         }
     }

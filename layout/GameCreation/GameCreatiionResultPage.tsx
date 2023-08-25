@@ -65,7 +65,8 @@ export default function GameCreationResultPage() {
             hours_spent: Number(gameCreationSelector.questions.hours) || 0,
             platform_played: gameCreationSelector.questions.platform,
             total_score: gameCreationSelector.scores.total,
-            platform_id: 0
+            platform_id: 0,
+            finished: gameCreationSelector.questions.finished
         }
         let result: StringDataError = await APIputGameReview(game);
 

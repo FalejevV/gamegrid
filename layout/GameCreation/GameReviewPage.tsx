@@ -4,10 +4,10 @@ import WideActionButton from "@/components/Buttons/WideActionButton/WideActionBu
 import DropdownInput from "@/components/DropdownInput/DropdownInput";
 import InlineInputField from "@/components/InlineInputField/InlineInputField";
 import InputCheckbox from "@/components/InputCheckbox/InputCheckbox";
-import { GameCreationRequiredInfo, GameCreationRequiredInfoDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError } from "@/interface";
-import { setGameCreationComment, setGameCreationFetchedGame, setGameCreationFinished, setGameCreationHours, setGameCreationPage, setGameCreationPlatform } from "@/store/features/gameCreation";
+import { GameCreationRequiredInfo, GameCreationRequiredInfoDataError, GameReviewData, IGDBFullGameInfo, IGDBFullGameInfoDataError } from "@/interface";
+import { setGameCreationComment, setGameCreationFetchedGame, setGameCreationFinished, setGameCreationHours, setGameCreationPage, setGameCreationPlatform, setGameCreationScore } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
-import { APICallSupabaseGameInsertByNameDateCompany, APIgetSupabaseGameFromNameAndDate } from "@/utils/apiFetching";
+import { APICallSupabaseGameInsertByNameDateCompany, APIgetSupabaseGameFromNameAndDate, APIgetUserReviewByGameNameAndDate } from "@/utils/apiFetching";
 import supabaseClient from "@/utils/supabaseClient";
 import { getTableList } from "@/utils/tableFetching";
 import { FormEvent, useEffect, useState } from "react";
@@ -18,8 +18,73 @@ import AlertText from "@/components/AlertText/AlertText";
 import Title from "@/components/Title/Title";
 
 
-
 export default function GameReviewPage() {
+    // DO NOT LOOK HERE
+    function fillDatabaseUserReviewScores(review: GameReviewData) {
+        dispatch(setGameCreationScore({
+            aspect: "graphics_avg",
+            value: review.graphics_score / 10
+        }))
+        dispatch(setGameCreationScore({
+            aspect: "sound_avg",
+            value: review.sound_score / 10
+        }))
+        dispatch(setGameCreationScore({
+            aspect: "gameplay_avg",
+            value: review.gameplay_score / 10
+        }));
+
+        dispatch(setGameCreationScore({
+            aspect: "level_avg",
+            value: review.level_score / 10
+        }));
+
+        dispatch(setGameCreationScore({
+            aspect: "balance_avg",
+            value: review.balance_score / 10
+        }));
+
+        dispatch(setGameCreationScore({
+            aspect: "story_avg",
+            value: review.story_score / 10
+        }));
+
+        dispatch(setGameCreationScore({
+            aspect: "performance_avg",
+            value: review.performance_score / 10
+        }));
+
+        dispatch(setGameCreationScore({
+            aspect: "original_avg",
+            value: review.original_score / 10
+        }));
+
+        dispatch(setGameCreationScore({
+            aspect: "customization_avg",
+            value: review.customization_score / 10
+        }));
+
+        dispatch(setGameCreationScore({
+            aspect: "microtransactions_avg",
+            value: review.microtransactions_score / 10
+        }));
+
+        dispatch(setGameCreationScore({
+            aspect: "support_avg",
+            value: review.support_score / 10
+        }));
+
+    }
+    function fillDatabaseUserReviewInfo(review: GameReviewData) {
+        dispatch(setGameCreationHours(review.hours_spent.toString()));
+        dispatch(setGameCreationFinished(review.finished));
+        dispatch(setGameCreationComment(review.user_comment));
+        dispatch(setGameCreationPlatform(review.platform_played || ""));
+        fillDatabaseUserReviewScores(review);
+    }
+
+
+
 
     const gameCreationSelector = useAppSelector((state: RootState) => state.gameCreation);
     const [gameInfoGathered, setGameInfoGathered] = useState(false);
@@ -30,9 +95,16 @@ export default function GameReviewPage() {
     const [newGameCreation, setNewGameCreation] = useState(false);
     const [supabaseInsertDebounce, setSupabaseInsertDebounce] = useState(false);
     const [supabaseSearchDebounce, setSupabaseSearchDebounce] = useState(false);
+    const userAuthSelector = useAppSelector((state: RootState) => state.userAuth);
+
 
     // search for a game in supabase.
     async function supabaseGameSearch() {
+        if (!userAuthSelector.userId) {
+            setError("User not authenticated");
+            return;
+        }
+
         if (supabaseSearchDebounce) return;
         setSupabaseSearchDebounce(true);
         if (gameCreationSelector.gameInfo.gameId === gameCreationSelector.memoGame.gameId) {
@@ -47,6 +119,10 @@ export default function GameReviewPage() {
 
         const result: GameCreationRequiredInfoDataError = await APIgetSupabaseGameFromNameAndDate(gameCreationSelector.gameInfo.name, gameCreationSelector.gameInfo.date);
         if (result.data) {
+            let userReview = await APIgetUserReviewByGameNameAndDate(userAuthSelector.userId, result.data.id);
+            if (userReview.data?.game_id) {
+                fillDatabaseUserReviewInfo(userReview.data);
+            }
             setGameDatabaseId(Number(result.data.id) || -1);
             dispatch(setGameCreationFetchedGame(result.data));
         }
@@ -104,17 +180,17 @@ export default function GameReviewPage() {
         e.preventDefault();
         setError("");
 
-        if(!Number(gameCreationSelector.questions.hours)){
+        if (!Number(gameCreationSelector.questions.hours)) {
             setError("Wrong 'Hours' field data")
             return;
         }
 
-        if(!gameCreationSelector.questions.platform){
+        if (!gameCreationSelector.questions.platform) {
             setError("Please pick platform you played on");
             return;
         }
 
-        if(gameCreationSelector.questions.comment.trim().length < 20){
+        if (gameCreationSelector.questions.comment.trim().length < 20) {
             setError("Please write at least 20 characters in comment section ;)");
             return;
         }
@@ -123,7 +199,7 @@ export default function GameReviewPage() {
     }
 
     function proceedToNextPage() {
-        if(gameCreationSelector.gameCreationFetchedGame?.id){
+        if (gameCreationSelector.gameCreationFetchedGame?.id) {
             dispatch(setGameCreationPage(2));
         }
     }
@@ -136,14 +212,14 @@ export default function GameReviewPage() {
         return (
             <form className="flex flex-col gap-[25px]" onSubmit={formSubmit}>
                 <SelectedGame gameInfo={gameCreationSelector.gameCreationFetchedGame} />
-                <Title title={"Please describe your experience"} /> 
+                <Title title={"Please describe your experience"} />
                 <InputCheckbox question={"Did you finish the game?"} name={"finished"} onChange={(value: boolean) => dispatch(setGameCreationFinished(value))} value={gameCreationSelector.questions.finished} />
                 <InlineInputField title={"How many hours have you played?"} name={"hours"} onChange={(value: string) => dispatch(setGameCreationHours(value))} value={gameCreationSelector.questions.hours.toString()} placeholder={"Hours"} />
                 <DropdownInput additionalOptions={allPlatformsFetch} options={gameCreationSelector.gameCreationFetchedGame?.platforms || []} value={gameCreationSelector.questions.platform} onChange={(value: string) => dispatch(setGameCreationPlatform(value))} title={"What platform did you play on?"} name={"platform"} />
                 <TextField title={"Please write a short comment about this game. Even 1 sentence is enough :)"} name={"comment"} onChange={(value: string) => dispatch(setGameCreationComment(value))} value={gameCreationSelector.questions.comment} />
                 <div className="flex w-full items-center justify-between gap-[25px]">
                     <Button title={"BACK"} onClick={proceedToPrevPage} />
-                    <WideActionButton submit text={"NEXT"} onClick={() => {}} />
+                    <WideActionButton submit text={"NEXT"} onClick={() => { }} />
                 </div>
 
             </form>
