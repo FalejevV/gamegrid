@@ -11,15 +11,13 @@ export default function AddGameButton() {
 
     function resetGameCreationPage() {
         dispatch(clearGameCreationAll());
-        
+
     }
 
     return (
-        <div className="w-full flex flex-col gap-[40px] items-center justify-center pt-[50px]">
-            <Link href="/add-game" className="bg-hi textcol-main py-[5px] px-[10px] text-[23px] font-medium"
-                onClick={resetGameCreationPage}>
-                Add Game
-            </Link>
-        </div>
+        <Link href="/add-game" className="bg-hi textcol-main py-[5px] text-[23px] font-medium w-full max-w-[250px] flex items-center justify-center"
+            onClick={resetGameCreationPage}>
+            Add Game
+        </Link>
     )
 }

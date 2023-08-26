@@ -2,12 +2,10 @@ import Button from "@/components/Buttons/WideActionButton/Button";
 import WideActionButton from "@/components/Buttons/WideActionButton/WideActionButton";
 import Title from "@/components/Title/Title";
 import { GameReviewData, ScoreList, StringDataError } from "@/interface";
-import gameCreation, { setGameCreationPage, setGameCreationScore } from "@/store/features/gameCreation";
+import { setGameCreationPage, setGameCreationScore } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
 import { APIputGameReview } from "@/utils/apiFetching";
-import supabaseClient from "@/utils/supabaseClient";
 import { useEffect, useState } from "react";
-
 
 
 
@@ -18,6 +16,7 @@ export default function GameCreationResultPage() {
     const dispatch = useAppDispatch();
     const [isFetching, setIsFetching] = useState(false);
 
+
     function getTotalScore() {
         let sum = 0;
         // @ts-ignore 
@@ -26,9 +25,7 @@ export default function GameCreationResultPage() {
             if (key === "total") return;
             sum += gameCreationSelector.scores[key];
         })
-        console.log(sum, keys.length);
         let total = Math.floor(sum / (keys.length - 1) * 10);
-        console.log(total);
         dispatch(setGameCreationScore({
             aspect: "total",
             value: total,
@@ -71,7 +68,10 @@ export default function GameCreationResultPage() {
         let result: StringDataError = await APIputGameReview(game);
 
         if (result.data === "OK") {
-            alert("Review SAVED. You cant see it though. I did not implement review yet -_-");
+            setTimeout(() => {
+                window.location.href = "/collection";
+            }, 1000);
+            return;
         } else if (result.error) {
             alert(result.error);
         }

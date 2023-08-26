@@ -180,3 +180,27 @@ export interface GameReviewDataError{
     data: GameReviewData | null,
     error: string |null
 }
+
+
+export interface FullGameReviewInfo{
+    game_id:number,
+    user_comment:string,
+    graphics_score:number,
+    sound_score:number,
+    gameplay_score:number,
+    level_score:number,
+    balance_score:number,
+    story_score:number,
+    performance_score:number,
+    original_score:number,
+    customization_score:number,
+    microtransactions_score:number,
+    support_score:number,
+    state_id:number,
+    hours_spent:number,
+    platform_name:string,
+    total_score:number,
+    finished:boolean,
+    date:Date,
+    game_name:string
+}
