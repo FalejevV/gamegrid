@@ -2,84 +2,85 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
+body {
   background-color: rgb(26, 26, 28);
   overflow: hidden;
 }
 
-.do-scroll{
+.do-scroll {
   overflow: auto !important;
 }
 
-.bg-gray{
+.bg-gray {
   background-color: rgb(26, 26, 28);
 }
 
-.bg-dimm{
-  background-color:rgb(111, 34, 50);
+.bg-dimm {
+  background-color: rgb(111, 34, 50);
 }
 
-.bg-mid{
-  background-color:rgb(149, 7, 65);
+.bg-mid {
+  background-color: rgb(149, 7, 65);
 }
 
-.bg-hi{
-  background-color:rgb(195, 8, 63);
+.bg-hi {
+  background-color: rgb(195, 8, 63);
 }
 
-.bg-textcolmain{
-  background-color:rgb(202, 233, 234);
+.bg-textcolmain {
+  background-color: rgb(202, 233, 234);
 }
 
-.bg-textcoldimm{
-  background-color:rgb(149, 171, 172);
+.bg-textcoldimm {
+  background-color: rgb(149, 171, 172);
 }
 
-.bordercol-gray{
+.bordercol-gray {
   border-color: rgb(26, 26, 28);
 }
 
-.bordercol-dimm{
-  border-color:rgb(111, 34, 50);
+.bordercol-dimm {
+  border-color: rgb(111, 34, 50);
 }
 
-.bordercol-mid{
-  border-color:rgb(149, 7, 65);
+.bordercol-mid {
+  border-color: rgb(149, 7, 65);
 }
 
-.bordercol-hi{
-  border-color:rgb(195, 8, 63);
+.bordercol-hi {
+  border-color: rgb(195, 8, 63);
 }
 
-.bg-loading{
+.bg-loading {
   background-color: #4d4d4d80;
 }
 
 
-.textcol-main{
-  color:rgb(202, 233, 234);
-}
-.textcol-dimm{
-  color:rgb(149, 171, 172);
+.textcol-main {
+  color: rgb(202, 233, 234);
 }
 
-.textcol-bgmid{
-  color:rgb(149, 7, 65);
+.textcol-dimm {
+  color: rgb(149, 171, 172);
 }
 
-.flexgap{
-  display:flex;
-  gap:10px;
+.textcol-bgmid {
+  color: rgb(149, 7, 65);
 }
 
-.pten{
-  padding:10px;
+.flexgap {
+  display: flex;
+  gap: 10px;
+}
+
+.pten {
+  padding: 10px;
 }
 
 @media only screen and (max-width: 600px) {
-    .flexgap{
-      gap:5px;
-    }
+  .flexgap {
+    gap: 5px;
+  }
 }
 
 * {
@@ -106,17 +107,111 @@ body{
     opacity: 1;
   }
 }
+
 .animate-fade-in {
   animation: fadeIn 0.15s ease-out forwards;
 }
 
-.h-dvh{
-  height:100vh;
-  height:100dvh;
+.h-dvh {
+  height: 100vh;
+  height: 100dvh;
 }
 
-.inputheight{
-  height:45px;
+.inputheight {
+  height: 45px;
   min-height: 45px;
   max-height: 45px;
+}
+
+
+.summary-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  grid-template-rows: repeat(3, 140px);
+  gap: 10px 10px;
+  grid-template-areas:
+    "count count completion completion completion completion comment comment comment comment comment average-time average-time average-time"
+    "tags tags tags hours hours hours comment comment comment comment comment date date date"
+    "tags tags tags platform platform platform platform rating rating rating rating date date date";
+  max-width: 1000px;
+}
+
+.grid-flex{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  padding-top: 25px;
+}
+
+.gridtext-main{
+  font-size: 40px;
+  @apply textcol-main;
+}
+
+.gridtext-title{
+  font-size: 16px;
+  position: absolute;
+  font-weight: 500;
+  left:50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  @apply textcol-dimm;
+}
+
+.count {
+  grid-area: count;
+  @apply bg-mid grid-flex;
+}
+
+.tags {
+  grid-area: tags;
+  @apply bg-dimm grid-flex;
+}
+
+.completion {
+  grid-area: completion;
+  @apply bg-dimm grid-flex;
+
+}
+
+.hours {
+  grid-area: hours;
+  @apply bg-dimm grid-flex;
+  filter: saturate(0.85);
+
+}
+
+.comment {
+  grid-area: comment;
+  @apply bg-mid grid-flex;
+  filter:saturate(0.8);
+
+}
+
+.platform {
+  grid-area: platform;
+  @apply bg-dimm grid-flex;
+  filter: saturate(1.2);
+}
+
+.date {
+  grid-area: date;
+  @apply bg-hi grid-flex;
+  filter: saturate(0.7);
+}
+
+.rating {
+  grid-area: rating;
+  @apply bg-dimm grid-flex;
+
+}
+
+.average-time {
+  grid-area: average-time;
+  @apply bg-dimm grid-flex;
+
 }
