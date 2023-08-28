@@ -127,91 +127,32 @@ body {
 .summary-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(14, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
   grid-template-rows: repeat(3, 140px);
   gap: 10px 10px;
-  grid-template-areas:
-    "count count completion completion completion completion comment comment comment comment comment average-time average-time average-time"
-    "tags tags tags hours hours hours comment comment comment comment comment date date date"
-    "tags tags tags platform platform platform platform rating rating rating rating date date date";
   max-width: 1000px;
+  @apply textcol-main font-semibold;
 }
 
-.grid-flex{
+.summary-grid-mobile{
+  width:fit-content;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(70px,1fr));
+  grid-template-rows: repeat(2, 140px);
+  gap: 10px 10px;
+  @apply textcol-main font-semibold;
+
+}
+
+.grid-flex {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   position: relative;
   padding-top: 25px;
-}
 
-.gridtext-main{
-  font-size: 40px;
-  @apply textcol-main;
-}
-
-.gridtext-title{
-  font-size: 16px;
-  position: absolute;
-  font-weight: 500;
-  left:50%;
-  bottom: 20px;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  @apply textcol-dimm;
-}
-
-.count {
-  grid-area: count;
-  @apply bg-mid grid-flex;
-}
-
-.tags {
-  grid-area: tags;
-  @apply bg-dimm grid-flex;
-}
-
-.completion {
-  grid-area: completion;
-  @apply bg-dimm grid-flex;
-
-}
-
-.hours {
-  grid-area: hours;
-  @apply bg-dimm grid-flex;
-  filter: saturate(0.85);
-
-}
-
-.comment {
-  grid-area: comment;
-  @apply bg-mid grid-flex;
-  filter:saturate(0.8);
-
-}
-
-.platform {
-  grid-area: platform;
-  @apply bg-dimm grid-flex;
-  filter: saturate(1.2);
-}
-
-.date {
-  grid-area: date;
-  @apply bg-hi grid-flex;
-  filter: saturate(0.7);
-}
-
-.rating {
-  grid-area: rating;
-  @apply bg-dimm grid-flex;
-
-}
-
-.average-time {
-  grid-area: average-time;
-  @apply bg-dimm grid-flex;
-
+  @media(max-width:1180px) {
+    padding-top: 15px;
+  }
 }

@@ -25,7 +25,7 @@ export default function MainLayout(props:{
               <ServerWrap>
                 <Header />
                 <Sidebar />
-                <main className="min-h-screen max-h-screen h-fit max-w-screen pl-[10px] sm:pt-[80px] pt-[30px] pb-[100px] pr-[10px] md:pl-[100px] do-scroll">
+                <main className="min-h-screen max-h-screen h-fit max-w-screen pl-[10px] sm:pt-[80px] pt-[30px] pb-[50px] pr-[10px] md:pl-[100px] do-scroll">
                   {props.elem}
                 </main>
               </ServerWrap>

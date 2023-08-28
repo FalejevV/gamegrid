@@ -1,5 +1,12 @@
+"use client"
+
+import SummaryStatComment from "@/components/SummaryStat/SummaryStatComment"
+import SummaryStatLong from "@/components/SummaryStat/SummaryStatLong"
+import SummaryStatSmall from "@/components/SummaryStat/SummaryStatSmall"
+import SummaryStatWide from "@/components/SummaryStat/SummaryStatWide"
 import { GameReviewData } from "@/interface"
 import games from "@/store/features/games"
+import { RootState, useAppSelector } from "@/store/store"
 
 
 
@@ -8,6 +15,7 @@ export default function CollectionSummary(props: {
     games: GameReviewData[]
 }) {
 
+    const windowSelector = useAppSelector((state: RootState) => state.window);
     if (props.games.length === 0) return (
         <section className="w-full h-[400px] flex items-center justify-center bg-dimm">
             <p className=" text-[25px] textcol-main font-medium">
@@ -16,52 +24,46 @@ export default function CollectionSummary(props: {
         </section>
     )
 
-    return (
-        <section className="summary-grid textcol-main font-semibold">
-            <div className="count">
-                <p className="gridtext-main">{games.length}</p>
-                <p className="gridtext-title">Total Games</p>
-            </div>
 
-            <div className="tags gap-[30px]">
-                <p className="text-[25px]">Action</p>
-                <p className="text-[25px]">Adventure</p>
-                <p className="text-[25px]">RPG</p>
-                <p className="gridtext-title">Favourite Tags</p>
+    function MobileLayout() {
+        return (
+            <div className="flex gap-[10px] items-center overflow-x-scroll pb-[10px]">
+                <div className="summary-grid-mobile">
+                    <SummaryStatSmall title={games.length} about={"Total Games"} className="bg-mid"/>
+                    <SummaryStatWide title={"67%"} about={"Completion Rate"} />
+                    <SummaryStatComment title={"Red Read Redemption 2"} comment={""} about={"Random Comment"} className="bg-mid saturate-[80%]"/>
+                    <SummaryStatWide title={"1320"} about={"Total Hours"} />
+                    <SummaryStatSmall title={"75"} about={"Average Hours"} className="bg-hi saturate-50"/>
+                </div>
+                <div className="summary-grid-mobile">
+                    <SummaryStatWide title={"PlayStation 5"} about={"Popular Platform"} titleSize="text-[23px]"  className="bg-mid saturate-[60%]"/>
+                    <SummaryStatLong firstLine={"20"} secondLine={"December"} thirdLine={"2023"} about={"Last Completion"} firstLineSize="text-[38px]" thirdLineSize="text-[38px]" className="bg-hi saturate-50"/>
+                    <SummaryStatLong firstLine={"Action"} secondLine={"Adventure"} thirdLine={"RPG"} about={"Popular Tags"} />
+                    <SummaryStatWide title={"78/100"} about={"Average Score"} />
+                </div>
             </div>
+        )
+    }
 
-            <div className="completion">
-                <p className="gridtext-main">68%</p>
-                <p className="gridtext-title">Completion Rate</p>
-            </div>
-            <div className="hours">
-                <p className="gridtext-main">1320</p>
-                <p className="gridtext-title">Total Hours</p>
-            </div>
-            <div className="comment gap-[15px]">
-                <p className="text-[20px] text-left w-full px-[15px]">Red Dead Redemption 2</p>
-                <p className="text-[16px] font-normal px-[15px]">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque aspernatur consequuntur, vitae adipisci maxime consequatur, voluptatibus doloremque tempora totam autem ipsum voluptates labore illo, atque veniam.</p>
-                <p className="gridtext-title">Random Comment</p>
-            </div>
-            <div className="platform">
-                <p className="text-[30px]">PlayStation 4</p>
-                <p className="gridtext-title">Popular Platform</p>
-            </div>
-            <div className="date gap-[20px]">
-                <p className="text-[30px]">20</p>
-                <p className="text-[30px]">December</p>
-                <p className="text-[30px]">2022</p>
+    function MainLayout() {
+        return (
+            <section className="summary-grid">
+                <SummaryStatSmall title={games.length} about={"Total Games"} className="bg-mid" />
+                <SummaryStatWide title={"68%"} about={"Completion Rate"} />
+                <SummaryStatComment title={"Red Dead Redemption 2"} comment={"lorem ipsum dolor sit amet"} about={"Your Random Comment"} className="bg-mid saturate-[75%]" />
+                <SummaryStatWide title={"120"} about={"Average Hours"} />
+                <SummaryStatLong firstLine={"Action"} secondLine={"Adventure"} thirdLine={"RPG"} about={"Favourite Tags"} />
+                <SummaryStatSmall title={"1320"} about={"Total Hours"} className="bg-dimm saturate-[115%]" />
+                <SummaryStatLong firstLine={"20"} secondLine={"December"} thirdLine={"2022"} about={"Last Completion"} firstLineSize="text-[37px]" thirdLineSize="text-[35px]" className="bg-dimm saturate-[120%]" />
+                <SummaryStatWide title={"PlayStation 5"} about={"Popular Platform"} titleSize="text-[24px]" className="bg-hi saturate-[65%]" />
+                <SummaryStatWide title={"78%"} about={"Average Rating"} />
+            </section>
+        )
+    }
 
-                <p className="gridtext-title">Last Game Completion</p>
-            </div>
-            <div className="rating">
-                <p className="gridtext-main">78/100</p>
-                <p className="gridtext-title">Average Rating</p>
-            </div>
-            <div className="average-time">
-                <p className="gridtext-main">120</p>
-                <p className="gridtext-title">Game Hours</p>
-            </div>
-        </section>
-    )
+    if (windowSelector.width < 1070) {
+        return <MobileLayout />
+    } else {
+        return <MainLayout />
+    }
 }

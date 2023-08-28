@@ -16,7 +16,7 @@ export default async function Collection() {
     }
     const collectionFetch = await supabase.rpc('get_user_reviews', { p_user_id: data.user.id });
     return (
-        <div className="flexgap flex-col w-full max-w-[1000px] mx-auto pt-[50px]">
+        <div className="flex gap-[10px] flex-col w-full max-w-[1000px] mx-auto pt-[50px]">
             <div className="flex items-center justify-end">
                 <AddGameButton />
             </div>

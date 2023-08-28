@@ -34,10 +34,9 @@ export default async function Games({searchParams}:{
     }
 
     return(
-        <div className="w-full h-screen flex flex-col gap-[60px] items-center py-[60px] overflow-y-scroll pb-[200px]">
+        <div className="w-full flex flex-col gap-[60px] items-center pt-[50px]">
             <SortFilterTab />
             {resultData && displayGames()}
-            <LoadMoreGamesButton searchParams={searchParams} />
         </div>
     )
 }

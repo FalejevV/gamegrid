@@ -8,7 +8,7 @@ export default function Sidebar(){
     const windowSitebarSelector = useAppSelector((state:RootState) => state.window.sidebarHovered);
 
     return(
-        <div className={`hidden h-screen max-h-screen bg-[#0D0306] fixed left-0 top-0 md:flex pt-[100px] transition-all duration-300
+        <div className={`hidden h-screen max-h-screen bg-[#0D0306] fixed left-0 top-0 md:flex pt-[100px] transition-all duration-300 z-50
         ${windowSitebarSelector && "w-[200px]"}
         ${!windowSitebarSelector && "w-[90px]"}
         `}
