@@ -242,8 +242,7 @@ export default function GameReviewPage() {
     function loadingMessage() {
         return (
             <div className="flex flex-col gap-[30px] textcol-main">
-                <GameReviewPageLoading />
-                {newGameCreation && <p>Game was not found in our database. Fetching game data...</p>}
+                <GameReviewPageLoading newGame={newGameCreation}/>
             </div>
         )
     }

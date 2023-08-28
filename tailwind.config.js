@@ -17,6 +17,7 @@ module.exports = {
       },
       screens: {
         'md': '880px',
+        'summary-lg': '1070px'
         // => @media (min-width: 992px) { ... }
       },
     },

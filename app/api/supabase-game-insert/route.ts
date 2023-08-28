@@ -15,7 +15,6 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: Request):Promise<NextResponse<IGDBFullGameInfoDataError>> {
     const res = await request.json()
-
     let result = await supabaseGameInsertByNameDateCompany(res.name, res.date, res.company);
     
     return new NextResponse(JSON.stringify({

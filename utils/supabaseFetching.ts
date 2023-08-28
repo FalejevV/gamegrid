@@ -235,7 +235,6 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
     }
     if (error) return { data: null, error: error };
 
-
     // getting correct game developer information
     const developersResponse: StringArrayDataError = await getIGDBGameDevelopersByNameAndDate(name, date);
     const developersList = developersResponse.data || [] as string[];
@@ -250,6 +249,7 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
     // Merging duplicate games selection
     let combinedDuplicateGame = IGDBDuplicateGamesJoin(IGDBFetch.data) as IGDBFullGameInfo | IGDBFullGameInfo[];
 
+
     if (Array.isArray(combinedDuplicateGame)) combinedDuplicateGame = { ...combinedDuplicateGame[0] };
     combinedDuplicateGame.image = toCoverLargeFormat(combinedDuplicateGame.cover.url);
 
@@ -261,7 +261,6 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
         insertSupabaseDevelopers(developersList),
         insertSupabasePlayers(combinedDuplicateGame.game_modes)
     ])
-
 
     // React errors from promiseResultArray
     let promiseError: null | string = null;
@@ -280,12 +279,11 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
         data: null,
         error: "Could not upload game image to server." + imageError
     }
-
+    
     // inserting a game into supabase Game table and getting its game ID.
     let { data: gameInsertId, error: gameInsertError } = await insertSupabaseGame(combinedDuplicateGame, imageData || "");
     if (imageError) return { data: null, error: gameInsertError }
-
-
+    combinedDuplicateGame.id = Number(gameInsertId);
     // using the game ID we create many to many inserts into various tables.
     let manyToManyResult = await Promise.all([
         insertSupabaseGameManyRelationData(Number(gameInsertId), combinedDuplicateGame.platforms, "Platform"),
@@ -293,6 +291,7 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
         insertSupabaseGameManyRelationData(Number(gameInsertId), combinedDuplicateGame.game_modes, "Player"),
         insertSupabaseGameManyRelationData(Number(gameInsertId), developersList, "Developer"),
     ]);
+
     // Cheking for promise manyToManyResult errors
     let manyToManyError: null | string = null;
     promisesResult.forEach((result: StringDataError) => {
@@ -318,7 +317,7 @@ export async function getSupabaseGameByNameAndDate(name: string, date: number): 
     });
     let errorString = error?.message || null;
 
-    if (data.length > 0) {
+    if (data?.length > 0) {
         let game: GameCreationRequiredInfo = { ...data[0], platforms: [data[0].platform] };
 
         data.forEach((item: { platform: string }, index: number) => {
@@ -333,7 +332,7 @@ export async function getSupabaseGameByNameAndDate(name: string, date: number): 
             { data: game, error: null }
         )
     }
-    return { data: null, error: errorString };
+    return { data: null, error: errorString};
 }
 
 
@@ -408,14 +407,14 @@ async function uploadToSupabaseAction(webpBuffer: Buffer, imageName: string): Pr
 async function insertSupabaseGame(game: IGDBFullGameInfo, imageURL: string): Promise<StringDataError> {
     const { data, error } = await supabaseRoot
         .from('Game')
-        .insert({
+        .upsert({
             name: game.name,
             release_date: new Date(game.first_release_date * 1000).toISOString(),
             description: game.summary,
             image: imageURL,
             state_id: 2
         }).select().single()
-
+    
     return { data: data.id, error: error?.message || null }
 }
 
@@ -491,11 +490,13 @@ async function supabaseUserIdByUserUID(userId: string): Promise<StringDataError>
 }
 
 export async function insertSupabaseReview(userId: string, game: GameReviewData): Promise<StringDataError> {
+    // just checking if user is registered
     let userRequest: StringDataError = await supabaseUserIdByUserUID(userId);
     if (userRequest.error || !userRequest.data) return {
         data: null,
         error: userRequest.error
     }
+
 
     if (!game.platform_played) {
         return {
@@ -503,6 +504,7 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
             error: "platform is not provided"
         }
     }
+    
     let platformRequest = await getSupabasePlatformIdByPlatformName(game.platform_played);
     if (platformRequest.error && !platformRequest.data) return {
         data: null,

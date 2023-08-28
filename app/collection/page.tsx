@@ -24,7 +24,7 @@ export default async function Collection() {
             <CollectionSummary games={collectionFetch.data} />
 
             <div className="flexgap flex-col textcol-main text-[18px]">
-                {collectionFetch.data.length > 0 && collectionFetch.data.map((game:FullGameReviewInfo) => <p> Game: {game.game_name} - Platform: {game.platform_name} - Score: {game.total_score} - Date: {new Date(game.date).toDateString()} </p>)}
+                {collectionFetch?.data && collectionFetch.data?.length > 0 && collectionFetch.data.map((game:FullGameReviewInfo) => <p> Game: {game.game_name} - Platform: {game.platform_name} - Score: {game.total_score} - Date: {new Date(game.date).toDateString()} </p>)}
             </div>
 
         </div>
