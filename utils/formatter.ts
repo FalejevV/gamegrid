@@ -1,4 +1,4 @@
-import { AverageScoreItem, GameReviewData, IGDBGameFetch, IGDBTagIdName } from "@/interface";
+import { AverageScoreItem, CollectionSummary, FullGameReviewInfo, GameReviewData, IGDBGameFetch, IGDBTagIdName } from "@/interface";
 import fetch from "node-fetch"
 
 export function dateToText(date: number): string {
@@ -179,6 +179,73 @@ export function toAverageScore(games: GameReviewData[]): AverageScoreItem {
     resultGame.microtransactions_avg = Math.floor(resultGame.microtransactions_avg / games.length);
     resultGame.support_avg = Math.floor(resultGame.support_avg / games.length);
     resultGame.total = Math.floor(resultGame.total / games.length);
-    
+
     return resultGame;
+}
+
+
+export function getCollectionSummary(games: FullGameReviewInfo[]): CollectionSummary {
+    let summary: CollectionSummary = {
+        lastCompletionDate: new Date(),
+        totalGames: 0,
+        completionRate: 0,
+        tags: [],
+        totalHours: 0,
+        platform: "",
+        averageRating: 0,
+        lastCompletion: new Date,
+        averageHours: 0,
+        commentGame: "",
+        commentText: "",
+    }
+
+    summary.totalGames = games.length;
+    let tagMap = new Map();
+    let platformsMap = new Map();
+    let completedGames = 0;
+    let totalHours = 0;
+    let totalRating = 0;
+    let lastCompletionDate = 0;
+
+    games.forEach((game: FullGameReviewInfo) => {
+        if (game.finished) {
+            completedGames += 1;
+            if(new Date(game.date).valueOf() > 0){
+                lastCompletionDate = new Date(game.date).valueOf();
+            }
+        }
+        totalHours += game.hours_spent;
+        totalRating += game.total_score;
+
+        game.game_tags.forEach((tag: string) => {
+            if (!tagMap.has(tag)) {
+                tagMap.set(tag, 1);
+            } else {
+                tagMap.set(tag, tagMap.get(tag) + 1)
+            }
+        })
+        if (platformsMap.has(game.platform_name)) {
+            platformsMap.set(game.platform_name, platformsMap.get(game.platform_name) + 1);
+        } else {
+            platformsMap.set(game.platform_name, 1);
+        }
+    })
+    const tagEntries = [...tagMap.entries()];
+    const sortedTagEntries = tagEntries.sort((a, b) => b[1] - a[1]);
+    summary.tags.push(sortedTagEntries[0][0]);
+    summary.tags.push(sortedTagEntries[1][0]);
+    summary.tags.push(sortedTagEntries[2][0]);
+    const platformEntries = [...platformsMap.entries()];
+    const sortedPlatformEntries = platformEntries.sort((a, b) => b[1] - a[1]);
+    summary.lastCompletionDate = new Date(lastCompletionDate);
+    summary.platform = sortedPlatformEntries[0][0];
+    summary.averageHours = Math.floor(totalHours / games.length);
+    summary.averageRating = Math.floor(totalRating / games.length);
+    summary.completionRate = Math.floor(completedGames / games.length * 100);
+    summary.totalHours = totalHours;
+    let randomCommentIndex = Math.floor(Math.random() * games.length);
+    summary.commentGame = games[randomCommentIndex].game_name;
+    summary.commentText = games[randomCommentIndex].user_comment;
+
+    return summary;
 }

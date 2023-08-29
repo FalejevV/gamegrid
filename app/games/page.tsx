@@ -34,7 +34,7 @@ export default async function Games({searchParams}:{
     }
 
     return(
-        <div className="w-full flex flex-col gap-[60px] items-center pt-[50px]">
+        <div className="w-full flex flex-col gap-[60px] items-center">
             <SortFilterTab />
             {resultData && displayGames()}
         </div>

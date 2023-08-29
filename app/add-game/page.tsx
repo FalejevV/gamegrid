@@ -9,7 +9,7 @@ export default async function AddGame(){
 
     if(!data.user){
         return(
-            <div className="w-full flex flex-col gap-[40px] items-center justify-center pt-[50px]">
+            <div className="w-full flex flex-col gap-[40px] items-center justify-center">
                 <p className="text-lg text-yellow-50">You need do sign in to view this page</p>
             </div>
         )
@@ -18,7 +18,7 @@ export default async function AddGame(){
 
 
     return (
-        <div className="w-full flex justify-center pt-[50px]">
+        <div className="w-full flex justify-center">
             <AddGameForm />
        </div>
     )

@@ -202,5 +202,21 @@ export interface FullGameReviewInfo{
     total_score:number,
     finished:boolean,
     date:Date,
-    game_name:string
+    game_name:string,
+    game_tags:string[]
+}
+
+
+export interface CollectionSummary{
+    totalGames:number,
+    completionRate:number,
+    tags:string[],
+    totalHours:number,
+    platform:string,
+    averageRating:number,
+    lastCompletion:Date,
+    averageHours:number,
+    commentGame:string,
+    commentText:string,
+    lastCompletionDate:Date,
 }

@@ -61,7 +61,7 @@ export default function ChangePassword(){
 
     if(!useAuthSelector.userId && loaded){
         return(
-            <p className="w-full text-center pt-[30px] text-[25px] textcol-main">You need to be signed in to change password</p>
+            <p className="w-full text-center text-[25px] textcol-main">You need to be signed in to change password</p>
         )
     }
     return(
