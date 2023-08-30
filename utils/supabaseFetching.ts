@@ -1,8 +1,8 @@
-import { AverageScoreItem, FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, GameCreationRequiredInfoDataError, GameReviewData, GameReviewDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
+import { AverageScoreItem, CollectionSummaryInfo, FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, GameCreationRequiredInfoDataError, GameReviewData, GameReviewDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import supabaseServer from "./supabaseServer";
 import { getIGDBFullGameInfo, getIGDBGameDevelopersByNameAndDate } from "./apiFetching";
-import { IGDBDuplicateGamesJoin, toAverageScore, toCoverLargeFormat } from "./formatter";
+import { IGDBDuplicateGamesJoin, getCollectionSummary, toAverageScore, toCoverLargeFormat } from "./formatter";
 import supabaseRootClient from "./supabaseRootClient";
 import { fetchImageToBuffer } from "./imageFormat";
 
@@ -521,30 +521,50 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
         .from('Review')
         .upsert(game);
 
-    if (!data && !error) {
-        updateAverageReviewData(game.game_id);
+    if(error?.message){
+        return{
+            data:null,
+            error: error.message
+        }
     }
+    
+    const promisesResult = await Promise.all([updateAverageReviewData(game.game_id), updateAverageUserCollectionInfo(userId)]);
+    
+    promisesResult.forEach((response:StringDataError) => {
+        if(response.error){
+            return{
+                data:null,
+                error: response.error
+            }
+        }
+    })
 
     return {
-        data: data || "OK",
+        data: "OK",
         error: error?.message || null
     }
 }
 
 
 
-async function updateAverageReviewData(gameId: number) {
+async function updateAverageReviewData(gameId: number):Promise<StringDataError> {
     const { data, error } = await supabaseRoot.from("Review").select("*").eq("game_id", gameId);
     if (data) {
         const averageReview: AverageScoreItem = toAverageScore(data);
         if (averageReview) {
-            supabaseRoot.from("AverageReview")
-                .upsert(averageReview).then(res => { });
+            const averageUpsert = await supabaseRoot.from("AverageReview")
+                .upsert(averageReview)
+            if(averageUpsert.error){
+                return{
+                    data:null,
+                    error: averageUpsert.error.message
+                }
+            }
         }
     }
 
     return {
-        data: data || null,
+        data: "OK" || null,
         error: error?.message || null
     }
 }
@@ -555,5 +575,32 @@ export default async function getSupabaseUserGameReview(userId: string, gameId: 
     return {
         data: result.data || null,
         error: result.error?.message || null 
+    }
+}
+
+async function updateAverageUserCollectionInfo(userId:string): Promise<StringDataError> {
+    const collectionFetch = await supabaseRoot.rpc('get_user_reviews', { p_user_id: userId });
+    if(collectionFetch.error){
+        return {
+            data:null,
+            error: collectionFetch.error.message
+        }
+    }
+
+    if(collectionFetch && collectionFetch.data && collectionFetch.data.length > 0){
+        let collectionSummary:CollectionSummaryInfo = getCollectionSummary(collectionFetch.data);
+        collectionSummary.user_id = userId;
+        const collectionInsertResult = await supabaseRoot.from("AverageUserCollectionInfo").upsert(collectionSummary);
+        if(collectionInsertResult.error?.message){
+            return {
+                data:null,
+                error: collectionInsertResult.error.message
+            }
+        }
+    }
+
+    return{
+        data:"OK",
+        error:null,
     }
 }

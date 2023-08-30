@@ -1,4 +1,4 @@
-import { AverageScoreItem, CollectionSummary, FullGameReviewInfo, GameReviewData, IGDBGameFetch, IGDBTagIdName } from "@/interface";
+import { AverageScoreItem, CollectionSummaryInfo, FullGameReviewInfo, GameReviewData, IGDBGameFetch, IGDBTagIdName } from "@/interface";
 import fetch from "node-fetch"
 
 export function dateToText(date: number): string {
@@ -184,38 +184,41 @@ export function toAverageScore(games: GameReviewData[]): AverageScoreItem {
 }
 
 
-export function getCollectionSummary(games: FullGameReviewInfo[]): CollectionSummary {
-    let summary: CollectionSummary = {
-        lastCompletionDate: new Date(),
-        totalGames: 0,
-        completionRate: 0,
+export function getCollectionSummary(games: FullGameReviewInfo[]): CollectionSummaryInfo {
+    let summary: CollectionSummaryInfo = {
+        last_completion: new Date(),
+        total_games: 0,
+        completion_rate: 0,
         tags: [],
-        totalHours: 0,
+        total_hours: 0,
         platform: "",
-        averageRating: 0,
-        lastCompletion: new Date,
-        averageHours: 0,
-        commentGame: "",
-        commentText: "",
+        average_rating: 0,
+        average_hours: 0,
+        comment_game: "",
+        comment_text: "",
     }
 
     if(games.length === 0){
         return summary;
     }
     
-    summary.totalGames = games.length;
+    summary.total_games = games.length;
     let tagMap = new Map();
     let platformsMap = new Map();
     let completedGames = 0;
     let totalHours = 0;
     let totalRating = 0;
-    let lastCompletionDate = 0;
+    let lastCompletionDate = new Date(games[0].date).valueOf();
+    let lastGame = games[0].game_name;
+    let lastComment = games[0].user_comment;
 
     games.forEach((game: FullGameReviewInfo) => {
         if (game.finished) {
             completedGames += 1;
             if(new Date(game.date).valueOf() > 0){
                 lastCompletionDate = new Date(game.date).valueOf();
+                lastGame = game.game_name;
+                lastComment = game.user_comment;
             }
         }
         totalHours += game.hours_spent;
@@ -228,6 +231,7 @@ export function getCollectionSummary(games: FullGameReviewInfo[]): CollectionSum
                 tagMap.set(tag, tagMap.get(tag) + 1)
             }
         })
+
         if (platformsMap.has(game.platform_name)) {
             platformsMap.set(game.platform_name, platformsMap.get(game.platform_name) + 1);
         } else {
@@ -241,15 +245,14 @@ export function getCollectionSummary(games: FullGameReviewInfo[]): CollectionSum
     summary.tags.push(sortedTagEntries[2][0]);
     const platformEntries = [...platformsMap.entries()];
     const sortedPlatformEntries = platformEntries.sort((a, b) => b[1] - a[1]);
-    summary.lastCompletionDate = new Date(lastCompletionDate);
+    summary.last_completion = new Date(lastCompletionDate);
     summary.platform = sortedPlatformEntries[0][0];
-    summary.averageHours = Math.floor(totalHours / games.length);
-    summary.averageRating = Math.floor(totalRating / games.length);
-    summary.completionRate = Math.floor(completedGames / games.length * 100);
-    summary.totalHours = totalHours;
-    let randomCommentIndex = Math.floor(Math.random() * games.length);
-    summary.commentGame = games[randomCommentIndex].game_name;
-    summary.commentText = games[randomCommentIndex].user_comment;
-
+    summary.average_hours = Math.floor(totalHours / games.length);
+    summary.average_rating = Math.floor(totalRating / games.length);
+    summary.completion_rate = Math.floor(completedGames / games.length * 100);
+    summary.total_hours = totalHours;
+    
+    summary.comment_game = lastGame;
+    summary.comment_text = lastComment;
     return summary;
 }

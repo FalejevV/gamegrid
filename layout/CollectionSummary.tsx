@@ -4,15 +4,15 @@ import SummaryStatComment from "@/components/SummaryStat/SummaryStatComment"
 import SummaryStatLong from "@/components/SummaryStat/SummaryStatLong"
 import SummaryStatSmall from "@/components/SummaryStat/SummaryStatSmall"
 import SummaryStatWide from "@/components/SummaryStat/SummaryStatWide"
-import { CollectionSummary, GameReviewData } from "@/interface"
+import { CollectionSummaryInfo, GameReviewData } from "@/interface"
 
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 export default function CollectionSummary(props: {
-    summary:CollectionSummary | null
+    summary:CollectionSummaryInfo | null
 }) {
-    if (!props.summary || props.summary.totalGames === 0) return (
+    if (!props.summary || props.summary.total_games === 0) return (
         <section className="w-full h-[400px] flex items-center justify-center bg-dimm">
             <p className=" text-[25px] textcol-main font-medium">
                 You have no games added to your collection.
@@ -20,16 +20,16 @@ export default function CollectionSummary(props: {
         </section>
     )
     
-    let totalGames = props.summary.totalGames || 0;
-    let completionRate = props.summary.completionRate || 0;
-    let commentGame = props.summary.commentGame || "";
-    let commentText = props.summary.commentText || "";
-    let totalHours = props.summary.totalHours || 0;
-    let averageHours = props.summary.averageHours || 0;
+    let totalGames = props.summary.total_games || 0;
+    let completionRate = props.summary.completion_rate || 0;
+    let commentGame = props.summary.comment_game || "";
+    let commentText = props.summary.comment_text || "";
+    let totalHours = props.summary.total_hours || 0;
+    let averageHours = props.summary.average_hours || 0;
     let popularPlatform = props.summary.platform || "";
     let popularTags = props.summary.tags || ["", "", ""];
-    let averageScore = props.summary.averageRating || 0;
-    let lastCompletionDate = props.summary.lastCompletionDate || new Date();
+    let averageScore = props.summary.average_rating || 0;
+    let lastCompletionDate = new Date(props.summary.last_completion) || new Date();
 
 
 
@@ -39,7 +39,7 @@ export default function CollectionSummary(props: {
                 <div className="summary-grid-mobile">
                     <SummaryStatSmall title={totalGames} about={"Total Games"} className="bg-mid" />
                     <SummaryStatWide title={completionRate+"%"} about={"Completion Rate"} />
-                    <SummaryStatComment title={commentGame} comment={commentText} about={"Random Comment"} className="bg-mid saturate-[80%]" />
+                    <SummaryStatComment title={commentGame} comment={commentText} about={"Last Game / Comment"} className="bg-mid saturate-[80%]" />
                     <SummaryStatWide title={totalHours} about={"Total Hours"} />
                     <SummaryStatSmall title={averageHours} about={"Average Hours"} className="bg-hi saturate-50" />
                 </div>
@@ -60,7 +60,7 @@ export default function CollectionSummary(props: {
                 <section className="summary-grid">
                     <SummaryStatSmall title={totalGames} about={"Total Games"} className="bg-mid" />
                     <SummaryStatWide title={completionRate+"%"} about={"Completion Rate"} />
-                    <SummaryStatComment title={commentGame} comment={commentText} about={"Your Random Comment"} className="bg-mid saturate-[75%]" />
+                    <SummaryStatComment title={commentGame} comment={commentText} about={"Last Game / Comment"} className="bg-mid saturate-[75%]" />
                     <SummaryStatWide title={averageHours} about={"Average Hours"} />
                     <SummaryStatLong firstLine={popularTags[0]} secondLine={popularTags[1]} thirdLine={popularTags[2]} about={"Favourite Tags"} />
                     <SummaryStatSmall title={totalHours} about={"Total Hours"} className="bg-dimm saturate-[115%]" />

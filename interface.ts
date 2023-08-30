@@ -207,16 +207,16 @@ export interface FullGameReviewInfo{
 }
 
 
-export interface CollectionSummary{
-    totalGames:number,
-    completionRate:number,
+export interface CollectionSummaryInfo{
+    user_id?:string,
+    total_games:number,
+    completion_rate:number,
     tags:string[],
-    totalHours:number,
+    total_hours:number,
     platform:string,
-    averageRating:number,
-    lastCompletion:Date,
-    averageHours:number,
-    commentGame:string,
-    commentText:string,
-    lastCompletionDate:Date,
+    average_rating:number,
+    average_hours:number,
+    comment_game:string,
+    comment_text:string,
+    last_completion:Date,
 }
