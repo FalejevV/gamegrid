@@ -12,7 +12,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June", "Jul
 export default function CollectionSummary(props: {
     summary:CollectionSummary | null
 }) {
-    if (!props.summary) return (
+    if (!props.summary || props.summary.totalGames === 0) return (
         <section className="w-full h-[400px] flex items-center justify-center bg-dimm">
             <p className=" text-[25px] textcol-main font-medium">
                 You have no games added to your collection.

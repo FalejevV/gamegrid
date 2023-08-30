@@ -199,6 +199,10 @@ export function getCollectionSummary(games: FullGameReviewInfo[]): CollectionSum
         commentText: "",
     }
 
+    if(games.length === 0){
+        return summary;
+    }
+    
     summary.totalGames = games.length;
     let tagMap = new Map();
     let platformsMap = new Map();

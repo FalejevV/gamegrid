@@ -68,6 +68,10 @@ body {
   color: rgb(149, 7, 65);
 }
 
+.textcol-bghi {
+  color: rgb(195, 8, 63);
+}
+
 .flexgap {
   display: flex;
   gap: 10px;
@@ -134,10 +138,10 @@ body {
   @apply textcol-main font-semibold;
 }
 
-.summary-grid-mobile{
-  width:fit-content;
+.summary-grid-mobile {
+  width: fit-content;
   display: grid;
-  grid-template-columns: repeat(9, minmax(60px,1fr));
+  grid-template-columns: repeat(9, minmax(60px, 1fr));
   grid-template-rows: repeat(2, 120px);
   gap: 10px 10px;
   @apply textcol-main font-semibold;
