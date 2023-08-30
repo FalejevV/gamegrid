@@ -20,7 +20,8 @@ export default async function Collection() {
 
     return (
         <div className="flex gap-[10px] flex-col w-full max-w-[1000px] mx-auto">
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-betwee gap-[10px]">
+                <div className="flex-auto inputheight text-[16px] textcol-main bg-dimm saturate-50 flex items-center p-[10px] font-medium sm:text-[19px] min-w-[170px] justify-center">Your Summary</div>
                 <AddGameButton />
             </div>
 

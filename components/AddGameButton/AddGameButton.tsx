@@ -15,7 +15,7 @@ export default function AddGameButton() {
     }
 
     return (
-        <Link href="/add-game" className="bg-hi textcol-main py-[5px] text-[23px] font-medium w-full max-w-[250px] flex items-center justify-center"
+        <Link href="/add-game" className="bg-hi textcol-main py-[5px] text-[16px] sm:text-[20px] inputheight font-medium w-full sm:max-w-[300px] max-w-[200px] flex items-center justify-center hover:brightness-110"
             onClick={resetGameCreationPage}>
             Add Game
         </Link>

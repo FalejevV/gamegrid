@@ -137,8 +137,8 @@ body {
 .summary-grid-mobile{
   width:fit-content;
   display: grid;
-  grid-template-columns: repeat(9, minmax(70px,1fr));
-  grid-template-rows: repeat(2, 140px);
+  grid-template-columns: repeat(9, minmax(60px,1fr));
+  grid-template-rows: repeat(2, 120px);
   gap: 10px 10px;
   @apply textcol-main font-semibold;
 
