@@ -1,10 +1,8 @@
-"use client"
-
 import SummaryStatComment from "@/components/SummaryStat/SummaryStatComment"
 import SummaryStatLong from "@/components/SummaryStat/SummaryStatLong"
 import SummaryStatSmall from "@/components/SummaryStat/SummaryStatSmall"
 import SummaryStatWide from "@/components/SummaryStat/SummaryStatWide"
-import { CollectionSummaryInfo, GameReviewData } from "@/interface"
+import { CollectionSummaryInfo } from "@/interface"
 
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

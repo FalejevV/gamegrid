@@ -203,7 +203,8 @@ export interface FullGameReviewInfo{
     finished:boolean,
     date:Date,
     game_name:string,
-    game_tags:string[]
+    game_tags:string[],
+    image?:string
 }
 
 

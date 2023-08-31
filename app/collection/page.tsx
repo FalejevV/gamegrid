@@ -1,4 +1,5 @@
 import AddGameButton from "@/components/AddGameButton/AddGameButton";
+import CollectionGameItem from "@/components/CollectionGameItem/CollectionGameItem";
 import { CollectionSummaryInfo, FullGameReviewInfo } from "@/interface";
 import CollectionSummary from "@/layout/CollectionSummary";
 import supabaseServer from "@/utils/supabaseServer";
@@ -27,10 +28,15 @@ export default async function Collection() {
             </div>
 
             <CollectionSummary summary={userSummary} />
-            <div className="flexgap flex-col textcol-main text-[18px]">
-                {collectionFetch?.data && collectionFetch.data?.length > 0 && collectionFetch.data.map((game: FullGameReviewInfo) => <p key={game.game_id}> Game: {game.game_name} - Platform: {game.platform_name} - Score: {game.total_score} - Date: {new Date(game.date).toDateString()} </p>)}
-            </div>
 
+            {collectionFetch && collectionFetch.data && collectionFetch.data.length > 0 &&
+                <>
+                    <p className="text-[25px] font-semibold textcol-main pt-[30px] pb-[10px]">Game Collection</p>
+                    <div className="flex gap-[50px] flex-col textcol-main text-[18px]">
+                        {collectionFetch?.data && collectionFetch.data?.length > 0 && collectionFetch.data.map((game: FullGameReviewInfo) => <CollectionGameItem game={game} />)}
+                    </div>
+                </>
+            }
 
         </div>
     )

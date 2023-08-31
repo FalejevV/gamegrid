@@ -132,7 +132,7 @@ body {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-  grid-template-rows: repeat(3, 140px);
+  grid-template-rows: repeat(3, 120px);
   gap: 10px 10px;
   max-width: 1000px;
   @apply textcol-main font-semibold;
