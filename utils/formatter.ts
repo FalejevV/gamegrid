@@ -198,10 +198,10 @@ export function getCollectionSummary(games: FullGameReviewInfo[]): CollectionSum
         comment_text: "",
     }
 
-    if(games.length === 0){
+    if (games.length === 0) {
         return summary;
     }
-    
+
     summary.total_games = games.length;
     let tagMap = new Map();
     let platformsMap = new Map();
@@ -213,17 +213,25 @@ export function getCollectionSummary(games: FullGameReviewInfo[]): CollectionSum
     let lastComment = games[0].user_comment;
 
     games.forEach((game: FullGameReviewInfo) => {
+        // get the last finished game date
         if (game.finished) {
             completedGames += 1;
-            if(new Date(game.date).valueOf() > 0){
+            if (new Date(game.date).valueOf() > 0) {
                 lastCompletionDate = new Date(game.date).valueOf();
-                lastGame = game.game_name;
-                lastComment = game.user_comment;
             }
         }
+        console.log(game.game_name, new Date(game.date).valueOf());
+        // get the last game added date
+        if (new Date(game.date).valueOf() > lastCompletionDate) {
+            lastGame = game.game_name;
+            lastComment = game.user_comment;
+        }
+
+
         totalHours += game.hours_spent;
         totalRating += game.total_score;
 
+        //Creating a map of tags, and platforms that describe each game
         game.game_tags.forEach((tag: string) => {
             if (!tagMap.has(tag)) {
                 tagMap.set(tag, 1);
@@ -231,13 +239,13 @@ export function getCollectionSummary(games: FullGameReviewInfo[]): CollectionSum
                 tagMap.set(tag, tagMap.get(tag) + 1)
             }
         })
-
         if (platformsMap.has(game.platform_name)) {
             platformsMap.set(game.platform_name, platformsMap.get(game.platform_name) + 1);
         } else {
             platformsMap.set(game.platform_name, 1);
         }
     })
+    // Picking most popular tags and platform from all games.
     const tagEntries = [...tagMap.entries()];
     const sortedTagEntries = tagEntries.sort((a, b) => b[1] - a[1]);
     summary.tags.push(sortedTagEntries[0][0]);
@@ -245,13 +253,15 @@ export function getCollectionSummary(games: FullGameReviewInfo[]): CollectionSum
     summary.tags.push(sortedTagEntries[2][0]);
     const platformEntries = [...platformsMap.entries()];
     const sortedPlatformEntries = platformEntries.sort((a, b) => b[1] - a[1]);
-    summary.last_completion = new Date(lastCompletionDate);
     summary.platform = sortedPlatformEntries[0][0];
+
+
+    summary.last_completion = new Date(lastCompletionDate);
     summary.average_hours = Math.floor(totalHours / games.length);
     summary.average_rating = Math.floor(totalRating / games.length);
     summary.completion_rate = Math.floor(completedGames / games.length * 100);
     summary.total_hours = totalHours;
-    
+
     summary.comment_game = lastGame;
     summary.comment_text = lastComment;
     return summary;

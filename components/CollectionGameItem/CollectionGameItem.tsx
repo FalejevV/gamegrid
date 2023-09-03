@@ -7,7 +7,7 @@ function GameItemDataBlock(props: {
     color?: string,
 }) {
     return (
-        <div className={`flex flex-col flex-auto h-[63px] ustify-between sm:h-[73px] sm:p-[10px] p-[8px]
+        <div className={`flex flex-col flex-auto h-[63px] ustify-between sm:h-[73px] sm:p-[10px] sm:pb-[3px] p-[8px]
             ${props.color ? props.color : "bg-dimm"}
         `}>
             <p className="textcol-main sm:text-[24px] text-[20px] w-full text-right font-semibold">{props.value}</p>
@@ -41,10 +41,13 @@ function PCTabletLayout(props: {
                     </div>
                 </div>
 
-                <p className="w-full max-w-[370px] h-full bg-mid p-[10px] text-[16px] font-medium overflow-x-hidden overflow-y-auto hidden summary-lg:flex">
-                    {props.game.user_comment}
-                </p>
+
+                <div className="w-full max-w-[370px] h-full bg-mid p-[10px] pb-[3px] text-[16px] font-medium overflow-x-hidden overflow-y-auto hidden summary-lg:flex flex-col justify-between">
+                    <p className="w-full max-h-[155px] overflow-y-auto">{props.game.user_comment}</p>
+                    <p className="textcol-dimm">Comment</p>
+                </div>
             </div>
+
         </div>
 
     )
@@ -64,7 +67,7 @@ function MobileLayout(props: {
 
                     <div className="flex flex-col h-full gap-[10px] relative">
                         <Image src={props.game.image || ""} alt={`${props.game.game_name} image`} className="w-full h-[156px] bg-dimm object-cover" width={500} height={156} />
-                         <p className="bg-dimm px-[10px] textcol-dimm flex items-center text-[16px] overflow-hidden min-w-fit absolute right-0 top-[132px]">{new Date(props.game.date).toDateString()}</p>
+                        <p className="bg-dimm px-[10px] textcol-dimm flex items-center text-[16px] overflow-hidden min-w-fit absolute right-0 top-[132px]">{new Date(props.game.date).toDateString()}</p>
 
                         <div className="flex flex-col gap-[10px] flex-auto">
                             <div className="flex gap-[10px]">
@@ -76,9 +79,6 @@ function MobileLayout(props: {
                     </div>
                 </div>
 
-                <p className="w-full max-w-[370px] h-full bg-mid p-[10px] text-[16px] font-medium overflow-x-hidden overflow-y-auto hidden summary-lg:flex">
-                    {props.game.user_comment}
-                </p>
             </div>
         </div>
 

@@ -37,7 +37,7 @@ export default function CollectionSummary(props: {
                 <div className="summary-grid-mobile">
                     <SummaryStatSmall title={totalGames} about={"Total Games"} className="bg-mid" />
                     <SummaryStatWide title={completionRate+"%"} about={"Completion Rate"} />
-                    <SummaryStatComment title={commentGame} comment={commentText} about={"Last Game / Comment"} className="bg-mid saturate-[80%]" />
+                    <SummaryStatComment title={commentGame} comment={commentText} about={"Recent Game / Comment"} className="bg-mid saturate-[80%]" />
                     <SummaryStatWide title={totalHours} about={"Total Hours"} />
                     <SummaryStatSmall title={averageHours} about={"Average Hours"} className="bg-hi saturate-50" />
                 </div>
@@ -58,7 +58,7 @@ export default function CollectionSummary(props: {
                 <section className="summary-grid">
                     <SummaryStatSmall title={totalGames} about={"Total Games"} className="bg-mid" />
                     <SummaryStatWide title={completionRate+"%"} about={"Completion Rate"} />
-                    <SummaryStatComment title={commentGame} comment={commentText} about={"Last Game / Comment"} className="bg-mid saturate-[75%]" />
+                    <SummaryStatComment title={commentGame} comment={commentText} about={"Recent Game / Comment"} className="bg-mid saturate-[75%]" />
                     <SummaryStatWide title={averageHours} about={"Average Hours"} />
                     <SummaryStatLong firstLine={popularTags[0]} secondLine={popularTags[1]} thirdLine={popularTags[2]} about={"Favourite Tags"} />
                     <SummaryStatSmall title={totalHours} about={"Total Hours"} className="bg-dimm saturate-[115%]" />
