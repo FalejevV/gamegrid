@@ -17,9 +17,9 @@ export default function MenuBurger(){
     }
 
     return(
-        <div className="min-w-[35px] min-h-[35px] max-w-[35px] max-h-[35x] mr-[30px] ml-[5px] flex flex-col justify-center gap-[10px] cursor-pointer" onClick={toggleMenu}>
+        <div className="min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px] flex flex-col justify-center gap-[8px] cursor-pointer" onClick={toggleMenu}>
             <span className={`w-full h-[3px] bg-hi transition-all duration-300
-                ${windowSelector.displayDropdownMenu && "translate-y-[13px] rotate-[135deg]"}
+                ${windowSelector.displayDropdownMenu && "translate-y-[10px] rotate-[135deg]"}
             `}/>
 
             <span className={`w-full h-[3px] bg-hi transition-all duration-300
@@ -27,7 +27,7 @@ export default function MenuBurger(){
             `}/>
 
             <span className={`w-full h-[3px] bg-hi transition-all duration-300
-                ${windowSelector.displayDropdownMenu && "-translate-y-[13px] -rotate-[135deg]"}
+                ${windowSelector.displayDropdownMenu && "-translate-y-[12px] -rotate-[135deg]"}
             `}/>
         </div>
     )

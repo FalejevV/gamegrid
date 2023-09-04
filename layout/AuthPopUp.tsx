@@ -148,7 +148,7 @@ export default function AuthPopUp() {
 
     function ForgotPasswordButton() {
         return (
-            <button onClick={() => setFormType("Recover")}
+            <button type="button" onClick={() => setFormType("Recover")}
                 className="textcol-main bg-transparent text-[14px] font-semibold underline underline-offset-2 w-full text-right">
                 Forgot password?
             </button>

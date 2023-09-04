@@ -25,7 +25,7 @@ export default function MainLayout(props:{
               <ServerWrap>
                 <Header />
                 <Sidebar />
-                <div className="w-full h-[70px]" />
+                <div className="w-full sm:h-[70px] h-[60px]" />
                 <main className="min-h-screen max-h-screen h-fit max-w-screen pl-[10px] md:pt-[30px] pt-[10px] pb-[100px] pr-[10px] md:pl-[100px] overflow-x-hidden">
                   {props.elem}
                 </main>

@@ -15,7 +15,8 @@ export default function AuthListener(){
             dispatch(setUser({
                 userId: null,
                 username: null,
-                role: null
+                role: null,
+                avatar:null
             }));
         }else{
             if(session.user.id && userSelector.userId !== session.user.id){
@@ -23,7 +24,8 @@ export default function AuthListener(){
                     dispatch(setUser({
                         userId: res.data?.id,
                         username: res.data?.username,
-                        role: res.data?.role
+                        role: res.data?.role,
+                        avatar: res.data?.avatar
                     }))
                 });
             }

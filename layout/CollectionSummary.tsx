@@ -55,7 +55,7 @@ export default function CollectionSummary(props: {
     function MainLayout() {
         return (
             <div className="hidden summary-lg:block">
-                <section className="summary-grid">
+                <div className="summary-grid">
                     <SummaryStatSmall title={totalGames} about={"Total Games"} className="bg-mid" />
                     <SummaryStatWide title={completionRate+"%"} about={"Completion Rate"} />
                     <SummaryStatComment title={commentGame} comment={commentText} about={"Recent Game / Comment"} className="bg-mid saturate-[75%]" />
@@ -65,7 +65,7 @@ export default function CollectionSummary(props: {
                     <SummaryStatLong firstLine={lastCompletionDate.getDate()} secondLine={monthNames[lastCompletionDate.getMonth()]} thirdLine={lastCompletionDate.getFullYear()} about={"Last Completion"} firstLineSize="text-[30px]" thirdLineSize="text-[30px]" className="bg-dimm saturate-[120%]" />
                     <SummaryStatWide title={popularPlatform} about={"Popular Platform"} titleSize="text-[24px]" className="bg-hi saturate-[65%]" />
                     <SummaryStatWide title={averageScore+" / 100"} about={"Average Rating"} />
-                </section>
+                </div>
             </div>
         )
     }
