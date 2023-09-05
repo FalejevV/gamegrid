@@ -4,8 +4,10 @@ export interface Game {
     id: string
     name: string,
     developer: {
-        developer: string
-    }
+        Developer:{
+            developer: string
+        }
+    }[],
     release_date: Date,
     tags: TagItem[]
     description: string,

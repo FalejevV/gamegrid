@@ -9,7 +9,10 @@ export default function GamePreviewTags(props:{
 }){
     return(
         <div className="flexgap justify-end flex-auto">
-            {props.tags.map((tag:TagItem) => <Tag key={nanoid()} tag={tag?.Tag?.tag || "None"} />)}         
+            {props.tags.map((tag:TagItem, index:number) => {
+                if(index > 2) return
+                return <Tag key={nanoid()} tag={tag?.Tag?.tag || "None"} />
+            })}         
         </div>
     )
 }

@@ -97,8 +97,8 @@ async function filterByPlayers(supabase: SupabaseClient, players: string, gameid
     return { data: resultArray, error };
 }
 
-async function filterByDevelopers(supabase: SupabaseClient, developer: string, gameids: number[]): Promise<FilteredIDPromise> {
-    const { data, error } = await supabase.rpc('get_games_by_developer', { developer_name: developer, game_ids: gameids })
+async function filterByDevelopers(supabase: SupabaseClient, developer: string, gameIds: number[]): Promise<FilteredIDPromise> {
+    const { data, error } = await supabase.rpc('search_games_by_developer', { developer_name: developer, game_ids: null });
     let resultArray: number[] = [];
     if (data) {
         data.forEach((filteredItem: { game_id: number }) => resultArray.push(filteredItem.game_id));
@@ -188,7 +188,9 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
 
     let query = supabase.from('Game').select(`
                 *,
-                developer:Developer(developer),
+                developer:GameDeveloper(
+                    Developer(developer)
+                ),
                 state:ActionState(state),
                 tags:GameTag(
                     Tag(tag)
@@ -206,7 +208,6 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
     query.eq("state_id", 5);
 
     let { data, error } = await query;
-
 
     if (isTotal) {
         let result: Game[] = [];

@@ -99,7 +99,7 @@ export default function GameCreationResultPage() {
 
             <div className="flexgap items-center justify-between">
                 <Button title={"Go Back"} onClick={previousPage} />
-                <WideActionButton disabled={isFetching} onClick={saveReview} text={"Save My Review"} />
+                <WideActionButton disabled={isFetching} onClick={saveReview} text={"Save My Review"} disableText="Saving..." />
             </div>
         </div>
     )
