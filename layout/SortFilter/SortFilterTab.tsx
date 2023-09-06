@@ -75,7 +75,7 @@ export default function SortFilterTab(){
             <div className="tab-tags relative">
                 <SortFilterButton doCount title={"Tags"} dropdownName={"tags"} />
                 {sortFilterSelector.dropdowns.tags.isDropdown && 
-                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[500px] bg-mid z-[500]">
+                <div className="absolute left-[-10px] top-[50px] w-screen max-w-[330px] h-[500px] bg-mid z-[500]">
                     <TagsFilterDropdown itemList={tagOptions} />
                 </div>}
             </div>
@@ -111,7 +111,7 @@ export default function SortFilterTab(){
             <div className="tab-developer relative">
                 <SortFilterButton mimicTitle title={"Company"} dropdownName={"developer"} />
                 {sortFilterSelector.dropdowns.developer.isDropdown && 
-                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[300px] bg-mid z-[500]">
+                <div className="absolute right-[-10px] top-[50px] w-screen max-w-[330px] h-[300px] bg-mid z-[500]">
                     <DeveloperFilterDropdown itemList={developerOptions} />
                 </div>}
             </div>
@@ -123,7 +123,7 @@ export default function SortFilterTab(){
             <div className="tab-order relative">
                 <SortFilterButton mimicTitle title={"Order by"} dropdownName={"order"} />
                 {sortFilterSelector.dropdowns.order.isDropdown && 
-                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[500px] bg-mid z-[500] overflow-y-scroll">
+                <div className="absolute right-[-10px] top-[50px] w-screen max-w-[330px] h-[500px] bg-mid z-[500] overflow-hidden">
                     <OrderByDropdown  itemList={aspectOptions} />
                 </div>}
             </div>
