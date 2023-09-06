@@ -14,7 +14,7 @@ export default function DeveloperFilterDropdown(props:{
     return(
         <div className="w-full h-full flex flex-col gap-[10px] textcol-main pten">
             <OutClickListener target={"developer"} />
-            <p className="text-[15px]">Games by developer</p>
+            <p className="text-[15px]">Games by company</p>
             <SearchBar searchValue={search} setSearchValue={setSearch} />
             <div className="flex-auto overflow-y-scroll">
                 <SortFilterList singlePick searchCriteria={search} itemList={props.itemList} dropdownType={"developer"} />

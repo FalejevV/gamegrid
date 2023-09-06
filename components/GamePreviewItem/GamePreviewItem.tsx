@@ -10,16 +10,23 @@ import GamePreviewTags from "@/layout/GamePreviewTags";
 import { AverageScoreItem, Game, ScoreItem, ScoreNameList } from "@/interface";
 import { useEffect, useState } from "react";
 import scoreName from "@/utils/scoreName";
+import AdditionalInfoHover from "../AdditionalInfoHover/AdditionalInfoHover";
+import Tag from "../Tag/Tag";
 
-
+function getDeveloperStringArray(game:Game):string[]{
+    return game.developer.map((developer:{Developer: {developer:string}}) => developer.Developer.developer).slice(1);
+}
 
 function PCItemLayout(gameData:Game, leastLoved:ScoreItem, mostLoved:ScoreItem, total:ScoreItem){
     return(
-        <div className="w-full max-w-[950px] h-[300px] min-h-[300px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
+        <div className="w-full max-w-[1000px] h-[300px] min-h-[300px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
         <header className="flexgap w-full h-[34px] items-center">
             <GamePreviewTitle title={gameData.name} />
             <div className="flex gap-[30px] h-full flex-auto bg-red-400 items-center px-3 bg-dimm">
-                <p className="textcol-main font-medium text-[15px] whitespace-nowrap">{gameData.developer[0].Developer.developer}</p>
+                <div className="flex gap-[10px] items-center">
+                    <Tag single tag={gameData.developer[0].Developer.developer} bright type="developer" />
+                    <AdditionalInfoHover single items={getDeveloperStringArray(gameData)} type={"developer"} />
+                </div>
                 <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap"> {gameData.release_date.toString()} </p>
                 <GamePreviewTags tags={gameData.tags} />
             </div>
@@ -51,7 +58,10 @@ function TabletItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreIte
         <header className="flexgap flex-col w-full h-[78px] items-center">
             <GamePreviewTitle title={gameData.name} stretch center/>
             <div className="flex gap-[30px] w-full h-full flex-auto bg-red-400 items-center px-3 bg-dimm">
-                <p className="textcol-main font-medium text-[15px] whitespace-nowrap">{gameData.developer[0].Developer.developer}</p>
+                <div className="flex gap-[10px] items-center">
+                    <Tag single tag={gameData.developer[0].Developer.developer} bright type="developer" />
+                    <AdditionalInfoHover single items={getDeveloperStringArray(gameData)} type={"developer"} />
+                </div>
                 <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap">{gameData.release_date.toString()}</p>
                 <GamePreviewTags tags={gameData.tags} />
             </div>
@@ -93,7 +103,10 @@ function MobileItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreIte
             </div>
 
             <div className="flex gap-[30px] w-[calc(100%-10px)] h-[34px] flex-auto items-center justify-between px-3 bg-dimm absolute z-30 top-[153px] left-[5px]">
-                <p className="textcol-main font-medium text-[15px] whitespace-nowrap">{gameData.developer[0].Developer.developer}</p>
+                <div className="flex gap-[10px] items-center">
+                    <Tag single tag={gameData.developer[0].Developer.developer} bright type="developer" />
+                    <AdditionalInfoHover single direction="left-[-30px]" items={getDeveloperStringArray(gameData)} type={"developer"} />
+                </div>
                 <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap"> {gameData.release_date.toString()}</p>
             </div>
 

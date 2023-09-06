@@ -1,20 +1,26 @@
-import { toggleOption } from "@/store/features/sortFilter";
+import { SortFilterDropdowns, clearOptions, toggleOption } from "@/store/features/sortFilter";
 import { useAppDispatch } from "@/store/store"
 
 
 
 export default function Tag(props:{
     tag:string
+    type?:keyof SortFilterDropdowns,
+    bright?:boolean,
+    single?:boolean
 }){
     const dispatch = useAppDispatch();
     function tagClick(){
+        if(props.single && props.type){
+            dispatch(clearOptions(props.type))
+        }
         dispatch(toggleOption({
-            key: "tags",
+            key: props.type || "tags",
             value: props.tag
         }))
     }
     return(
-        <button className="textcol-dimm whitespace-nowrap" onClick={tagClick}>
+        <button className={`whitespace-nowrap hover:brightness-150 transition-all duration-200 ${props.bright ? "textcol-main" : "textcol-dimm"}`} onClick={tagClick}>
             {props.tag}
         </button>
     )
