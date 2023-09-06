@@ -67,7 +67,7 @@ function MobileLayout(props: {
 
                     <div className="flex flex-col h-full gap-[10px] relative">
                         <Image src={props.game.image || ""} alt={`${props.game.game_name} image`} className="w-full h-[156px] bg-dimm object-cover" width={500} height={156} />
-                        {props.game.finished && <p className="absolute left-0 top-[132px]">Completed</p>}
+                        {props.game.finished && <p className="absolute left-0 top-[131px] bg-hi px-[10px] py-[2px] text-[14px] font-semibold">Completed</p>}
                         <p className="bg-dimm px-[10px] textcol-dimm flex items-center text-[16px] overflow-hidden min-w-fit absolute right-0 top-[132px]">{new Date(props.game.date).toDateString()}</p>
 
                         <div className="flex flex-col gap-[10px] flex-auto">

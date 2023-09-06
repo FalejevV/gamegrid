@@ -177,7 +177,7 @@ export default function GamePreviewItem(props:{
     // check if width is set and values are calculated
     if(windowSelector.width !== -1 && leastLoved && mostLoved && total) return(
         <>
-            {windowSelector.width > 880 ? PCItemLayout(props.gameData,leastLoved,mostLoved,total) : 
+            {windowSelector.width > 1000 ? PCItemLayout(props.gameData,leastLoved,mostLoved,total) : 
             windowSelector.width < 600 ? MobileItemLayout(props.gameData,leastLoved,mostLoved,total) : TabletItemLayout(props.gameData,leastLoved,mostLoved,total)}
         </>
     )

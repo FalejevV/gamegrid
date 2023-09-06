@@ -12,7 +12,7 @@ export default function Loading(){
 
     return(
         <div className="w-full flex flex-col gap-[60px] items-center brightness-[70%] overflow-hidden animate-pulse">
-            <div className={`w-full max-w-[950px] h-[80px] bg-loading p-[10px]  relative`} />
+            <div className={`w-full max-w-[1000px] h-[80px] bg-loading p-[10px]  relative`} />
             {SkeletonGames()}
         </div>
     )

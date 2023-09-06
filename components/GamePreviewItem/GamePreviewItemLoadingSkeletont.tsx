@@ -9,7 +9,7 @@ export default function GamePreviewItemLS(){
 
     function PCItemLayout(){
         return(
-            <div className="w-full max-w-[950px] h-[300px] flexgap flex-col overflow-hidden brightness-[40%]">
+            <div className="w-full max-w-[1000px] h-[300px] flexgap flex-col overflow-hidden brightness-[40%]">
             <header className="flexgap w-full h-[34px] items-center">
                 <div className="flex gap-[30px] h-full flex-auto bg-gray-400 items-center px-3 "/>
                 <div className="flex gap-[30px] h-full flex-auto bg-gray-400 items-center px-3 "/>
