@@ -41,7 +41,7 @@ export default function SidebarMenu(){
     function SidebarMenuPC(){
         return(
             <nav className={`flex flex-col gap-[25px] w-full h-full justify-center items-center pb-[45px] relative transition-all duration-300
-            ${!windowSelector.sidebarHovered && "left-[28px]"}
+            ${!windowSelector.sidebarHovered && "left-[28px] pointer-events-none"}
             ${windowSelector.sidebarHovered && "left-[20px]"}
             `}>
                 <MenuItem href={"/"} icon={"Home"} title={"Home"} />

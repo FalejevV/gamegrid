@@ -1,6 +1,7 @@
 import GamePreviewItem from "@/components/GamePreviewItem/GamePreviewItem";
 import LoadMoreGamesButton from "@/components/LoadMoreGamesButton";
 import { FilterQueryParams, Game } from "@/interface";
+import SortFilterTabMobile from "@/layout/SortFilter/SortFilterMobile/SortFilterTabMobile";
 import SortFilterTab from "@/layout/SortFilter/SortFilterTab";
 import { fetchFilteredGames } from "@/utils/supabaseFetching";
 import { PostgrestError } from "@supabase/supabase-js";

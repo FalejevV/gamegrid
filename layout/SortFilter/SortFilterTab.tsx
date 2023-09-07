@@ -16,6 +16,7 @@ import { generateSortFilterParams } from "@/utils/queryParams";
 import Link from "next/link";
 import SortFilterQueryReader from "@/components/SortFilterQueryReader/SortFilterQueryReader";
 import { nanoid } from "nanoid";
+import SortFilterTabMobile from "./SortFilterMobile/SortFilterTabMobile";
 
 
 export default function SortFilterTab(){
@@ -160,7 +161,8 @@ export default function SortFilterTab(){
     return(
         <>
             <SortFilterQueryReader />
-            <div className={`w-full max-w-[1000px] h-fit bg-dimm p-[10px]`}>
+            <SortFilterTabMobile />
+            <div className={`w-full max-w-[1000px] hidden k:block h-fit bg-dimm p-[10px]`}>
                 {MainRowPC()}
                 {AdvancedSearchWindowPC(sortFilterSelector.expand)}
             </div>
