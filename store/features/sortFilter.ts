@@ -77,6 +77,7 @@ const sortFilterSlice = createSlice({
         }),
         clearOptions: ((state:SortFilter, action:PayloadAction<keyof SortFilterDropdowns>) => {
             state.dropdowns[action.payload].selectedItems = [...state.dropdowns[action.payload].defaultValue];
+            return state;
         }),
         clearAllOptions: ((state:SortFilter) => {
             // @ts-ignore 
