@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { SortFilterDropdowns } from "./sortFilter";
 
 interface Window{
     width:number,
@@ -6,6 +7,8 @@ interface Window{
     displayDropdownMenu:boolean,
     sidebarHovered:boolean,
     profileMenuDropdown:boolean,
+    mobileFilterDropdown:boolean,
+    mobileFilterSelected:keyof SortFilterDropdowns | "",
 }
 
 const initialState:Window = {
@@ -13,8 +16,9 @@ const initialState:Window = {
     displayAuthWindow:false,
     displayDropdownMenu:false,
     sidebarHovered:false,
-    profileMenuDropdown:false
-
+    profileMenuDropdown:false,
+    mobileFilterDropdown:false,
+    mobileFilterSelected:""
 }
 
 const windowSlice = createSlice({
@@ -35,10 +39,16 @@ const windowSlice = createSlice({
         }),
         toggleProfileMenuDropdown : ((state:Window, action:PayloadAction<boolean>) => {
             state.profileMenuDropdown = action.payload;
+        }),
+        toggleMobileFilterDropdown : ((state:Window, action:PayloadAction<boolean>) => {
+            state.mobileFilterDropdown = action.payload;
+        }),
+        setMobileFilterSelected: ((state:Window, action:PayloadAction<keyof SortFilterDropdowns | "">) => {
+            state.mobileFilterSelected = action.payload;
         })
     }
 })
 
 export default windowSlice.reducer;
 
-export const { setWidth, toggleAuthWindow, toggleDropdownMenu, toggleSidebarHover, toggleProfileMenuDropdown } = windowSlice.actions
+export const { setWidth, toggleAuthWindow, toggleDropdownMenu, toggleSidebarHover, toggleProfileMenuDropdown, toggleMobileFilterDropdown, setMobileFilterSelected } = windowSlice.actions

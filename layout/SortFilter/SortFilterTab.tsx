@@ -15,7 +15,6 @@ import OrderByDropdown from "./OrderByDropdown";
 import { generateSortFilterParams } from "@/utils/queryParams";
 import Link from "next/link";
 import SortFilterQueryReader from "@/components/SortFilterQueryReader/SortFilterQueryReader";
-import { nanoid } from "nanoid";
 import SortFilterTabMobile from "./SortFilterMobile/SortFilterTabMobile";
 
 
@@ -161,7 +160,7 @@ export default function SortFilterTab(){
     return(
         <>
             <SortFilterQueryReader />
-            <SortFilterTabMobile />
+            <SortFilterTabMobile tagOptions={tagOptions} developerOptions={developerOptions} playerOptions={playerOptions} platformOptions={platformOptions} aspectOptions={aspectOptions}  />
             <div className={`w-full max-w-[1000px] hidden k:block h-fit bg-dimm p-[10px]`}>
                 {MainRowPC()}
                 {AdvancedSearchWindowPC(sortFilterSelector.expand)}
