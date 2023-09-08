@@ -14,6 +14,7 @@ function generateOrderByType(order: string): [orderBy: string, ascending: { asce
     let ascending = false
     let isAspect = false;
     let isTotal = false;
+    if(order === "Originality") order = "original"
     switch (order) {
         case "": {
             let orderBy = "id";
@@ -98,7 +99,7 @@ async function filterByPlayers(supabase: SupabaseClient, players: string, gameid
 }
 
 async function filterByDevelopers(supabase: SupabaseClient, developer: string, gameIds: number[]): Promise<FilteredIDPromise> {
-    const { data, error } = await supabase.rpc('search_games_by_developer', { developer_name: developer, game_ids: null });
+    const { data, error } = await supabase.rpc('search_games_by_developer', { developer_name: developer, game_ids: null })
     let resultArray: number[] = [];
     if (data) {
         data.forEach((filteredItem: { game_id: number }) => resultArray.push(filteredItem.game_id));
@@ -110,7 +111,7 @@ async function sortByAspect(supabase: SupabaseClient, aspect: string, gameids: n
     if (gameids && gameids.length === 0) {
         gameids = null
     }
-    const { data, error } = await supabase.rpc('get_review_game_ids_by_aspect_and_game_ids', { aspect, gameids, sort }).limit(amountDefault)
+    const { data, error } = (await supabase.rpc('get_review_game_ids_by_aspect_and_game_ids', { aspect, gameids, sort }).limit(amountDefault))
     return { data, error };
 }
 
@@ -123,7 +124,6 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
     const supabase = supabaseServer();
     let gameIds: number[] = [];
     let anyError: PostgrestError | null = null;
-    let sortedByAspect: boolean = false;
     let nothingFoundOnPrevQuery = false;
     amountDefault = filters.amount || 3;
 
@@ -144,7 +144,7 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
         const platformResponse = await filterByPlatforms(supabase, filters.platforms, gameIds);
         gameIds = platformResponse.data || [];
         if (gameIds.length === 0) nothingFoundOnPrevQuery = true;
-
+        
         if (nothingFoundOnPrevQuery) {
             return { data: [], error: null };
         }
@@ -197,19 +197,14 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
                 ),
                 score:AverageReview(*)
     `);
-
     if (gameIds.length > 0) query.in("id", gameIds);
     if (!isAspect) {
-        query.order(orderBy, ascending);
-        query.range(offset, offset + amountDefault - 1);
-    } else {
         query.order('id', ascending)
     }
     query.eq("state_id", 5);
 
     let { data, error } = await query;
-
-    if (isTotal) {
+    if (isTotal || isAspect) {
         let result: Game[] = [];
         result = gameIds.map((id) => {
             if (data) {

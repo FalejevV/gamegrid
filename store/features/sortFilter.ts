@@ -50,7 +50,7 @@ const initialState:SortFilter = {
             defaultValue: [],
         },
     },
-    amount:3
+    amount:100
 }
 
 const sortFilterSlice = createSlice({

@@ -34,7 +34,6 @@ export default function SortFilterMobileDropdown(props: {
     }
 
     function DisplaySelectedFilter() {
-        console.log(mobileFilterSelectedSelector);
         if (mobileFilterSelectedSelector === "tags") return <TagsFilterDropdown itemList={props.tagOptions} />
         if (mobileFilterSelectedSelector === "platforms") return <PlatformFilterDropdown itemList={props.platformOptions} />
         if (mobileFilterSelectedSelector === "players") return <PlayersFilterDropdown itemList={props.playerOptions} />
@@ -49,7 +48,6 @@ export default function SortFilterMobileDropdown(props: {
             || sortFilterSelector.dropdowns.order.selectedItems.length > 0
     }
 
-    console.log(mobileFilterSelectedSelector);
     return (
         <span className={`w-screen h-screen fixed left-0 top-0 bg-[#0000008a] z-[1000] transition-all duration-200
             ${mobileDropdownSelector ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
