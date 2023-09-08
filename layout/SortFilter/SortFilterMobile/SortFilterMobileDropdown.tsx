@@ -4,6 +4,7 @@ import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
 import TagsFilterDropdown from "../TagsFilterDropdown";
 import PlatformFilterDropdown from "../PlatformFilterDropdown";
 import OrderByDropdown from "../OrderByDropdown";
+import DeveloperFilterDropdown from "../DeveloperFilterDropdown";
 
 
 
@@ -32,7 +33,7 @@ export default function SortFilterMobileDropdown(props: {
         if (mobileFilterSelectedSelector === "platforms") return <PlatformFilterDropdown itemList={props.platformOptions} />
         if (mobileFilterSelectedSelector === "players") return <PlatformFilterDropdown itemList={props.playerOptions} />
         if (mobileFilterSelectedSelector === "order") return <OrderByDropdown itemList={props.aspectOptions} />
-
+        if (mobileFilterSelectedSelector === "developer") return <DeveloperFilterDropdown itemList={props.developerOptions} />
         return;
     }
 
@@ -46,11 +47,13 @@ export default function SortFilterMobileDropdown(props: {
                 ${mobileDropdownSelector ? "bottom-0 " : "bottom-[-100vh]"}
             `}>
 
-                <div className={`flex flex-col w-screen min-w-[100vw] overflow-hidden transition-all duration-200 whitespace-nowrap
-                    ${mobileFilterSelectedSelector !== "" && "w-[0px] min-w-0"}
+                <div className={`flex flex-col overflow-hidden transition-all duration-200 whitespace-nowrap
+                    ${mobileFilterSelectedSelector !== "" ? "w-[0px] min-w-0" : "w-screen min-w-[100vw]"}
                     `}>
 
-                    <div className="w-full inputheight bg-mid"></div>
+                    <div className="w-full inputheight bg-mid flex items-center p-[10px]">
+                        <button className="textcol-main" onClick={() => dispatch(toggleMobileFilterDropdown(false))}>{"Close"}</button>
+                    </div>
                     <section className="w-full flex flex-col gap-[20px] p-[10px]">
                         <MobileFilterButton title={"By Tags"} type={"tags"} />
                         <MobileFilterButton title={"By Platform"} type={"platforms"} />
@@ -60,11 +63,13 @@ export default function SortFilterMobileDropdown(props: {
                     </section>
                 </div>
 
-                <div className="w-screen h-full min-w-[100vw]">
+                <div className="w-screen min-w-[100vw]">
                     <div className="w-full inputheight bg-mid flex items-center p-[10px]">
                         <button className="textcol-main" onClick={() => dispatch(setMobileFilterSelected(""))}>{"Back"}</button>
                     </div>
-                    <DisplaySelectedFilter />
+                    <div className="w-full h-[calc(100%-45px)] overflow-y-auto brightness-90">
+                        <DisplaySelectedFilter />
+                    </div>
                 </div>
             </div>
         </span>
