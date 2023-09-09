@@ -49,11 +49,11 @@ export default function SortFilterMobileDropdown(props: {
     }
 
     return (
-        <span className={`w-screen h-screen fixed left-0 top-0 bg-[#0000008a] z-[1000] transition-all duration-200
+        <span className={`w-screen h-screen fixed left-0 top-0 bg-[#0000008a] z-[300] transition-all duration-200
             ${mobileDropdownSelector ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
         `} onClick={clickLocationCheck}>
 
-            <div className={`w-full h-[calc(100vh-130px)] bg-dimm fixed left-0 bottom-0 z-[1001] flex overflow-y-auto overflow-x-hidden transition-all duration-200
+            <div className={`w-full h-[calc(100vh-130px)] bg-dimm fixed left-0 bottom-0 z-[301] flex overflow-y-auto overflow-x-hidden transition-all duration-200
                 ${mobileDropdownSelector ? "bottom-0 " : "bottom-[-100vh]"}
             `}>
 
@@ -86,7 +86,7 @@ export default function SortFilterMobileDropdown(props: {
                     </div>
                 </div>
             </div>
-            <Link className="absolute mx-auto w-full max-w-[250px] bg-mid textcol-main inputheight text-[18px] font-semibold bottom-[10px] left-[50%] translate-x-[-50%] z-[1002] flex items-center justify-center"
+            <Link className="absolute mx-auto w-full max-w-[250px] bg-mid textcol-main inputheight text-[18px] font-semibold bottom-[10px] left-[50%] translate-x-[-50%] z-[305] flex items-center justify-center"
                 href={generateSortFilterParams(sortFilterSelector, "games")} onClick={() => {dispatch(toggleMobileFilterDropdown(false)); dispatch(setMobileFilterSelected(""))}}>
                 Search!
             </Link>
