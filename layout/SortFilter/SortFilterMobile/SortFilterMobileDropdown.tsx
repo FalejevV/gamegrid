@@ -79,14 +79,14 @@ export default function SortFilterMobileDropdown(props: {
                 <div className="w-screen min-w-[100vw]">
                     <div className="w-full inputheight bg-mid flex items-center p-[10px] justify-between">
                         <button className="textcol-main py-[5px] pr-[20px]" onClick={() => dispatch(setMobileFilterSelected(""))}>Back</button>
-                        <button className="textcol-main py-[5px] pl-[20px]" onClick={() => dispatch(clearOptions(mobileFilterSelectedSelector || "tags"))}>Clear {mobileFilterSelectedSelector}</button>
+                        {sortFilterSelector.dropdowns[mobileFilterSelectedSelector || "tags"].selectedItems.length > 0 && <button className="textcol-main py-[5px] pl-[20px]" onClick={() => dispatch(clearOptions(mobileFilterSelectedSelector || "tags"))}>Clear {mobileFilterSelectedSelector}</button>}
                     </div>
                     <div className="w-full h-[calc(100%-105px)] overflow-y-auto brightness-90">
                         <DisplaySelectedFilter />
                     </div>
                 </div>
             </div>
-            <Link className="absolute mx-auto w-full max-w-[250px] bg-mid textcol-main inputheight text-[18px] font-semibold bottom-[10px] left-[50%] translate-x-[-50%] z-[305] flex items-center justify-center"
+            <Link className="fixed mx-auto w-full max-w-[250px] bg-mid textcol-main inputheight text-[18px] font-semibold bottom-[10px] left-[50%] translate-x-[-50%] z-[305] flex items-center justify-center"
                 href={generateSortFilterParams(sortFilterSelector, "games")} onClick={() => {dispatch(toggleMobileFilterDropdown(false)); dispatch(setMobileFilterSelected(""))}}>
                 Search!
             </Link>
