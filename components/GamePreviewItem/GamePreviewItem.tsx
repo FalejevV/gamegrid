@@ -19,8 +19,8 @@ function getDeveloperStringArray(game:Game):string[]{
 
 function PCItemLayout(gameData:Game, leastLoved:ScoreItem, mostLoved:ScoreItem, total:ScoreItem){
     return(
-        <div className="w-full max-w-[1000px] h-[300px] min-h-[300px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
-        <header className="flexgap w-full h-[34px] items-center">
+        <section className="w-full max-w-[1000px] h-[300px] min-h-[300px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
+        <div className="flexgap w-full h-[34px] items-center">
             <GamePreviewTitle title={gameData.name} />
             <div className="flex gap-[30px] h-full flex-auto bg-red-400 items-center px-3 bg-dimm">
                 <div className="flex gap-[10px] items-center">
@@ -30,9 +30,9 @@ function PCItemLayout(gameData:Game, leastLoved:ScoreItem, mostLoved:ScoreItem, 
                 <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap"> {gameData.release_date.toString()} </p>
                 <GamePreviewTags tags={gameData.tags} />
             </div>
-        </header>
+        </div>
 
-        <main className="flexgap w-full h-[256p] relative">
+        <div className="flexgap w-full h-[256p] relative">
             <GamePreviewImage src={gameData.image}/>
             <section className="flexgap flex-col flex-auto">
 
@@ -47,15 +47,15 @@ function PCItemLayout(gameData:Game, leastLoved:ScoreItem, mostLoved:ScoreItem, 
                 </div>
 
             </section>
-        </main>
-    </div>
+        </div>
+    </section>
     )
 }
 
 function TabletItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreItem, total:ScoreItem){
     return(
-        <div className="w-full h-[344px] min-h-[344px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
-        <header className="flexgap flex-col w-full h-[78px] items-center">
+        <section className="w-full h-[344px] min-h-[344px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
+        <div className="flexgap flex-col w-full h-[78px] items-center">
             <GamePreviewTitle title={gameData.name} stretch center/>
             <div className="flex gap-[30px] w-full h-full flex-auto bg-red-400 items-center px-3 bg-dimm">
                 <div className="flex gap-[10px] items-center">
@@ -65,11 +65,11 @@ function TabletItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreIte
                 <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap">{gameData.release_date.toString()}</p>
                 <GamePreviewTags tags={gameData.tags} />
             </div>
-        </header>
+        </div>
 
-        <main className="flexgap w-full h-[256px] relative">
+        <div className="flexgap w-full h-[256px] relative">
             <GamePreviewImage src={gameData.image}/>
-            <section className="flexgap flex-col flex-auto">
+            <div className="flexgap flex-col flex-auto">
 
                 <div className="w-full h-[158px] leading-[25px] ">
                     <GamePreviewParagraph text={gameData.description} />
@@ -83,20 +83,20 @@ function TabletItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreIte
                         <GamePreviewTotalScore value={total.value} />
                 </div>
 
-            </section>
-        </main>
-    </div>
+            </div>
+        </div>
+    </section>
     )
 }
 
 function MobileItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreItem, total:ScoreItem){
     return(
-        <div className="w-full max-w-[770px] h-[360px] min-h-[360px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
-        <header className="flexgap flex-col w-full h-[34px]">
+        <section className="w-full max-w-[770px] h-[360px] min-h-[360px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
+        <div className="flexgap flex-col w-full h-[34px]">
             <GamePreviewTitle title={gameData.name} stretch/>
-        </header>
+        </div>
 
-        <main className="flexgap w-full h-[320px] relative flex-col">
+        <div className="flexgap w-full h-[320px] relative flex-col">
             <GamePreviewImage wfull src={gameData.image}/>
             <div className="absolute right-[5px] top-[5px] z-30">
                 <GamePreviewTotalScore value={total.value} minimal/>
@@ -110,15 +110,15 @@ function MobileItemLayout(gameData:Game,leastLoved:ScoreItem, mostLoved:ScoreIte
                 <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap"> {gameData.release_date.toString()}</p>
             </div>
 
-            <section className="flexgap flex-auto flex-col">
+            <div className="flexgap flex-auto flex-col">
                     <div className="flex flex-auto text-right text-[14px] textcol-dimm whitespace-nowrap bg-dimm h-[34px] items-center justify-end p-[10px]">
                         <GamePreviewTags tags={gameData.tags} />
                     </div>
                     <GamePreviewMostLoved discipline={mostLoved.title} value={mostLoved.value} minimal/>
                     <GamePreviewLeastLoved discipline={leastLoved.title} value={leastLoved.value} minimal/>
-            </section>
-        </main>
-    </div>
+            </div>
+        </div>
+    </section>
     )
 }
 

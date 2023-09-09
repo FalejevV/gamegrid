@@ -1,7 +1,5 @@
 import GamePreviewItem from "@/components/GamePreviewItem/GamePreviewItem";
-import LoadMoreGamesButton from "@/components/LoadMoreGamesButton";
 import { FilterQueryParams, Game } from "@/interface";
-import SortFilterTabMobile from "@/layout/SortFilter/SortFilterMobile/SortFilterTabMobile";
 import SortFilterTab from "@/layout/SortFilter/SortFilterTab";
 import { fetchFilteredGames } from "@/utils/supabaseFetching";
 import { PostgrestError } from "@supabase/supabase-js";
@@ -35,9 +33,11 @@ export default async function Games({searchParams}:{
     }
 
     return(
-        <div className="w-full flex flex-col gap-[60px] items-center">
+        <div className="w-full flex flex-col k:gap-[60px] gap-[15px] items-center">
             <SortFilterTab />
+            <div className="w-full items-center flex flex-col gap-[60px]">
             {resultData && displayGames()}
+            </div>
         </div>
     )
 }

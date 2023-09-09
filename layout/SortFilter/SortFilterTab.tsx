@@ -134,7 +134,7 @@ export default function SortFilterTab(){
     function AdvancedSearchWindowPC(expand:boolean){
         return(
             <div className={`w-full relative flex items-center justify-between transition-all duration-300
-                ${expand && "h-[60px] opacity-100 overflow-visible"}
+                ${expand && "h-[45px] opacity-100 overflow-visible mt-[10px]"}
                 ${!expand && "h-[0px] opacity-0 overflow-hidden"}
             `}>
                 {TagFilter()}
@@ -147,7 +147,7 @@ export default function SortFilterTab(){
 
     function MainRowPC(){
         return(
-            <div className={`w-full h-[60px] flex items-center gap-[10px] textcol-main`}>
+            <div className={`w-full h-[45px] flex items-center gap-[10px] textcol-main`}>
                 <button className={`${sortFilterSelector.expand && "textcol-dimm"}`} onClick={() => dispatch(sortFilterExpand(!sortFilterSelector.expand))}>Advanced Search</button>
                 {isFilteringSelected() && ClearFiltersButton()}
                 {isFilteringSelected() && SearchFilterButton()}
@@ -161,7 +161,7 @@ export default function SortFilterTab(){
         <>
             <SortFilterQueryReader />
             <SortFilterTabMobile tagOptions={tagOptions} developerOptions={developerOptions} playerOptions={playerOptions} platformOptions={platformOptions} aspectOptions={aspectOptions}  />
-            <div className={`w-full max-w-[1000px] hidden k:block h-fit bg-dimm p-[10px]`}>
+            <div className={`w-full max-w-[1000px] hidden k:block  h-fit bg-dimm p-[10px]`}>
                 {MainRowPC()}
                 {AdvancedSearchWindowPC(sortFilterSelector.expand)}
             </div>

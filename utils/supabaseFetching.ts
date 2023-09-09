@@ -6,7 +6,7 @@ import { IGDBDuplicateGamesJoin, getCollectionSummary, toAverageScore, toCoverLa
 import supabaseRootClient from "./supabaseRootClient";
 import { fetchImageToBuffer } from "./imageFormat";
 
-let amountDefault = 3;
+let amountDefault = 5;
 
 const supabaseRoot = supabaseRootClient();
 function generateOrderByType(order: string): [orderBy: string, ascending: { ascending: boolean }, isAspect: boolean, itTotal: boolean] {
@@ -125,7 +125,7 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
     let gameIds: number[] = [];
     let anyError: PostgrestError | null = null;
     let nothingFoundOnPrevQuery = false;
-    amountDefault = filters.amount || 3;
+    amountDefault = filters.amount || 5;
 
     // If tags are selected, fint games by these tags
     if (filters.tags && filters.tags.length > 0) {
@@ -201,6 +201,7 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
     if (!isAspect) {
         query.order('id', ascending)
     }
+    query.range(offset, offset + amountDefault -1);
     query.eq("state_id", 5);
 
     let { data, error } = await query;
