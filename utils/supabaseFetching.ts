@@ -198,13 +198,17 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
                 score:AverageReview(*)
     `);
     if (gameIds.length > 0) query.in("id", gameIds);
-    if (!isAspect) {
+    if (!isAspect && orderBy !== "release_date") {
         query.order('id', ascending)
+    }
+    if(orderBy === "release_date"){
+        query.order("release_date", ascending);
     }
     query.range(offset, offset + amountDefault -1);
     query.eq("state_id", 5);
 
     let { data, error } = await query;
+    
     if (isTotal || isAspect) {
         let result: Game[] = [];
         result = gameIds.map((id) => {
