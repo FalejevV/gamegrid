@@ -24,7 +24,7 @@ export default function TagsFilterDropdown(props:{
             <p className="text-[15px]">Game should include these tags: ({sortFilterDropdownSelector.selectedItems.length}/3)</p>
             <SortFilterGrid itemList={primaryTags} dropdownType={"tags"} />
             <SearchBar searchValue={search} setSearchValue={setSearch} />
-            <div className="flex-auto overflow-y-scroll">
+            <div className="flex-auto overflow-hidden">
                 <SortFilterList excludeItems={primaryTags} searchCriteria={search} itemList={props.itemList} dropdownType={"tags"} />
             </div>
         </div>

@@ -148,7 +148,8 @@ export default function SortFilterTab(){
     function MainRowPC(){
         return(
             <div className={`w-full h-[45px] flex items-center gap-[10px] textcol-main`}>
-                <button className={`${sortFilterSelector.expand && "textcol-dimm"}`} onClick={() => dispatch(sortFilterExpand(!sortFilterSelector.expand))}>Advanced Search</button>
+                <button className={`${sortFilterSelector.expand ? "textcol-dimm saturate-[95%]" : "textcol-main saturate-100"} transition-all duration-200 bg-mid h-[40px] w-full max-w-[185px] text-left p-[10px]`} 
+                onClick={() => dispatch(sortFilterExpand(!sortFilterSelector.expand))}>Advanced Search</button>
                 {isFilteringSelected() && ClearFiltersButton()}
                 {isFilteringSelected() && SearchFilterButton()}
                 <div className="flex-auto"/>

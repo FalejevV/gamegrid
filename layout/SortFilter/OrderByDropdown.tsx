@@ -23,7 +23,7 @@ export default function OrderByDropdown(props:{
             <SortFilterGrid singlePick itemList={primaryOrder} dropdownType={"order"} />
             <p className="text-[15px]">OR by game aspect:</p>
             <SearchBar searchValue={search} setSearchValue={setSearch} />
-            <div className="flex-auto overflow-y-scroll">
+            <div className="flex-auto overflow-hidden">
                 <SortFilterList singlePick excludeItems={primaryOrder} searchCriteria={search} itemList={props.itemList} dropdownType={"order"} />
             </div>
         </div>

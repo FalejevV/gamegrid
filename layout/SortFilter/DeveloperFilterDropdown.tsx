@@ -6,18 +6,18 @@ import { useState } from "react";
 import SearchBar from "@/components/SearchBar/SearchBar";
 
 
-export default function DeveloperFilterDropdown(props:{
-    itemList:string[]
-}){
+export default function DeveloperFilterDropdown(props: {
+    itemList: string[]
+}) {
     const [search, setSearch] = useState("");
-    
-    return(
+
+    return (
         <div className="w-full h-full flex flex-col gap-[10px] textcol-main pten">
             <OutClickListener target={"developer"} />
             <p className="text-[15px]">Games by company</p>
             <SearchBar searchValue={search} setSearchValue={setSearch} />
-            <div className="flex-auto overflow-y-scroll">
-                <SortFilterList singlePick searchCriteria={search} itemList={props.itemList} dropdownType={"developer"} />
+            <div className="flex-auto overflow-hidden">
+                <SortFilterList searchCriteria={search} itemList={props.itemList} dropdownType={"developer"} />
             </div>
         </div>
     )

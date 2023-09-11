@@ -33,12 +33,12 @@ export default function SortFilterListOption(props:{
     }
 
     return(
-        <div className={`w-full h-full bg-transparent flex justify-between items-center`}
+        <div className={`w-full whitespace-nowrap bg-transparent flex justify-between items-center`}
         onClick={toggleDropdownOption}
         role="button"
         tabIndex={0}
         >
-            <p className="textcol-main">{props.title}</p>
+            <p className="textcol-main overflow-hidden w-full">{props.title}</p>
             {Indicator()}
         </div>
     )
