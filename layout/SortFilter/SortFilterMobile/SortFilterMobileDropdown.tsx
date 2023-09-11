@@ -9,6 +9,7 @@ import { clearAllOptions, clearOptions } from "@/store/features/sortFilter";
 import PlayersFilterDropdown from "../PlayersFilterDropdown";
 import Link from "next/link";
 import { generateSortFilterParams } from "@/utils/queryParams";
+import { useMemo } from "react";
 
 
 
@@ -48,25 +49,32 @@ export default function SortFilterMobileDropdown(props: {
             || sortFilterSelector.dropdowns.order.selectedItems.length > 0
     }
 
+    let dropdownListMemo = useMemo(() => {
+        return (
+            <DisplaySelectedFilter />
+        )
+    },[mobileFilterSelectedSelector]);
+
     return (
-        <span className={`w-screen h-screen fixed left-0 top-0 bg-[#0000008a] z-[300] transition-all duration-200
+        <span className={`w-screen h-screen fixed left-0 top-0 bg-[#0000008a] z-[300] transition-all duration-200 pb-[0px]
             ${mobileDropdownSelector ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
         `} onClick={clickLocationCheck}>
 
-            <div className={`w-full h-[calc(100vh-130px)] bg-dimm fixed left-0 bottom-0 z-[301] flex overflow-y-auto overflow-x-hidden transition-all duration-200
+            <div className={`w-full h-[calc(100vh-60px)] bg-dimm fixed left-0 bottom-0 z-[301] flex overflow-y-auto overflow-x-hidden transition-all duration-200
                 ${mobileDropdownSelector ? "bottom-0 " : "bottom-[-100vh]"}
             `}>
 
                 {/* Main filter page, where user can select required filter type */}
-                <div className={`flex flex-col overflow-hidden transition-all duration-200 whitespace-nowrap pb-[15px] h-[calc(100%-105px)] overflow-y-auto
+                <div className={`flex flex-col overflow-hidden transition-all duration-200 whitespace-nowrap h-[calc(100%-105px)] overflow-y-auto
                     ${mobileFilterSelectedSelector !== "" ? "w-[0px] min-w-0" : "w-screen min-w-[100vw]"}
                     `}>
 
-                    <div className="w-full inputheight bg-mid flex items-center p-[10px] justify-between">
+                    <div className="w-full inputheight bg-mid flex items-center p-[10px] justify-between fixed z-40">
                         <button className="textcol-main py-[5px] pr-[20px]" onClick={() => dispatch(toggleMobileFilterDropdown(false))}>{"Close"}</button>
                         {isAnythingSelected() && <button className="textcol-main py-[5px] pl-[20px]" onClick={() => dispatch(clearAllOptions())}>Clear all</button>}
                     </div>
-                    <section className="w-full flex flex-col gap-[20px] p-[10px] flex-auto">
+
+                    <section className="w-full flex flex-col gap-[20px] p-[10px] flex-auto pt-[55px]">
                         <MobileFilterButton title={"By Tags"} type={"tags"} />
                         <MobileFilterButton title={"By Platform"} type={"platforms"} />
                         <MobileFilterButton title={"By Players"} type={"players"} />
@@ -77,19 +85,21 @@ export default function SortFilterMobileDropdown(props: {
 
                 {/* Selected filter type page */}
                 <div className="w-screen min-w-[100vw]">
-                    <div className="w-full inputheight bg-mid flex items-center p-[10px] justify-between">
+                    <div className="w-full inputheight bg-mid flex items-center p-[10px] justify-between fixed z-40">
                         <button className="textcol-main py-[5px] pr-[20px]" onClick={() => dispatch(setMobileFilterSelected(""))}>Back</button>
                         {sortFilterSelector.dropdowns[mobileFilterSelectedSelector || "tags"].selectedItems.length > 0 && <button className="textcol-main py-[5px] pl-[20px]" onClick={() => dispatch(clearOptions(mobileFilterSelectedSelector || "tags"))}>Clear {mobileFilterSelectedSelector}</button>}
                     </div>
-                    <div className="w-full h-[calc(100%-105px)] overflow-y-auto brightness-90">
-                        <DisplaySelectedFilter />
+                    <div className="w-full h-[calc(100%-105px)] min-h-[600px] overflow-y-auto brightness-90 pt-[45px]">
+                        {dropdownListMemo}                        
                     </div>
                 </div>
             </div>
-            <Link className="fixed mx-auto w-full max-w-[250px] bg-mid textcol-main inputheight text-[18px] font-semibold bottom-[10px] left-[50%] translate-x-[-50%] z-[305] flex items-center justify-center"
-                href={generateSortFilterParams(sortFilterSelector, "games")} onClick={() => {dispatch(toggleMobileFilterDropdown(false)); dispatch(setMobileFilterSelected(""))}}>
-                Search!
-            </Link>
+            <div className="fixed w-full bg-dimm textcol-main h-[55px] text-[18px] font-semibold bottom-[0px] left-[50%] translate-x-[-50%] z-[305] flex justify-center items-center ">
+                <Link className="w-full max-w-[250px] bg-mid inputheight flex items-center justify-center" 
+                    href={generateSortFilterParams(sortFilterSelector, "games")} onClick={() => { dispatch(toggleMobileFilterDropdown(false)); dispatch(setMobileFilterSelected("")) }}>
+                    Search!
+                </Link>
+            </div>
         </span>
 
     )

@@ -87,7 +87,7 @@ export default function SortFilterTab(){
             <div className="tab-platforms relative">
                 <SortFilterButton doCount title={"Platform"} dropdownName={"platforms"} />
                 {sortFilterSelector.dropdowns.platforms.isDropdown && 
-                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-[350px] bg-mid z-[500]">
+                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] bg-mid z-[500]">
                     <PlatformFilterDropdown itemList={platformOptions} />
                 </div>}
             </div>
@@ -111,7 +111,7 @@ export default function SortFilterTab(){
             <div className="tab-developer relative">
                 <SortFilterButton mimicTitle title={"Company"} dropdownName={"developer"} />
                 {sortFilterSelector.dropdowns.developer.isDropdown && 
-                <div className="absolute right-[-10px] top-[50px] w-screen max-w-[330px] h-[300px] bg-mid z-[500]">
+                <div className="absolute right-[-10px] top-[50px] w-screen max-w-[330px] bg-mid z-[500]">
                     <DeveloperFilterDropdown itemList={developerOptions} />
                 </div>}
             </div>
@@ -123,7 +123,7 @@ export default function SortFilterTab(){
             <div className="tab-order relative">
                 <SortFilterButton mimicTitle title={"Order by"} dropdownName={"order"} />
                 {sortFilterSelector.dropdowns.order.isDropdown && 
-                <div className="absolute right-[-10px] top-[50px] w-screen max-w-[330px] h-[500px] bg-mid z-[500] overflow-hidden">
+                <div className="absolute right-[-10px] top-[50px] w-screen max-w-[330px] bg-mid z-[500] overflow-hidden">
                     <OrderByDropdown  itemList={aspectOptions} />
                 </div>}
             </div>

@@ -19,7 +19,7 @@ export default function PlatformFilterDropdown(props:{
             <OutClickListener target={"platforms"} />
             <p className="text-[15px]">Games that include any platform:  ({sortFilterDropdownSelector.selectedItems.length}/3)</p>
             <SearchBar searchValue={search} setSearchValue={setSearch} />
-            <div className="flex-auto overflow-hidden">
+            <div className="flex-auto">
                 <SortFilterList searchCriteria={search} itemList={props.itemList} dropdownType={"platforms"} />
             </div>
         </div>

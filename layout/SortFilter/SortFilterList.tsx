@@ -41,9 +41,9 @@ export default function SortFilterList(props: {
 
 
     return (
-        <div className="w-full flex flex-col gap-[10px] pten">
+        <div className="w-full flex flex-col pl-[10px] pb-[20px] relative pt-[10px]" >
             <List
-                className="List"
+                className="List list"
                 height={200}
                 itemCount={filteredItems.length}
                 itemSize={getSize}
@@ -51,6 +51,7 @@ export default function SortFilterList(props: {
             >
                 {Row}
             </List>
+            <div className="listgradient w-full inputheight absolute bottom-0 left-0 pointer-events-none" />
         </div>
     )
 }
