@@ -4,7 +4,7 @@ import { SortFilterDropdowns, clearAllOptions, sortFilterExpand } from "@/store/
 import { useAppDispatch, useAppSelector } from "@/store/store"
 import SortFilterButton from "@/components/SortFilterButton/SortFilterButton";
 import TagsFilterDropdown from "./TagsFilterDropdown";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getTableList } from "@/utils/tableFetching";
 import supabaseClient from "@/utils/supabaseClient";
 import { convertToFancyScores } from "@/utils/scoreName";
@@ -18,7 +18,7 @@ import SortFilterQueryReader from "@/components/SortFilterQueryReader/SortFilter
 import SortFilterTabMobile from "./SortFilterMobile/SortFilterTabMobile";
 
 
-export default function SortFilterTab(){
+export default function SortFilterTab() {
     const sortFilterSelector = useAppSelector((state) => state.sortFilter);
     const dispatch = useAppDispatch();
 
@@ -30,109 +30,147 @@ export default function SortFilterTab(){
 
 
     useEffect(() => {
-            getTableList(supabaseClient, "Tag").then(res => setTagOptions(res.data || []));
-            getTableList(supabaseClient, "Platform").then(res => setPlatformOptions(res.data || []));
-            getTableList(supabaseClient, "Player").then(res => setPlayerOptions(res.data || []));
-            getTableList(supabaseClient, "Aspect").then(res => setAspectOptions(convertToFancyScores(res.data || [])));
-            getTableList(supabaseClient, "Developer").then(res => setDeveloperOptions(res.data || []));
-        }
-    ,[]);
+        getTableList(supabaseClient, "Tag").then(res => setTagOptions(res.data || []));
+        getTableList(supabaseClient, "Platform").then(res => setPlatformOptions(res.data || []));
+        getTableList(supabaseClient, "Player").then(res => setPlayerOptions(res.data || []));
+        getTableList(supabaseClient, "Aspect").then(res => setAspectOptions(convertToFancyScores(res.data || [])));
+        getTableList(supabaseClient, "Developer").then(res => setDeveloperOptions(res.data || []));
+    }
+        , []);
 
-    
 
-    function isFilteringSelected(){
+
+    function isFilteringSelected() {
         let filterKeys = Object.keys(sortFilterSelector.dropdowns) as (keyof SortFilterDropdowns)[];
         let filteringFound = false;
-        filterKeys.forEach((key:keyof SortFilterDropdowns) => {
-            if(filteringFound) return;
+        filterKeys.forEach((key: keyof SortFilterDropdowns) => {
+            if (filteringFound) return;
             // If dropdown filter has items in array or it is different that default value
-            if(sortFilterSelector.dropdowns[key].selectedItems.length > 0 && sortFilterSelector.dropdowns[key].selectedItems[0] !== sortFilterSelector.dropdowns[key].defaultValue[0]){
+            if (sortFilterSelector.dropdowns[key].selectedItems.length > 0 && sortFilterSelector.dropdowns[key].selectedItems[0] !== sortFilterSelector.dropdowns[key].defaultValue[0]) {
                 filteringFound = true;
             }
         })
         return filteringFound;
     }
 
-    function ClearFiltersButton(){
-        return(
-            <Link href="games" className="bg-mid px-[10px] py-[5px]" onClick={() => dispatch(clearAllOptions())}>
+    function ClearFiltersButton() {
+        return (
+            <Link href="games" className="bg-mid h-[40px] px-[10px] flex items-center justify-center " onClick={() => dispatch(clearAllOptions())}>
                 Clear
             </Link>
         )
     }
 
-    function SearchFilterButton(){
-        return(
-            <Link className="bg-hi px-[10px] py-[5px]" href={generateSortFilterParams(sortFilterSelector, "games")}>
+    function SearchFilterButton() {
+        return (
+            <Link className="bg-hi h-[40px] px-[10px] flex items-center justify-center searchbutton" href={generateSortFilterParams(sortFilterSelector, "games")} onClick={searchClick}>
                 Search!
             </Link>
         )
     }
+ 
+    // Function checks if current page filtering query is different from stored query data to either display loading indicator and start loading data, or do nothing;
+    function searchClick(e: React.MouseEvent) {
+        // @ts-ignore 
+        let params = new URL(document.location).searchParams;
+        let generatedParams = generateSortFilterParams(sortFilterSelector, "games");
+        let orderParams = params.getAll("order").sort().toString();
+        let orderGenerated = [generatedParams.query.order].sort().toString();
+
+        let tagsParams = params.getAll("tags").sort().toString();
+        let tagsGenerated = [generatedParams.query.tags].sort().toString();
+
+        let playersParams = params.getAll("players").sort().toString();
+        let playersGenerated = [generatedParams.query.players].sort().toString();
+
+        let developerParams = params.getAll("developer").sort().toString();
+        let developerGenerated = [generatedParams.query.developer].sort().toString();
+
+        let platformParams = params.getAll("platforms").sort().toString();
+        let platformGenerated = [generatedParams.query.platforms].sort().toString();
+        if (orderParams !== orderGenerated || tagsParams !== tagsGenerated || playersParams !== playersGenerated || developerParams !== developerGenerated || platformParams !== platformGenerated) {
+            let target = e.target as HTMLLinkElement;
+            if (target.innerHTML === "Loading...") {
+                e.preventDefault();
+                return;
+            }
+            target.innerHTML = "Loading...";
+        } else {
+            e.preventDefault();
+        }
+    }
+
+    useEffect(() => {
+        let searchButton = document.getElementsByClassName("searchbutton")[0];
+        if (searchButton) {
+            searchButton.innerHTML = "Search!"
+        }
+    })
 
 
-    function TagFilter(){
-        return(
+    function TagFilter() {
+        return (
             <div className="tab-tags relative">
                 <SortFilterButton doCount title={"Tags"} dropdownName={"tags"} />
-                {sortFilterSelector.dropdowns.tags.isDropdown && 
-                <div className="absolute left-[-10px] top-[50px] w-screen max-w-[330px] h-[500px] bg-mid z-[500]">
-                    <TagsFilterDropdown itemList={tagOptions} />
-                </div>}
+                {sortFilterSelector.dropdowns.tags.isDropdown &&
+                    <div className="absolute left-[-10px] top-[50px] w-screen max-w-[330px] h-[500px] bg-mid z-[500]">
+                        <TagsFilterDropdown itemList={tagOptions} />
+                    </div>}
             </div>
         )
     }
 
-    function PlatformFilter(){
-        return(
+    function PlatformFilter() {
+        return (
             <div className="tab-platforms relative">
                 <SortFilterButton doCount title={"Platform"} dropdownName={"platforms"} />
-                {sortFilterSelector.dropdowns.platforms.isDropdown && 
-                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] bg-mid z-[500]">
-                    <PlatformFilterDropdown itemList={platformOptions} />
-                </div>}
+                {sortFilterSelector.dropdowns.platforms.isDropdown &&
+                    <div className="absolute left-0 top-[50px] w-screen max-w-[330px] bg-mid z-[500]">
+                        <PlatformFilterDropdown itemList={platformOptions} />
+                    </div>}
             </div>
         )
     }
 
-    function PlayerFilter(){
-        return(
+    function PlayerFilter() {
+        return (
             <div className="tab-players relative">
                 <SortFilterButton mimicTitle title={"Players"} dropdownName={"players"} />
-                {sortFilterSelector.dropdowns.players.isDropdown && 
-                <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-fit bg-mid z-[500]">
-                    <PlayersFilterDropdown itemList={playerOptions} />
-                </div>}
+                {sortFilterSelector.dropdowns.players.isDropdown &&
+                    <div className="absolute left-0 top-[50px] w-screen max-w-[330px] h-fit bg-mid z-[500]">
+                        <PlayersFilterDropdown itemList={playerOptions} />
+                    </div>}
             </div>
         )
     }
 
-    function DeveloperFilter(){
-        return(
+    function DeveloperFilter() {
+        return (
             <div className="tab-developer relative">
                 <SortFilterButton mimicTitle title={"Company"} dropdownName={"developer"} />
-                {sortFilterSelector.dropdowns.developer.isDropdown && 
-                <div className="absolute right-[-10px] top-[50px] w-screen max-w-[330px] bg-mid z-[500]">
-                    <DeveloperFilterDropdown itemList={developerOptions} />
-                </div>}
+                {sortFilterSelector.dropdowns.developer.isDropdown &&
+                    <div className="absolute right-[-10px] top-[50px] w-screen max-w-[330px] bg-mid z-[500]">
+                        <DeveloperFilterDropdown itemList={developerOptions} />
+                    </div>}
             </div>
         )
     }
 
-    function SortByTab(){
-        return(
+    function SortByTab() {
+        return (
             <div className="tab-order relative">
                 <SortFilterButton mimicTitle title={"Order by"} dropdownName={"order"} />
-                {sortFilterSelector.dropdowns.order.isDropdown && 
-                <div className="absolute right-[-10px] top-[50px] w-screen max-w-[330px] bg-mid z-[500] overflow-hidden">
-                    <OrderByDropdown  itemList={aspectOptions} />
-                </div>}
+                {sortFilterSelector.dropdowns.order.isDropdown &&
+                    <div className="absolute right-[-10px] top-[50px] w-screen max-w-[330px] bg-mid z-[500] overflow-hidden">
+                        <OrderByDropdown itemList={aspectOptions} />
+                    </div>}
             </div>
         )
     }
 
 
-    function AdvancedSearchWindowPC(expand:boolean){
-        return(
+    function AdvancedSearchWindowPC(expand: boolean) {
+        return (
             <div className={`w-full relative flex items-center justify-between transition-all duration-300
                 ${expand && "h-[45px] opacity-100 overflow-visible mt-[10px]"}
                 ${!expand && "h-[0px] opacity-0 overflow-hidden"}
@@ -145,23 +183,23 @@ export default function SortFilterTab(){
         )
     }
 
-    function MainRowPC(){
-        return(
+    function MainRowPC() {
+        return (
             <div className={`w-full h-[45px] flex items-center gap-[10px] textcol-main`}>
-                <button className={`${sortFilterSelector.expand ? "textcol-dimm saturate-[95%]" : "textcol-main saturate-100"} transition-all duration-200 bg-mid h-[40px] w-full max-w-[185px] text-left p-[10px]`} 
-                onClick={() => dispatch(sortFilterExpand(!sortFilterSelector.expand))}>Advanced Search</button>
+                <button className={`${sortFilterSelector.expand ? "textcol-dimm saturate-[95%]" : "textcol-main saturate-100"} transition-all duration-200 bg-mid h-[40px] w-full max-w-[185px] text-left p-[10px]`}
+                    onClick={() => dispatch(sortFilterExpand(!sortFilterSelector.expand))}>Advanced Search</button>
                 {isFilteringSelected() && ClearFiltersButton()}
                 {isFilteringSelected() && SearchFilterButton()}
-                <div className="flex-auto"/>
+                <div className="flex-auto" />
                 {SortByTab()}
             </div>
         )
     }
 
-    return(
+    return (
         <>
             <SortFilterQueryReader />
-            <SortFilterTabMobile tagOptions={tagOptions} developerOptions={developerOptions} playerOptions={playerOptions} platformOptions={platformOptions} aspectOptions={aspectOptions}  />
+            <SortFilterTabMobile tagOptions={tagOptions} developerOptions={developerOptions} playerOptions={playerOptions} platformOptions={platformOptions} aspectOptions={aspectOptions} />
             <div className={`w-full max-w-[1000px] hidden k:block  h-fit bg-dimm p-[10px]`}>
                 {MainRowPC()}
                 {AdvancedSearchWindowPC(sortFilterSelector.expand)}
