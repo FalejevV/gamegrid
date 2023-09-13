@@ -78,7 +78,7 @@ export default function GameSearchPage() {
 
 
     return (
-        <div className="flexgap flex-col relative">
+        <div className="flex gap-[10px] flex-col relative">
             <form onSubmit={formSubmit} className="flex w-full flex-col h-[fit] relative gap-[15px]">
                 <Title title={"Game creation"} /> 
                 <div className="textcolhover flex flex-col gap-[5px] tracking-normal">

@@ -24,7 +24,7 @@ export default function GameRagingDisclamer() {
         }
     }
     return (
-        <div className="flex flex-col sm:gap-[100px] gap-[30px]">
+        <div className="flex flex-col sm:gap-[87px] gap-[30px]">
             <div className="w-full h-fit gap-[15px] flex flex-col">
                 <Title title={"Its time to share your gaming feels!"} />
                 <p className="textcol-dimm text-[16px]">

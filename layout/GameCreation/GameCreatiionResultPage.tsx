@@ -96,7 +96,7 @@ export default function GameCreationResultPage() {
         state_id: 0,
         hours_spent: Number(gameCreationSelector.questions.hours),
         platform_name: gameCreationSelector.questions.platform,
-        total_score: 0,
+        total_score: gameCreationSelector.scores.total,
         finished: gameCreationSelector.questions.finished,
         date: new Date(),
         game_name: gameCreationSelector.gameInfo.name,
@@ -105,12 +105,12 @@ export default function GameCreationResultPage() {
     }
 
     return (
-        <div className="flexgap flex-col w-full textcol-main overflow-hidden">
+        <div className="flex gap-[10px] flex-col w-full textcol-main overflow-hidden">
             <p className="inputheight w-full bg-dimm flex items-center justify-center">{gameCreationSelector.gameInfo.name}</p>
             <Title title={"Game Creation Results"} />
             <div />
             <CollectionGameItem game={gameReviewInfo} />
-            <div className="flexgap items-center justify-between">
+            <div className="flex gap-[10px] items-center justify-between">
                 <Button title={"Go Back"} onClick={previousPage} />
                 <WideActionButton disabled={isFetching} onClick={saveReview} text={"Save My Review"} disableText="Saving..." />
             </div>

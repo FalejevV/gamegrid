@@ -210,14 +210,16 @@ export default function GameReviewPage() {
 
     function reviewWindow() {
         return (
-            <form className="flex flex-col gap-[25px]" onSubmit={formSubmit}>
-                <SelectedGame gameInfo={gameCreationSelector.gameCreationFetchedGame} />
-                <Title title={"Please describe your experience"} />
-                <InputCheckbox question={"Did you finish the game?"} name={"finished"} onChange={(value: boolean) => dispatch(setGameCreationFinished(value))} value={gameCreationSelector.questions.finished} />
-                <InlineInputField title={"How many hours have you played?"} name={"hours"} onChange={(value: string) => dispatch(setGameCreationHours(value))} value={gameCreationSelector.questions.hours.toString()} placeholder={"Hours"} />
-                <DropdownInput additionalOptions={allPlatformsFetch} options={gameCreationSelector.gameCreationFetchedGame?.platforms || []} value={gameCreationSelector.questions.platform} onChange={(value: string) => dispatch(setGameCreationPlatform(value))} title={"What platform did you play on?"} name={"platform"} />
-                <TextField title={"Please write a short comment about this game. Even 1 sentence is enough :)"} name={"comment"} onChange={(value: string) => dispatch(setGameCreationComment(value))} value={gameCreationSelector.questions.comment} />
-                <div className="flex w-full items-center justify-between gap-[25px]">
+            <form className="flex flex-col gap-[10px]" onSubmit={formSubmit}>
+                <div className="flex flex-col gap-[25px]">
+                    <SelectedGame gameInfo={gameCreationSelector.gameCreationFetchedGame} />
+                    <Title title={"Please describe your experience"} />
+                    <InputCheckbox question={"Did you finish the game?"} name={"finished"} onChange={(value: boolean) => dispatch(setGameCreationFinished(value))} value={gameCreationSelector.questions.finished} />
+                    <InlineInputField title={"How many hours have you played?"} name={"hours"} onChange={(value: string) => dispatch(setGameCreationHours(value))} value={gameCreationSelector.questions.hours.toString()} placeholder={"Hours"} />
+                    <DropdownInput additionalOptions={allPlatformsFetch} options={gameCreationSelector.gameCreationFetchedGame?.platforms || []} value={gameCreationSelector.questions.platform} onChange={(value: string) => dispatch(setGameCreationPlatform(value))} title={"What platform did you play on?"} name={"platform"} />
+                    <TextField title={"Please write a short comment about this game. Even 1 sentence is enough :)"} name={"comment"} onChange={(value: string) => dispatch(setGameCreationComment(value))} value={gameCreationSelector.questions.comment} />
+                </div>
+                <div className="flex w-full items-center justify-between gap-[10px]">
                     <Button title={"BACK"} onClick={proceedToPrevPage} />
                     <WideActionButton submit text={"NEXT"} onClick={() => { }} />
                 </div>
@@ -242,7 +244,7 @@ export default function GameReviewPage() {
     function loadingMessage() {
         return (
             <div className="flex flex-col gap-[30px] textcol-main">
-                <GameReviewPageLoading newGame={newGameCreation}/>
+                <GameReviewPageLoading newGame={newGameCreation} />
             </div>
         )
     }
