@@ -1,7 +1,8 @@
 import Button from "@/components/Buttons/WideActionButton/Button";
 import WideActionButton from "@/components/Buttons/WideActionButton/WideActionButton";
+import CollectionGameItem from "@/components/CollectionGameItem/CollectionGameItem";
 import Title from "@/components/Title/Title";
-import { GameReviewData, ScoreList, StringDataError } from "@/interface";
+import { FullGameReviewInfo, GameReviewData, ScoreList, StringDataError } from "@/interface";
 import { setGameCreationPage, setGameCreationScore } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
 import { APIputGameReview } from "@/utils/apiFetching";
@@ -78,25 +79,37 @@ export default function GameCreationResultPage() {
         setIsFetching(false);
     }
 
+    let gameReviewInfo:FullGameReviewInfo = {
+        game_id: 0,
+        user_comment: gameCreationSelector.questions.comment,
+        graphics_score: 0,
+        sound_score: 0,
+        gameplay_score: 0,
+        level_score: 0,
+        balance_score: 0,
+        story_score: 0,
+        performance_score: 0,
+        original_score: 0,
+        customization_score: 0,
+        microtransactions_score: 0,
+        support_score: 0,
+        state_id: 0,
+        hours_spent: Number(gameCreationSelector.questions.hours),
+        platform_name: gameCreationSelector.questions.platform,
+        total_score: 0,
+        finished: gameCreationSelector.questions.finished,
+        date: new Date(),
+        game_name: gameCreationSelector.gameInfo.name,
+        game_tags: [],
+        image:gameCreationSelector.gameCreationFetchedGame?.image || ""
+    }
 
     return (
         <div className="flexgap flex-col w-full textcol-main overflow-hidden">
             <p className="inputheight w-full bg-dimm flex items-center justify-center">{gameCreationSelector.gameInfo.name}</p>
             <Title title={"Game Creation Results"} />
-
             <div />
-
-            <p>Game Completed?: {gameCreationSelector.questions.finished ? "Yes" : "No"} </p>
-            <p>Hours played: {gameCreationSelector.questions.hours}</p>
-            <p>Platform: {gameCreationSelector.questions.platform}</p>
-            <p className="whitespace-normal">Comment: {gameCreationSelector.questions.comment}</p>
-
-            <div />
-            <div />
-            <div />
-
-            <p>Total score: {gameCreationSelector.scores.total} / 100</p>
-
+            <CollectionGameItem game={gameReviewInfo} />
             <div className="flexgap items-center justify-between">
                 <Button title={"Go Back"} onClick={previousPage} />
                 <WideActionButton disabled={isFetching} onClick={saveReview} text={"Save My Review"} disableText="Saving..." />

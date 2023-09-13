@@ -220,7 +220,6 @@ export function getCollectionSummary(games: FullGameReviewInfo[]): CollectionSum
                 lastCompletionDate = new Date(game.date).valueOf();
             }
         }
-        console.log(game.game_name, new Date(game.date).valueOf());
         // get the last game added date
         if (new Date(game.date).valueOf() > lastCompletionDate) {
             lastGame = game.game_name;

@@ -79,8 +79,15 @@ export default function GameSearchPage() {
 
     return (
         <div className="flexgap flex-col relative">
-            <form onSubmit={formSubmit} className="flex w-full flex-col h-[fit] relative gap-[25px]">
+            <form onSubmit={formSubmit} className="flex w-full flex-col h-[fit] relative gap-[15px]">
                 <Title title={"Game creation"} /> 
+                <div className="textcolhover flex flex-col gap-[5px] tracking-normal">
+                    <p>Search tips:</p>
+                    <p>• Long game name? Use keywords! "mine" or "craft" finds Minecraft</p>
+                    <p>• Symbols count! "Call of Duty: Modern Warfare" needs ":"</p>
+                    <p>• Popular games top the list. Rare ones? Scroll down.</p>
+                    <p>• no need for capital letters.</p>
+                </div>
                 <InputField bgColor="bg-dimm" label={"Game search"} name={"search"} placeholder={"Game search..."} value={gameCreationSelector.gameSearchInput} setValue={(value: string) => dispatch(setGameCreationSearchInput(value))} />
                 <button className={`h-[45px] w-[70px] absolute bottom-0 right-0  flex items-center justify-center bg-mid hover:brightness-105 cursor-pointer
                         ${isFetching && "opacity-50"} 

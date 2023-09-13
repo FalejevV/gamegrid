@@ -170,3 +170,13 @@ body {
   background: rgb(100, 31, 45);
   background: linear-gradient(0deg, rgba(100, 31, 45, 0.6866947462578781) 0%, rgba(31, 31, 31, 0) 100%);
 }
+
+
+.textcolhover{
+  @apply textcol-dimm;
+  transition: all 0.3s;
+}
+
+.textcolhover:hover{
+  @apply textcol-main;
+}

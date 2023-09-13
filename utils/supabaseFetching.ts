@@ -518,7 +518,7 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
 
     delete game.platform_played;
 
-    const { data, error } = await supabaseRoot
+    const { error } = await supabaseRoot
         .from('Review')
         .upsert(game);
 

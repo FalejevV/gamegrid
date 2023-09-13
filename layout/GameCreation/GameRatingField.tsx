@@ -38,27 +38,29 @@ export default function GameRatingField() {
     return (
         <div className="flex flex-col gap-[10px]">
             <div className="flex flex-col gap-[10px]">
-                <p className="w-full inputheight bg-dimm flex items-center justify-center textcol-main mb-[15px]">{gameCreationGameInfoSelector.name}</p>
+                <p className="w-full inputheight bg-dimm flex items-center justify-center textcol-main">{gameCreationGameInfoSelector.name}</p>
                 <div className="flex items-center justify-between flexgap">
                     <Title title={`${ratingAspects[ratingPageAspectNamesArray[gameCreationRatingPageSelector]].title}`} />
                     <p className="textcol-dimm text-[15px]">Question ( {gameCreationRatingPageSelector + 1} / 11 )</p>
                 </div>
                 <p className="textcol-dimm sm:text-[16px] text-[15px] h-[90px]">{ratingAspects[ratingPageAspectNamesArray[gameCreationRatingPageSelector]].description}</p>
             </div>
-            <div className="flex items-center justify-between">
-                <RatingButton value={0} />
-                <RatingButton value={1} />
-                <RatingButton value={2} />
-                <RatingButton value={3} />
-                <RatingButton middle value={5} />
-                <RatingButton value={7} />
-                <RatingButton value={8} />
-                <RatingButton value={9} />
-                <RatingButton value={10} />
+            <div className="bg-[#6f223171] p-[10px] pb-[50px]">
+                <div className="flex items-center justify-between">
+                    <RatingButton value={0} />
+                    <RatingButton value={1} />
+                    <RatingButton value={2} />
+                    <RatingButton value={3} />
+                    <RatingButton middle value={5} />
+                    <RatingButton value={7} />
+                    <RatingButton value={8} />
+                    <RatingButton value={9} />
+                    <RatingButton value={10} />
+                </div>
             </div>
-            <div className="flex items-center justify-between flexgap pt-[50px]">
+            <div className="flex items-center justify-between gap-[10px]">
                 {gameCreationRatingPageSelector >= 0 && <Button title={"Previous Question"} onClick={previousQuestion} />}
-                <WideActionButton onClick={nextQuestion} text={gameCreationRatingPageSelector < 10 ? "Next Question" : "Finish!"} disabled={gameCreationRatingScore < 0} />
+                <WideActionButton onClick={nextQuestion} text={gameCreationRatingPageSelector < 10 ? "Next Question" : "Finish!"} disableText="Pick Something" disabled={gameCreationRatingScore < 0} />
             </div>
         </div>
     )
