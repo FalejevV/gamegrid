@@ -16,6 +16,7 @@ import { generateSortFilterParams } from "@/utils/queryParams";
 import Link from "next/link";
 import SortFilterQueryReader from "@/components/SortFilterQueryReader/SortFilterQueryReader";
 import SortFilterTabMobile from "./SortFilterMobile/SortFilterTabMobile";
+import Image from "next/image";
 
 
 export default function SortFilterTab() {
@@ -186,8 +187,12 @@ export default function SortFilterTab() {
     function MainRowPC() {
         return (
             <div className={`w-full h-[45px] flex items-center gap-[10px] textcol-main`}>
-                <button className={`${sortFilterSelector.expand ? "textcol-dimm saturate-[95%]" : "textcol-main saturate-100"} transition-all duration-200 bg-mid h-[40px] w-full max-w-[185px] text-left p-[10px]`}
-                    onClick={() => dispatch(sortFilterExpand(!sortFilterSelector.expand))}>Advanced Search</button>
+                <button className={`${sortFilterSelector.expand ? "textcol-dimm saturate-[90%]" : "textcol-main saturate-100"} 
+                transition-all duration-200 bg-mid h-[40px] w-full max-w-[185px] text-left p-[10px] flex items-center justify-between text-[15px]`}
+                    onClick={() => dispatch(sortFilterExpand(!sortFilterSelector.expand))}>
+                        Advanced Search
+                        <Image src={"/icons/dots.svg"} alt={"advanced search icon"}  width={20} height={20} className="brightness-0 invert opacity-50 w-[20px] h-[20px]"/>
+                        </button>
                 {isFilteringSelected() && ClearFiltersButton()}
                 {isFilteringSelected() && SearchFilterButton()}
                 <div className="flex-auto" />
