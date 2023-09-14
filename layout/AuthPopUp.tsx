@@ -214,10 +214,10 @@ export default function AuthPopUp() {
 
 
     return (
-        <span onClick={(e) => clickLocationCheck(e)} className="fixed w-screen h-screen left-0 top-0 bg-[#000000c0] cursor-pointer overflow-scroll
+        <span onClick={(e) => clickLocationCheck(e)} className="fixed w-screen h-screen left-0 top-0 bg-[#000000c0] cursor-pointer overflow-auto z-[100000]
             opacity-0 animate-fade-in
         ">
-            <div className="w-full h-fit max-w-[400px] bg-dimm cursor-default flex flex-col p-[20px] gap-[15px] overflow-scroll absolute k:top-[15%] top-0  md:ml-[45px] left-[50%] translate-x-[-50%]">
+            <div className="w-full h-fit max-w-[400px] bg-dimm cursor-default flex flex-col p-[20px] gap-[15px] absolute top-[10%] md:ml-[45px] left-[50%] translate-x-[-50%]">
                 {HiThereText()}
 
                 <p className="textcol-dimm w-full text-center">Please enter your credentials to sign in.</p>
