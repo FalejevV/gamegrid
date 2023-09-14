@@ -25,7 +25,7 @@ export default function Header(){
             </>}
 
             <Link href={"/"} className="min-w-[120px]">
-                <Image src={"Logo.svg"} alt={"logo-image"}  width={155} height={29}/>
+                <Image src={"/Logo.svg"} alt={"logo-image"}  width={155} height={29}/>
             </Link>
             
             <span className="flex-auto"/>

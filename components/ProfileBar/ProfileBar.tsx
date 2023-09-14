@@ -79,7 +79,7 @@ export default function ProfileBar() {
         <div className="relative" ref={containerRef}>
             <div className="h-full flex items-center cursor-pointer group justify-end gap-[10px]" onClick={toggleDropdown}>
                 <Image src={userSelector.avatar || "https://kvwtrzxxikuvdjmcwofc.supabase.co/storage/v1/object/public/gamegrid/avatar/avatar.svg"} width={45} height={35} alt={"User avatar"}
-                    className="w-[45px] h-[35px] bg-mid"
+                    className="w-[45px] h-[35px] bg-mid min-w-[45px] max-w-[45px] min-h-[35px] max-h-[35px]"
                 />
 
                 <p className="hidden sm:block w-full max-w-[120px] textcol-main truncate">{userSelector.username}</p>

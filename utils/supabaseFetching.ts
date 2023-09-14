@@ -14,7 +14,7 @@ function generateOrderByType(order: string): [orderBy: string, ascending: { asce
     let ascending = false
     let isAspect = false;
     let isTotal = false;
-    if(order === "Originality") order = "original"
+    if (order === "Originality") order = "original"
     switch (order) {
         case "": {
             let orderBy = "id";
@@ -144,7 +144,7 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
         const platformResponse = await filterByPlatforms(supabase, filters.platforms, gameIds);
         gameIds = platformResponse.data || [];
         if (gameIds.length === 0) nothingFoundOnPrevQuery = true;
-        
+
         if (nothingFoundOnPrevQuery) {
             return { data: [], error: null };
         }
@@ -201,14 +201,14 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
     if (!isAspect && orderBy !== "release_date") {
         query.order('id', ascending)
     }
-    if(orderBy === "release_date"){
+    if (orderBy === "release_date") {
         query.order("release_date", ascending);
     }
-    query.range(offset, offset + amountDefault -1);
+    query.range(offset, offset + amountDefault - 1);
     query.eq("state_id", 5);
 
     let { data, error } = await query;
-    
+
     if (isTotal || isAspect) {
         let result: Game[] = [];
         result = gameIds.map((id) => {
@@ -280,7 +280,7 @@ export async function supabaseGameInsertByNameDateCompany(name: string, date: nu
         data: null,
         error: "Could not upload game image to server." + imageError
     }
-    
+
     // inserting a game into supabase Game table and getting its game ID.
     let { data: gameInsertId, error: gameInsertError } = await insertSupabaseGame(combinedDuplicateGame, imageData || "");
     if (imageError) return { data: null, error: gameInsertError }
@@ -333,7 +333,7 @@ export async function getSupabaseGameByNameAndDate(name: string, date: number): 
             { data: game, error: null }
         )
     }
-    return { data: null, error: errorString};
+    return { data: null, error: errorString };
 }
 
 
@@ -415,7 +415,7 @@ async function insertSupabaseGame(game: IGDBFullGameInfo, imageURL: string): Pro
             image: imageURL,
             state_id: 2
         }).select().single()
-    
+
     return { data: data.id, error: error?.message || null }
 }
 
@@ -450,8 +450,8 @@ async function getSupabasePlatformIdByPlatformName(platformName: string = ""): P
     }
 }
 
-export async function getSupabasePlatformNameByPlatformId(platformId: number): Promise<StringDataError>{
-    const {data, error} = await supabaseRoot.from("Platform").select("platform").eq("id", platformId).single();
+export async function getSupabasePlatformNameByPlatformId(platformId: number): Promise<StringDataError> {
+    const { data, error } = await supabaseRoot.from("Platform").select("platform").eq("id", platformId).single();
 
     return {
         data: data?.platform || null,
@@ -498,14 +498,14 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
         error: userRequest.error
     }
 
-
+    
     if (!game.platform_played) {
         return {
             data: null,
             error: "platform is not provided"
         }
     }
-    
+
     let platformRequest = await getSupabasePlatformIdByPlatformName(game.platform_played);
     if (platformRequest.error && !platformRequest.data) return {
         data: null,
@@ -514,27 +514,27 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
 
     game.platform_id = Number(platformRequest.data) || 0;
     game.user_id = userId;
+    game.public_user_id = Number(userRequest.data);
     
-
     delete game.platform_played;
 
     const { error } = await supabaseRoot
         .from('Review')
         .upsert(game);
 
-    if(error?.message){
-        return{
-            data:null,
+    if (error?.message) {
+        return {
+            data: null,
             error: error.message
         }
     }
-    
+
     const promisesResult = await Promise.all([updateAverageReviewData(game.game_id), updateAverageUserCollectionInfo(userId)]);
-    
-    promisesResult.forEach((response:StringDataError) => {
-        if(response.error){
-            return{
-                data:null,
+
+    promisesResult.forEach((response: StringDataError) => {
+        if (response.error) {
+            return {
+                data: null,
                 error: response.error
             }
         }
@@ -548,16 +548,16 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
 
 
 
-async function updateAverageReviewData(gameId: number):Promise<StringDataError> {
+async function updateAverageReviewData(gameId: number): Promise<StringDataError> {
     const { data, error } = await supabaseRoot.from("Review").select("*").eq("game_id", gameId);
     if (data) {
         const averageReview: AverageScoreItem = toAverageScore(data);
         if (averageReview) {
             const averageUpsert = await supabaseRoot.from("AverageReview")
                 .upsert(averageReview)
-            if(averageUpsert.error){
-                return{
-                    data:null,
+            if (averageUpsert.error) {
+                return {
+                    data: null,
                     error: averageUpsert.error.message
                 }
             }
@@ -575,33 +575,49 @@ export default async function getSupabaseUserGameReview(userId: string, gameId: 
 
     return {
         data: result.data || null,
-        error: result.error?.message || null 
+        error: result.error?.message || null
     }
 }
 
-async function updateAverageUserCollectionInfo(userId:string): Promise<StringDataError> {
-    const collectionFetch = await supabaseRoot.rpc('get_user_reviews', { p_user_id: userId });
-    if(collectionFetch.error){
+async function updateAverageUserCollectionInfo(userId: string): Promise<StringDataError> {
+    const collectionFetch = await supabaseRoot.rpc('get_reviews_by_user_id', { p_user_id: userId });
+    if (collectionFetch.error) {
         return {
-            data:null,
+            data: null,
             error: collectionFetch.error.message
         }
     }
 
-    if(collectionFetch && collectionFetch.data && collectionFetch.data.length > 0){
-        let collectionSummary:CollectionSummaryInfo = getCollectionSummary(collectionFetch.data);
+    if (collectionFetch && collectionFetch.data && collectionFetch.data.length > 0) {
+        let collectionSummary: CollectionSummaryInfo = getCollectionSummary(collectionFetch.data);
         collectionSummary.user_id = userId;
         const collectionInsertResult = await supabaseRoot.from("AverageUserCollectionInfo").upsert(collectionSummary);
-        if(collectionInsertResult.error?.message){
+        if (collectionInsertResult.error?.message) {
             return {
-                data:null,
+                data: null,
                 error: collectionInsertResult.error.message
             }
         }
     }
 
-    return{
-        data:"OK",
-        error:null,
+    return {
+        data: "OK",
+        error: null,
     }
+}
+
+
+export async function getSupabasePublicUserReview(gameId:number, userId:number): Promise<GameReviewDataError> {
+    const { data, error } = await supabaseRoot.rpc('get_review_by_public_user_id_and_game_id', {
+        p_public_user_id: userId,
+        p_game_id: gameId, 
+    });
+    if(data[0] && data[0].user_id){
+        data[0].user_id = "";
+    }
+    return {
+        data: data[0] || null,
+        error: error?.message || null
+    }
+
 }

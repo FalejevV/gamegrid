@@ -176,6 +176,7 @@ export interface GameReviewData{
     platform_id:number,
     total_score:number,
     finished:boolean,
+    public_user_id:number,
 }
 
 export interface GameReviewDataError{
@@ -206,7 +207,8 @@ export interface FullGameReviewInfo{
     date:Date,
     game_name:string,
     game_tags:string[],
-    image?:string
+    image?:string,
+    public_user_id:number
 }
 
 

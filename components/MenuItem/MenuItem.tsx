@@ -36,7 +36,7 @@ export default function MenuItem(props:{
             hover:scale-105 hover:brightness-125
         `}> 
             <div className="max-w-[35px] min-w-[35px] min-h-[35px] max-h-[35px] flex items-start justify-start">
-                <Image src={`icons/menu/${props.icon}.svg`} alt={`menu-${props.icon}`} width={props.width || 35} height={35}
+                <Image src={`/icons/menu/${props.icon}.svg`} alt={`menu-${props.icon}`} width={props.width || 35} height={35}
                 className={`scale-110 h-[35px]
                 ${pathname !== props.href && "brightness-[60%] scale-100"} 
                 `}/>

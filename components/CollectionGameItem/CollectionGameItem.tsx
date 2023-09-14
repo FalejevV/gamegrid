@@ -1,5 +1,6 @@
 import { FullGameReviewInfo } from "@/interface"
 import Image from "next/image"
+import Link from "next/link"
 
 function GameItemDataBlock(props: {
     title: string,
@@ -91,10 +92,11 @@ function MobileLayout(props: {
 export default function CollectionGameItem(props: {
     game: FullGameReviewInfo
 }) {
+
     return (
-        <>
+        <Link href={`review/${props.game.public_user_id}/${props.game.game_id}`}>
             <MobileLayout game={props.game} />
             <PCTabletLayout game={props.game} />
-        </>
+        </Link>
     )
 }

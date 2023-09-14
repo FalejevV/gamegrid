@@ -19,7 +19,7 @@ export default async function Collection() {
     let userSummary: CollectionSummaryInfo = summaryResponse.data;
     if (userSummary?.user_id) delete userSummary.user_id;
 
-    const collectionFetch = await supabase.rpc('get_user_reviews', { p_user_id: data.user.id });
+    const collectionFetch = await supabase.rpc('get_reviews_by_user_id', { p_user_id: data.user.id });
     return (
         <div className="flex gap-[10px] flex-col w-full max-w-[1000px] mx-auto">
             <div className="flex items-center justify-betwee gap-[10px]">
