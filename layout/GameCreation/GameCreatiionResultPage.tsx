@@ -64,7 +64,8 @@ export default function GameCreationResultPage() {
             platform_played: gameCreationSelector.questions.platform,
             total_score: gameCreationSelector.scores.total,
             platform_id: 0,
-            finished: gameCreationSelector.questions.finished
+            finished: gameCreationSelector.questions.finished,
+            public_user_id: 0
         }
         let result: StringDataError = await APIputGameReview(game);
 
@@ -101,7 +102,8 @@ export default function GameCreationResultPage() {
         date: new Date(),
         game_name: gameCreationSelector.gameInfo.name,
         game_tags: [],
-        image:gameCreationSelector.gameCreationFetchedGame?.image || ""
+        image: gameCreationSelector.gameCreationFetchedGame?.image || "",
+        public_user_id: 0
     }
 
     return (
