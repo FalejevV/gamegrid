@@ -12,7 +12,7 @@ export default function Loading() {
 
     return (
         <div className="w-full flex flex-col k:gap-[60px] gap-[15px] items-center brightness-[70%] overflow-hidden animate-pulse">
-            <div className={`k:block hidden w-full max-w-[1000px] h-[80px] bg-loading p-[10px]  relative`} />
+            <div className={`k:block hidden w-full max-w-[1000px] h-[65px] bg-loading p-[10px]  relative`} />
             <div className="k:hidden flex w-full inputheight items-center justify-between">
                 <div className="w-[45px] h-[45px] bg-loading"/>
                 <div className="w-full max-w-[150px] h-[45px] bg-loading"/> 

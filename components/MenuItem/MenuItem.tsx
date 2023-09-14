@@ -19,7 +19,7 @@ export default function MenuItem(props:{
 
     if(props.mobile){
         return(
-            <Link href={props.href} tabIndex={props.selectable ? 1 : -1} className={`w-full flex justify-center items-center text-[25px]
+            <Link href={props.href} tabIndex={props.selectable ? 1 : -1} className={`w-full max-w-[50vw] flex justify-center items-center text-[25px]
             ${pathname !== props.href ? "textcol-dimm" :"textcol-main"}
             `}
             onClick={() => dispatch(toggleDropdownMenu(false))}
