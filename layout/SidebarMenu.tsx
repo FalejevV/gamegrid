@@ -21,10 +21,10 @@ export default function SidebarMenu(){
 
     function SidebarMenuMobile(){
         return(
-            <span className={`fixed left-0 top-0 w-screen h-screen pointer-events-none transition-all duration-300 overflow-hidden z-[1000]
+            <span className={`fixed left-0 top-0 w-screen h-dvh pointer-events-none transition-all duration-300 overflow-hidden z-[1000]
             ${windowSelector.displayDropdownMenu && "bg-[#00000080] pointer-events-auto"}`}
             onClick={clickLocationCheck}>
-                <nav className={`w-full h-screen max-h-[300px] bg-dimm absolute left-0 transition-all duration-300 flex flex-col p-[30px] pt-[50px] gap-[15px] overflow-y-scroll justify-between items-center
+                <nav className={`w-full h-dvh max-h-[300px] bg-dimm absolute left-0 transition-all duration-300 flex flex-col p-[30px] pt-[50px] gap-[15px] overflow-y-scroll justify-between items-center
                 ${windowSelector.displayDropdownMenu && "bottom-0 flex"}
                 ${!windowSelector.displayDropdownMenu && "bottom-[-100vh]"}
                 `}>
