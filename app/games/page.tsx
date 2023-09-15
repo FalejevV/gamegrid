@@ -31,11 +31,10 @@ export default async function Games({searchParams}:{
             <p>{isError.toString()}</p>
         </div>
     }
-
     return(
-        <div className="w-full flex flex-col k:gap-[60px] gap-[15px] items-center">
+        <div className="w-full flex min-h-[500px] flex-col k:gap-[60px] gap-[15px] items-center">
             <SortFilterTab />
-            <div className="w-full items-center flex flex-col gap-[60px]">
+            <div className="w-full items-center flex flex-col gap-[60px]" id="gameList">
             {resultData && displayGames()}
             </div>
         </div>

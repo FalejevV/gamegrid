@@ -21,7 +21,7 @@ function PCTabletLayout(props: {
     game: FullGameReviewInfo
 }) {
     return (
-        <div className="w-full max-w-[1000px] h-[200px] hidden sm:flex">
+        <div className="w-full max-w-[1000px] h-[200px] hidden sm:flex hover:brightness-110 transition-all duration-200">
             <div className="flex gap-[10px] w-full h-full">
                 <div className="flex gap-[10px] flex-auto h-full flex-col">
                     <div className="flex max-h-[34px] h-[34px] w-full gap-[10px] whitespace-nowrap">

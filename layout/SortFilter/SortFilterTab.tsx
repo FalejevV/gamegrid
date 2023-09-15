@@ -17,6 +17,7 @@ import Link from "next/link";
 import SortFilterQueryReader from "@/components/SortFilterQueryReader/SortFilterQueryReader";
 import SortFilterTabMobile from "./SortFilterMobile/SortFilterTabMobile";
 import Image from "next/image";
+import { isQueryFilterDifferent } from "@/utils/helpers";
 
 
 export default function SortFilterTab() {
@@ -28,6 +29,7 @@ export default function SortFilterTab() {
     const [playerOptions, setPlayerOptions] = useState<string[]>([]);
     const [aspectOptions, setAspectOptions] = useState<string[]>([]);
     const [developerOptions, setDeveloperOptions] = useState<string[]>([]);
+    const [searchActive, setSearchActive] = useState(false);
 
 
     useEffect(() => {
@@ -36,8 +38,7 @@ export default function SortFilterTab() {
         getTableList(supabaseClient, "Player").then(res => setPlayerOptions(res.data || []));
         getTableList(supabaseClient, "Aspect").then(res => setAspectOptions(convertToFancyScores(res.data || [])));
         getTableList(supabaseClient, "Developer").then(res => setDeveloperOptions(res.data || []));
-    }
-        , []);
+    }, []);
 
 
 
@@ -64,32 +65,21 @@ export default function SortFilterTab() {
 
     function SearchFilterButton() {
         return (
-            <Link className="bg-hi h-[40px] px-[10px] flex items-center justify-center searchbutton" href={generateSortFilterParams(sortFilterSelector, "games")} onClick={searchClick}>
+            <Link className={`bg-hi h-[40px] px-[10px] flex items-center justify-center searchbutton
+                ${searchActive ? "opacity-100" : "opacity-60"}
+            `} href={generateSortFilterParams(sortFilterSelector, "games")} onClick={searchClick}>
                 Search!
             </Link>
         )
     }
- 
+
     // Function checks if current page filtering query is different from stored query data to either display loading indicator and start loading data, or do nothing;
     function searchClick(e: React.MouseEvent) {
         // @ts-ignore 
         let params = new URL(document.location).searchParams;
         let generatedParams = generateSortFilterParams(sortFilterSelector, "games");
-        let orderParams = params.getAll("order").sort().toString();
-        let orderGenerated = [generatedParams.query.order].sort().toString();
 
-        let tagsParams = params.getAll("tags").sort().toString();
-        let tagsGenerated = [generatedParams.query.tags].sort().toString();
-
-        let playersParams = params.getAll("players").sort().toString();
-        let playersGenerated = [generatedParams.query.players].sort().toString();
-
-        let developerParams = params.getAll("developer").sort().toString();
-        let developerGenerated = [generatedParams.query.developer].sort().toString();
-
-        let platformParams = params.getAll("platforms").sort().toString();
-        let platformGenerated = [generatedParams.query.platforms].sort().toString();
-        if (orderParams !== orderGenerated || tagsParams !== tagsGenerated || playersParams !== playersGenerated || developerParams !== developerGenerated || platformParams !== platformGenerated) {
+        if (isQueryFilterDifferent(params, generatedParams)) {
             let target = e.target as HTMLLinkElement;
             if (target.innerHTML === "Loading...") {
                 e.preventDefault();
@@ -104,9 +94,22 @@ export default function SortFilterTab() {
     useEffect(() => {
         let searchButton = document.getElementsByClassName("searchbutton")[0];
         if (searchButton) {
-            searchButton.innerHTML = "Search!"
+            searchButton.innerHTML = "Search!";
+            // @ts-ignore
+            let params = new URL(document.location).searchParams;
+            let generatedParams = generateSortFilterParams(sortFilterSelector, "games");
+
+            if (isQueryFilterDifferent(params, generatedParams) && !searchActive) {
+                setSearchActive(true);
+                return;
+            } else {
+                if (!isQueryFilterDifferent(params, generatedParams) && searchActive) {
+                    setSearchActive(false);
+                    return;
+                }
+            }
         }
-    })
+    });
 
 
     function TagFilter() {
@@ -190,9 +193,9 @@ export default function SortFilterTab() {
                 <button className={`${sortFilterSelector.expand ? "textcol-dimm saturate-[90%]" : "textcol-main saturate-100"} 
                 transition-all duration-200 bg-mid h-[40px] w-full max-w-[185px] text-left p-[10px] flex items-center justify-between text-[15px]`}
                     onClick={() => dispatch(sortFilterExpand(!sortFilterSelector.expand))}>
-                        Advanced Search
-                        <Image src={"/icons/dots.svg"} alt={"advanced search icon"}  width={20} height={20} className="brightness-0 invert opacity-50 w-[20px] h-[20px]"/>
-                        </button>
+                    Advanced Search
+                    <Image src={"/icons/dots.svg"} alt={"advanced search icon"} width={20} height={20} className="brightness-0 invert opacity-50 w-[20px] h-[20px]" />
+                </button>
                 {isFilteringSelected() && ClearFiltersButton()}
                 {isFilteringSelected() && SearchFilterButton()}
                 <div className="flex-auto" />
