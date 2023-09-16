@@ -111,7 +111,7 @@ export default function GameCreationResultPage() {
             <p className="inputheight w-full bg-dimm flex items-center justify-center">{gameCreationSelector.gameInfo.name}</p>
             <Title title={"Game Creation Results"} />
             <div />
-            <CollectionGameItem game={gameReviewInfo} />
+            <CollectionGameItem disabledLink game={gameReviewInfo} />
             <div className="flex gap-[10px] items-center justify-between">
                 <Button title={"Go Back"} onClick={previousPage} />
                 <WideActionButton disabled={isFetching} onClick={saveReview} text={"Save My Review"} disableText="Saving..." />

@@ -177,6 +177,10 @@ export interface GameReviewData{
     total_score:number,
     finished:boolean,
     public_user_id:number,
+    game_name?:string,
+    game_image?:string,
+    date?:Date,
+    username?:string
 }
 
 export interface GameReviewDataError{

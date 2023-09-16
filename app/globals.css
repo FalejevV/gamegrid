@@ -62,6 +62,10 @@ body {
 
 .textcol-dimm {
   color: rgb(149, 171, 172);
+  transition: color 0.3s;
+}
+.textcol-dimm:hover{
+  color: rgb(202, 233, 234);
 }
 
 .textcol-bgmid {

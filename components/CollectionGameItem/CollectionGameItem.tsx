@@ -8,7 +8,7 @@ function GameItemDataBlock(props: {
     color?: string,
 }) {
     return (
-        <div className={`flex flex-col flex-auto h-[63px] ustify-between sm:h-[73px] sm:p-[10px] sm:pb-[3px] p-[8px]
+        <div className={`flex flex-col flex-auto h-[63px] justify-between sm:h-[73px] sm:p-[10px] sm:pb-[3px] p-[8px]
             ${props.color ? props.color : "bg-dimm"}
         `}>
             <p className="textcol-main sm:text-[24px] text-[20px] w-full text-right font-semibold">{props.value}</p>
@@ -90,9 +90,18 @@ function MobileLayout(props: {
 
 
 export default function CollectionGameItem(props: {
-    game: FullGameReviewInfo
+    game: FullGameReviewInfo,
+    disabledLink?: boolean
 }) {
 
+    if (props.disabledLink) {
+        return (
+            <>
+                <MobileLayout game={props.game} />
+                <PCTabletLayout game={props.game} />
+            </>
+        )
+    }
     return (
         <Link href={`review/${props.game.public_user_id}/${props.game.game_id}`}>
             <MobileLayout game={props.game} />
