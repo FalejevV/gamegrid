@@ -20,7 +20,7 @@ export default function GamePreviewTotalScore(props:{
     }
 
     return(
-        <div className="w-full max-w-[180px] min-w-[180px] flex-auto bg-hi flex flex-col justify-between py-[8px] pb-1 items-center relative overflow-hidden h-[88px]" >
+        <div className="w-full max-w-[180px] min-w-[180px] flex-auto bg-hi flex flex-col justify-between py-[8px] pb-1 items-center relative overflow-hidden h-[93px]" >
             <p className="font-semibold textcol-main text-[19px] z-10 relative">Overall rating</p>
             <p className="textcol-main text-[28px] font-bold relative z-10">{props.value}%</p>
 

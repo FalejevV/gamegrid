@@ -77,8 +77,8 @@ body {
 }
 
 .flexgap {
-  display: flex;
-  gap: 10px;
+  @apply flex gap-[5px]; 
+  @apply k:gap-[10px];
 }
 
 .pten {

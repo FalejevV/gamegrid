@@ -13,6 +13,18 @@ export const ratingNames = {
     10: "+4"
 }
 
+export const ratingSymbols = {
+    0: "----",
+    1: "---",
+    2: "---",
+    3: "-",
+    5: "==",
+    7: "+",
+    8: "++",
+    9: "+++",
+    10: "++++"
+}
+
 export const ratingAspects: {
     [key in keyof ScoreList]: {
         title: string,

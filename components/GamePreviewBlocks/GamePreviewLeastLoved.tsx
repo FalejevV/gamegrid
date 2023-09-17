@@ -8,7 +8,7 @@ export default function GamePreviewLeastLoved(props:{
 
     if(props.minimal){
         return(
-            <div className="flexjustify-between flex-auto min-w-[170px] bg-mid px-[10px] items-center relative overflow-hidden h-[39x] min-h-[39px] max-h-[39px]">
+            <div className="flexjustify-between flex-auto min-w-[170px] bg-mid px-[10px] items-center relative overflow-hidden h-[44x] min-h-[44px] max-h-[44px]">
                 <div className="h-full flex items-center font-medium textcol-main z-20 justify-between relative">
                     <p>{props.discipline}</p>
                     <p className="font-bold text-[18px]">{props.value}%</p>

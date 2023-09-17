@@ -1,4 +1,4 @@
-import { RatingNumber, ScoreList } from "@/interface"
+import { RatingNumber } from "@/interface"
 import { ratingAspects, ratingNames, ratingPageAspectNamesArray } from "@/rating";
 import { setGameCreationScore } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
