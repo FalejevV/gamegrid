@@ -18,7 +18,8 @@ module.exports = {
       screens: {
         'md': '880px',
         'summary-lg': '1070px',
-        "k": "1000px"
+        "k": "1000px",
+        "f": "512px"
         // => @media (min-width: 992px) { ... }
       },
     },
