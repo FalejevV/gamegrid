@@ -107,7 +107,7 @@ export default function SortFilterMobileDropdown(props: {
         `} onClick={clickLocationCheck}>
 
             <div className={`w-full h-[calc(100vh-60px)] bg-dimm fixed left-0 bottom-0 z-[301] flex overflow-y-auto overflow-x-hidden transition-all duration-200
-                ${mobileDropdownSelector ? "bottom-0 " : "bottom-[-100vh]"}
+                ${mobileDropdownSelector ? "bottom-0 duration-0" : "bottom-[-100vh]"}
             `}>
 
                 {/* Main filter page, where user can select required filter type */}
