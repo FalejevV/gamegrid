@@ -24,12 +24,22 @@ export default async function Review({ params }: {
     let data = response.data;
     let error = response.error;
 
-    if (error || !data?.game_image) {
+    if (error) {
         return (
+            <>
+                <p className="w-full max-w-[1000px] mx-auto bg-dimm h-[34px] flex items-center justify-center textcol-main">Error has acquired/</p>
+                <p className="w-full max-w-[1000px] mx-auto bg-dimm h-[34px] flex items-center justify-center textcol-main">{error}/</p>
+            </>
+        )
+    }
+
+    if( !data?.game_id ){
+        return(
             <p className="w-full max-w-[1000px] mx-auto bg-dimm h-[34px] flex items-center justify-center textcol-main">Game review not found :/</p>
         )
     }
 
+    
     return (
         <div className="w-full max-w-[1000px] mx-auto flex-col flexgap items-center flexgap">
             <div className="w-full h-[34px] flexgap">
@@ -39,7 +49,7 @@ export default async function Review({ params }: {
             </div>
 
             <div className=" w-full flexgap h-full max-h-[250px] overflow-hidden">
-                <Image src={data.game_image} alt={`${data.game_name} image`} width={400} height={250} className="w-full h-full max-w-[400px] max-h-[250px] object-cover" />
+                <Image src={data.game_image || ""} alt={`${data.game_name} image`} width={400} height={250} className="w-full h-full max-w-[400px] max-h-[250px] object-cover" />
 
                 <div className="flexgap flex-col flex-auto">
                     <div className="flex flexgap h-[60px]">
@@ -55,4 +65,4 @@ export default async function Review({ params }: {
 
         </div>
     )
-}
+}   
