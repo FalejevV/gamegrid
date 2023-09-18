@@ -15,6 +15,7 @@ export default async function Games({searchParams}:{
     let {data, error} = await fetchFilteredGames(searchParams);
         isError = error;
         resultData = data;
+        
     function displayGames(){
         if(data && data.length > 0 && !isError){
             return (

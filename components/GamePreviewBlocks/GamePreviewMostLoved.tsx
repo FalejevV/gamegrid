@@ -9,7 +9,7 @@ export default function GamePreviewMostLoved(props:{
     if(props.minimal){
         return(
             <div className="flexjustify-between flex-auto min-w-[170px] bg-mid px-[10px] items-center relative overflow-hidden h-[44x] min-h-[44px] max-h-[44px]">
-                <div className="h-full flex items-center font-medium textcol-main z-10 justify-between relative">
+                <div className="h-full flex items-center font-medium textcol-main z-10 justify-between relative gap-[10px]">
                     <p>{props.discipline}</p>
                     <p className="font-bold text-[18px]">{props.value}%</p>
                 </div>
