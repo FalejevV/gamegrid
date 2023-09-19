@@ -20,7 +20,7 @@ export default function Tag(props:{
         }))
     }
     return(
-        <button className={`whitespace-nowrap hover:brightness-150 transition-all duration-200 ${props.bright ? "textcol-main" : "textcol-dimm"}`} onClick={tagClick}>
+        <button className={`whitespace-nowrap sm:text-[18px] text-[16px] hover:brightness-150 transition-all duration-200 ${props.bright ? "textcol-main" : "textcol-dimm"}`} onClick={tagClick}>
             {props.tag}
         </button>
     )

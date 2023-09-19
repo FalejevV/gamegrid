@@ -1,6 +1,6 @@
 "use client"
 import { Game } from "@/interface";
-import { pushGames, setGames } from "@/store/features/games";
+import { pushGames, setCanBeLoaded, setGames } from "@/store/features/games";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store";
 import { URLQueryObject, generateSortFilterParams } from "@/utils/queryParams";
 import Image from "next/image";
@@ -40,6 +40,7 @@ export default function GamePageItemsLoader(props: {
     }
 
     useEffect(() => {
+        if(!loaded || !gamesSelector.canBeLoaded) return;
         if (inView && !isBusy) {
             setIsBusy(true);
             let queryParams = generateSortFilterParams(sortFilterSelector, "games");
@@ -54,14 +55,17 @@ export default function GamePageItemsLoader(props: {
         setIsBusy(false);
     },[gamesSelector]);
 
-   useEffect(() => {
-    setLoaded(true);
-   },[]); 
+    useEffect(() => {
+        if(!gamesSelector.canBeLoaded){
+            setLoaded(false);
+        }else{
+            setLoaded(true);
+        }
+    }, [gamesSelector.canBeLoaded]);
 
-   if(loaded) return (
-        
+   if(gamesSelector.canBeLoaded && loaded) return (
         <>
-            <div className="flex flex-col gap-[60px] items-center">
+            <div className=" w-full flex flex-col gap-[60px] items-center">
                 {gamesSelector.games.length > 0 && gamesSelector.games.map((game: Game) => <GamePreviewItem key={game.id + game.name} gameData={game} />)}
             </div>
             {!noMoreGames && <Image ref={ref} src={"/Loading-pulse.gif"} alt={"loading animation"} width={60} height={30} />}

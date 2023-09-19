@@ -3,11 +3,13 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 
 export interface GamesStore {
-    games: Game[]
+    games: Game[],
+    canBeLoaded:boolean
 }
 
 const initialState = {
-    games: []
+    games: [],
+    canBeLoaded:false
 }
 
 
@@ -29,10 +31,17 @@ const gamesSlice = createSlice({
                     }
                 }
             })
+        },
+        setCanBeLoaded : (state:GamesStore, action:PayloadAction<boolean>) => {
+            state.canBeLoaded = action.payload;
+        },
+        resetGames : (state:GamesStore, action:PayloadAction<[]>) => {
+            state.games = action.payload;
+            state.canBeLoaded = false;
         }
     }
 })
 
 export default gamesSlice.reducer;
 
-export const { setGames, pushGames } = gamesSlice.actions;
+export const { setGames, pushGames, setCanBeLoaded, resetGames } = gamesSlice.actions;

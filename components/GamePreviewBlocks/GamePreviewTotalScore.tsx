@@ -22,7 +22,7 @@ export default function GamePreviewTotalScore(props:{
     return(
         <div className="w-full max-w-[180px] min-w-[180px] flex-auto bg-hi flex flex-col justify-between py-[8px] pb-1 items-center relative overflow-hidden h-[93px]" >
             <p className="font-semibold textcol-main text-[19px] z-10 relative">Overall rating</p>
-            <p className="textcol-main text-[28px] font-bold relative z-10">{props.value}%</p>
+            <p className="textcol-main text-[35px] font-bold relative z-10 leading-[43px]">{props.value}%</p>
 
             <Image src={"/icons/Star.svg"} alt={"star icon"}  width={120} height={120} className="absolute right-[-50px] top-[-50px] opacity-20 w-[120px] h-[120px]"/>
             <Image src={"/icons/Star.svg"} alt={"star icon"}  width={80} height={80} className="absolute left-[-20px] bottom-[-10px] opacity-10 w-[80px] h-[80px]"/>

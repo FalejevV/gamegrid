@@ -18,7 +18,7 @@ import SortFilterQueryReader from "@/components/SortFilterQueryReader/SortFilter
 import SortFilterTabMobile from "./SortFilterMobile/SortFilterTabMobile";
 import Image from "next/image";
 import { isQueryFilterDifferent } from "@/utils/helpers";
-import { setGames } from "@/store/features/games";
+import { resetGames, setGames } from "@/store/features/games";
 import amountFetch from "@/utils/amoutFetch";
 
 
@@ -61,7 +61,7 @@ export default function SortFilterTab() {
         return (
             <Link href="games" className="bg-mid h-[40px] px-[10px] flex items-center justify-center " onClick={() => { 
                 dispatch(clearAllOptions());
-                dispatch(setGames([]));
+                dispatch(resetGames([]));
                 dispatch(setAmount(amountFetch));
             }}>
                 Clear
@@ -91,7 +91,7 @@ export default function SortFilterTab() {
                 e.preventDefault();
                 return;
             }
-            dispatch(setGames([]));
+            dispatch(resetGames([]));
             dispatch(setAmount(amountFetch));
             target.innerHTML = "Loading...";
         } else {

@@ -1,2 +1,2 @@
-let amountFetch = 5;
+let amountFetch = 15;
 export default amountFetch

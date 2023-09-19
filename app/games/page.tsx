@@ -18,9 +18,9 @@ export default async function Games({ searchParams }: {
     resultData = data;
     
     function displayGames() {
-        if (data && data.length > 0 && !isError) {
+        if (resultData && resultData.length > 0 && !isError) {
             return (
-                data.map((game: Game) => game !== undefined && <GamePreviewItem key={nanoid()} gameData={game} />)
+                resultData.map((game: Game) => game !== undefined && <GamePreviewItem key={nanoid()} gameData={game} />)
             )
         } else {
             return <p className="textcol-main text-2xl">No games found</p>

@@ -6,7 +6,7 @@ import GamePreviewMostLoved from "../GamePreviewBlocks/GamePreviewMostLoved";
 import GamePreviewParagraph from "../GamePreviewBlocks/GamePreviewParagraph";
 import GamePreviewTotalScore from "../GamePreviewBlocks/GamePreviewTotalScore";
 import GamePreviewImage from "../GamePreviewBlocks/GamePreviewImage";
-import { RootState, useAppSelector } from "@/store/store";
+import { RootState, useAppDispatch, useAppSelector } from "@/store/store";
 import GamePreviewTags from "@/layout/GamePreviewTags";
 import { AverageScoreItem, Game, ScoreItem, ScoreNameList } from "@/interface";
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ import scoreName from "@/utils/scoreName";
 import AdditionalInfoHover from "../AdditionalInfoHover/AdditionalInfoHover";
 import Tag from "../Tag/Tag";
 import { useInView } from "react-intersection-observer";
+import { setCanBeLoaded } from "@/store/features/games";
 
 function getDeveloperStringArray(game: Game): string[] {
     return game.developer.map((developer: { Developer: { developer: string } }) => developer.Developer.developer).slice(1);
@@ -59,7 +60,7 @@ function PCItemLayout(gameData: Game, leastLoved: ScoreItem, mostLoved: ScoreIte
 function TabletItemLayout(gameData: Game, leastLoved: ScoreItem, mostLoved: ScoreItem, total: ScoreItem, inView: boolean) {
     return (
         <section className="w-full h-[344px] min-h-[344px] flexgap flex-col overflow-hidden cursor-pointer hover:brightness-110 transition-all duration-300">
-            <div className={`w-full flexgap flex-col`} style={{ display: inView ? 'block' : 'none' }}>
+            <div className={`w-full flexgap flex-col`} style={{ display: inView ? 'flex' : 'none' }}>
                 <div className="flexgap flex-col w-full h-[78px] items-center">
                     <GamePreviewTitle title={gameData.name} stretch center />
                     <div className="flex gap-[30px] w-full h-full flex-auto bg-red-400 items-center px-3 bg-dimm relative">
@@ -133,7 +134,9 @@ export default function GamePreviewItem(props: {
     gameData: Game
 }) {
 
-    const windowSelector = useAppSelector((state: RootState) => state.window)
+    const windowSelector = useAppSelector((state: RootState) => state.window);
+    const canBeLoadedSelector = useAppSelector((state:RootState) => state.games.canBeLoaded);
+    const dispatch = useAppDispatch();
     const [leastLoved, setLeastLoved] = useState<ScoreItem>();
     const [mostLoved, setMostLoved] = useState<ScoreItem>();
     const [total, setTotal] = useState<ScoreItem>({
@@ -160,7 +163,7 @@ export default function GamePreviewItem(props: {
                     leastValue = scoreValue;
                     leastName = key;
                 }
-                if (scoreValue > mostValue) {
+                if (scoreValue > mostValue && leastName !== key) {
                     mostValue = scoreValue;
                     mostName = key;
                 }
@@ -182,7 +185,9 @@ export default function GamePreviewItem(props: {
             value: mostValue
         })
 
-        let totalScore = sum / (keys.length - 2);
+        if(!canBeLoadedSelector){
+            dispatch(setCanBeLoaded(true));
+        }
     }, [])
 
     // check if width is set and values are calculated
