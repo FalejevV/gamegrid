@@ -38,7 +38,7 @@ export default async function Games({ searchParams }: {
             <SortFilterTab />
             <div className="w-full items-center flex flex-col gap-[60px]" id="gameList">
                 {resultData && displayGames()}
-                {resultData && <GamePageItemsLoader />}
+                {resultData && resultData?.length > 0 && <GamePageItemsLoader initialGames={resultData} />}
             </div>
         </div>
     )

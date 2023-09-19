@@ -5,8 +5,9 @@ import { getIGDBFullGameInfo, getIGDBGameDevelopersByNameAndDate } from "./apiFe
 import { IGDBDuplicateGamesJoin, getCollectionSummary, toAverageScore, toCoverLargeFormat } from "./formatter";
 import supabaseRootClient from "./supabaseRootClient";
 import { fetchImageToBuffer } from "./imageFormat";
+import amountFetch from "./amoutFetch";
 
-let amountDefault = 5;
+let amountDefault = amountFetch;
 
 const supabaseRoot = supabaseRootClient();
 function generateOrderByType(order: string): [orderBy: string, ascending: { ascending: boolean }, isAspect: boolean, itTotal: boolean] {
@@ -107,11 +108,11 @@ async function filterByDevelopers(supabase: SupabaseClient, developer: string, g
     return { data: resultArray, error };
 }
 
-async function sortByAspect(supabase: SupabaseClient, aspect: string, gameids: number[] | null, sort: "asc" | "desc"): Promise<FilteredIDPromise> {
+async function sortByAspect(supabase: SupabaseClient, aspect: string, gameids: number[] | null, sort: "asc" | "desc", offset:number = 0): Promise<FilteredIDPromise> {
     if (gameids && gameids.length === 0) {
         gameids = null
     }
-    const { data, error } = (await supabase.rpc('get_review_game_ids_by_aspect_and_game_ids', { aspect, gameids, sort }).limit(amountDefault))
+    const { data, error } = await supabase.rpc('get_review_game_ids_by_aspect_and_game_ids', { aspect, gameids, sort }).range(offset, offset + amountDefault - 1);
     return { data, error };
 }
 
@@ -125,8 +126,7 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
     let gameIds: number[] = [];
     let anyError: PostgrestError | null = null;
     let nothingFoundOnPrevQuery = false;
-    amountDefault = filters.amount || 5;
-
+    amountDefault = Number(filters.amount || amountFetch);
     // If tags are selected, fint games by these tags
     if (filters.tags && filters.tags.length > 0) {
         const tagResponse = await filterByTags(supabase, filters.tags);
@@ -172,20 +172,17 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
         }
         anyError = developerResponse.error;
     }
-
     let [orderBy, ascending, isAspect, isTotal] = generateOrderByType(filters.order || "");
     if (isAspect && !anyError && filters.order) {
         let orderType: "asc" | "desc" = ascending.ascending ? "asc" : "desc";
-        const aspectResponse = await sortByAspect(supabase, orderBy, gameIds, orderType);
-
+        const aspectResponse = await sortByAspect(supabase, orderBy, gameIds, orderType,offset);
         gameIds = aspectResponse.data || [];
         if (gameIds.length === 0) nothingFoundOnPrevQuery = true;
         if (nothingFoundOnPrevQuery) {
             return { data: [], error: null };
         }
         anyError = aspectResponse.error;
-    }
-
+    } 
     let query = supabase.from('Game').select(`
                 *,
                 developer:GameDeveloper(
@@ -204,11 +201,12 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
     if (orderBy === "release_date") {
         query.order("release_date", ascending);
     }
-    query.range(offset, offset + amountDefault - 1);
     query.eq("state_id", 5);
+    if(!isAspect && !isTotal){
+        query.range(offset, offset + amountDefault - 1);
+    }
 
     let { data, error } = await query;
-
     if (isTotal || isAspect) {
         let result: Game[] = [];
         result = gameIds.map((id) => {

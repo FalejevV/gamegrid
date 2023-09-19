@@ -1,3 +1,4 @@
+import amountFetch from "@/utils/amoutFetch";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 
@@ -50,7 +51,7 @@ const initialState:SortFilter = {
             defaultValue: [],
         },
     },
-    amount:5
+    amount:amountFetch
 }
 
 const sortFilterSlice = createSlice({

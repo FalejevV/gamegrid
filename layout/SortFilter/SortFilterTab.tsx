@@ -1,6 +1,6 @@
 "use client"
 
-import { SortFilterDropdowns, clearAllOptions, sortFilterExpand } from "@/store/features/sortFilter";
+import { SortFilterDropdowns, clearAllOptions, setAmount, sortFilterExpand } from "@/store/features/sortFilter";
 import { useAppDispatch, useAppSelector } from "@/store/store"
 import SortFilterButton from "@/components/SortFilterButton/SortFilterButton";
 import TagsFilterDropdown from "./TagsFilterDropdown";
@@ -18,6 +18,8 @@ import SortFilterQueryReader from "@/components/SortFilterQueryReader/SortFilter
 import SortFilterTabMobile from "./SortFilterMobile/SortFilterTabMobile";
 import Image from "next/image";
 import { isQueryFilterDifferent } from "@/utils/helpers";
+import { setGames } from "@/store/features/games";
+import amountFetch from "@/utils/amoutFetch";
 
 
 export default function SortFilterTab() {
@@ -57,7 +59,11 @@ export default function SortFilterTab() {
 
     function ClearFiltersButton() {
         return (
-            <Link href="games" className="bg-mid h-[40px] px-[10px] flex items-center justify-center " onClick={() => dispatch(clearAllOptions())}>
+            <Link href="games" className="bg-mid h-[40px] px-[10px] flex items-center justify-center " onClick={() => { 
+                dispatch(clearAllOptions());
+                dispatch(setGames([]));
+                dispatch(setAmount(amountFetch));
+            }}>
                 Clear
             </Link>
         )
@@ -85,6 +91,8 @@ export default function SortFilterTab() {
                 e.preventDefault();
                 return;
             }
+            dispatch(setGames([]));
+            dispatch(setAmount(amountFetch));
             target.innerHTML = "Loading...";
         } else {
             e.preventDefault();

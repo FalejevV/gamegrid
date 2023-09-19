@@ -4,13 +4,15 @@ import userAuth from "./features/userAuth"
 import window from "./features/window"
 import sortFilter from "./features/sortFilter"
 import gameCreation from "./features/gameCreation"
+import games from "./features/games"
 
 export const store = configureStore({
   reducer: {
     userAuth:userAuth,
     window:window,
     sortFilter:sortFilter,
-    gameCreation: gameCreation
+    gameCreation: gameCreation,
+    games:games
   }
 })
 

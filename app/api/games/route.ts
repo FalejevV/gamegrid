@@ -14,12 +14,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: Request) {
   const res = await request.json()
-  
-  let {data, error} = await fetchFilteredGames(res);
-
+  var { data, error } = await fetchFilteredGames(res, res.amount);
   return new NextResponse(JSON.stringify({
-    data:data,
-    error:error
+    data: data,
+    error: error
   }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
