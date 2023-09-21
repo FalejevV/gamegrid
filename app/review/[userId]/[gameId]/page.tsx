@@ -1,5 +1,7 @@
+import ReviewEditButton from "@/components/ReviewEditButton/ReviewEditButton";
 import { RatingNumber } from "@/interface";
 import { ratingSymbols } from "@/rating";
+import { RootState, useAppSelector } from "@/store/store";
 import { getSupabasePublicUserReview } from "@/utils/supabaseFetching"
 import Image from "next/image";
 
@@ -45,7 +47,6 @@ export default async function Review({ params }: {
         )
     }
 
-    
     function ScoreGrid() {
         return (
             <div className="grid k:grid-cols-3 k:grid-rows-[repeat(4,50px)] w-full gap-[5px] k:gap-[10px] 
@@ -66,7 +67,6 @@ export default async function Review({ params }: {
         )
     }
 
-
     function MobileLayout() {
         if (!data) return;
 
@@ -74,11 +74,14 @@ export default async function Review({ params }: {
             <span className="k:hidden flex">
                 <div className="w-full max-w-[1000px] mx-auto flex-col items-center flexgap">
                     <div className="w-full flexgap f:flex-row flex-col">
-                        <p className="px-[20px] h-[34px] textcol-main text-[18px] bg-mid flex items-center justify-center font-semibold">{data.game_name}</p>
-                        <p className="px-[10px] h-[34px] textcol-dimm text-[16px] bg-dimm flex items-center justify-end flex-auto">{data.date && new Date(data.date).toDateString()}</p>
+                        <p className="px-[20px] h-[34px] textcol-main text-[18px] bg-mid flex items-center justify-center font-semibold whitespace-nowrap overflow-x-auto">{data.game_name}</p>
+                        <p className="px-[10px] h-[34px] textcol-dimm text-[16px] bg-dimm flex items-center justify-end flex-auto whitespace-nowrap overflow-x-auto">{data.date && new Date(data.date).toDateString()}</p>
                     </div>
 
-                    <p className="px-[10px] h-[34px] textcol-dimm text-[18px] bg-mid flex items-center flex-auto justify-end w-full">{data.username}</p>
+                    <div className="flex flexgap w-full">
+                        <ReviewEditButton gameId={data.game_id} name={data.game_name || ""} image={data.game_image || ""} date={new Date(data.release_date || "").valueOf()} company={""} />
+                        <p className="px-[10px] h-[34px] textcol-dimm text-[18px] bg-mid w-full overflow-x-auto leading-[34px] text-right">{data.username}</p>
+                    </div>
                     <Image src={data.game_image || ""} alt={`${data.game_name} image`} width={400} height={200} className="w-full h-[200px] object-cover" />
 
                     <div className=" w-full flexgap h-fit overflow-hidden">
@@ -112,6 +115,7 @@ export default async function Review({ params }: {
                         <p className="px-[20px] textcol-main text-[18px] bg-mid flex items-center justify-center font-semibold">{data.game_name}</p>
                         <p className="px-[20px] textcol-dimm text-[16px] bg-dimm flex items-center justify-center">{data.date && new Date(data.date).toDateString()}</p>
                         <p className="px-[10px] textcol-dimm text-[18px] bg-mid flex items-center flex-auto justify-end">{data.username}</p>
+                        <ReviewEditButton gameId={data.game_id} name={data.game_name || ""} image={data.game_image || ""} date={new Date(data.release_date || "").valueOf()} company={""} />
                     </div>
 
                     <div className=" w-full flexgap h-full max-h-[250px] overflow-hidden">
@@ -122,8 +126,8 @@ export default async function Review({ params }: {
                                 <DataBlock title={"Hours Played"} value={data.hours_spent} textValue={data.hours_spent} />
                                 <DataBlock title={"Game Completed"} textValue={data.finished ? "Yes" : "No"} value={0} />
                             </div>
-                            <div className="w-full  h-full bg-mid p-[10px] pb-[3px] text-[16px] font-medium overflow-x-hidden overflow-y-auto flex-col justify-between">
-                                <p className="w-full max-h-[155px] overflow-y-auto textcol-main">{data.user_comment}</p>
+                            <div className="w-full h-full bg-mid p-[10px] pb-[3px] text-[16px] font-medium overflow-x-hidden overflow-y-auto flex-col">
+                                <p className="w-full max-h-[152px] overflow-y-auto h-full textcol-main ">{data.user_comment}</p>
                                 <p className="textcol-dimm">Comment</p>
                             </div>
                         </div>

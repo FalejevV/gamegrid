@@ -16,7 +16,8 @@ export default function AuthListener(){
                 userId: null,
                 username: null,
                 role: null,
-                avatar:null
+                avatar:null,
+                publicId:null
             }));
         }else{
             if(session.user.id && userSelector.userId !== session.user.id){
@@ -25,7 +26,8 @@ export default function AuthListener(){
                         userId: res.data?.id,
                         username: res.data?.username,
                         role: res.data?.role,
-                        avatar: res.data?.avatar
+                        avatar: res.data?.avatar,
+                        publicId:res.data?.user_id
                     }))
                 });
             }

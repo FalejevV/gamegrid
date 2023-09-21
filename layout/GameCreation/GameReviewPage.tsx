@@ -116,7 +116,6 @@ export default function GameReviewPage() {
         } else {
             dispatch(setGameCreationFetchedGame(null));
         }
-
         const result: GameCreationRequiredInfoDataError = await APIgetSupabaseGameFromNameAndDate(gameCreationSelector.gameInfo.name, gameCreationSelector.gameInfo.date);
         if (result.data) {
             let userReview = await APIgetUserReviewByGameNameAndDate(userAuthSelector.userId, result.data.id);

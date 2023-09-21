@@ -180,7 +180,8 @@ export interface GameReviewData{
     game_name?:string,
     game_image?:string,
     date?:Date,
-    username?:string
+    username?:string,
+    release_date?:string
 }
 
 export interface GameReviewDataError{

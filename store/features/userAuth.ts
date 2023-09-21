@@ -4,14 +4,16 @@ interface AuthSlice{
     userId:string | null,
     username:string | null,
     role:number | null,
-    avatar:string | null
+    avatar:string | null,
+    publicId:string | null,
 }
 
 const initialState: AuthSlice = {
     userId:"-1",
     username:null,
     role:1,
-    avatar: null
+    avatar: null,
+    publicId:"-1"
 }
 
 const userAuthSlice = createSlice({
@@ -22,7 +24,8 @@ const userAuthSlice = createSlice({
             state.userId = action.payload.userId;
             state.username = action.payload.username;
             state.role = action.payload.role;
-            state.avatar = action.payload.avatar;
+            state.avatar = action.payload.avatar,
+            state.publicId = action.payload.publicId
         })
     }
 })
