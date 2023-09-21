@@ -26,7 +26,9 @@ export default function ReviewEditButton(props:{
             date: props.date / 1000,
             company: props.company
         }));
-        router.push("/add-game");
+        setTimeout(() => {
+            router.push("/add-game");
+        },200);
     }
     return(
         <div className="w-[34px] h-full bg-hi cursor-pointer flex items-center justify-center hover:brightness-125 group transition-all duration-300" onClick={editClick}>
