@@ -41,7 +41,7 @@ export default function GameRatingField() {
                 <p className="w-full inputheight bg-dimm flex items-center justify-center textcol-main">{gameCreationGameInfoSelector.name}</p>
                 <div className="flex items-center justify-between flexgap">
                     <Title title={`${ratingAspects[ratingPageAspectNamesArray[gameCreationRatingPageSelector]].title}`} />
-                    <p className="textcol-dimm text-[15px]">Question ( {gameCreationRatingPageSelector + 1} / 11 )</p>
+                    <p className="textcol-dimm text-[15px] whitespace-nowrap"> {gameCreationRatingPageSelector + 1} / 11</p>
                 </div>
                 <p className="textcol-dimm sm:text-[16px] text-[15px] h-[90px]">{ratingAspects[ratingPageAspectNamesArray[gameCreationRatingPageSelector]].description}</p>
             </div>
