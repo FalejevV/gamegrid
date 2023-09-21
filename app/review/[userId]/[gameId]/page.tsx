@@ -31,7 +31,6 @@ export default async function Review({ params }: {
     let response = await getSupabasePublicUserReview(params.gameId, params.userId);
     let data = response.data;
     let error = response.error;
-
     if (error) {
         return (
             <>

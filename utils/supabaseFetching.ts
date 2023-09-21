@@ -606,7 +606,7 @@ async function updateAverageUserCollectionInfo(userId: string): Promise<StringDa
 
 
 export async function getSupabasePublicUserReview(gameId:number, userId:number): Promise<GameReviewDataError> {
-    const { data, error } = await supabaseRoot.rpc('get_user_review_by_public_user_id_and_game_id', {
+    const { data, error } = await supabaseRoot.rpc('get_single_user_review_by_public_user_id_and_game_id', {
         p_public_user_id: userId,
         p_game_id: gameId, 
     });
