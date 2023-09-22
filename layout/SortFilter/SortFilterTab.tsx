@@ -18,8 +18,8 @@ import SortFilterQueryReader from "@/components/SortFilterQueryReader/SortFilter
 import SortFilterTabMobile from "./SortFilterMobile/SortFilterTabMobile";
 import Image from "next/image";
 import { isQueryFilterDifferent } from "@/utils/helpers";
-import { resetGames, setGames } from "@/store/features/games";
-import amountFetch from "@/utils/amoutFetch";
+import { resetGames } from "@/store/features/games";
+import { amountFetch } from "@/utils/config";
 
 
 export default function SortFilterTab() {

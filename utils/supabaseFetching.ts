@@ -5,7 +5,7 @@ import { getIGDBFullGameInfo, getIGDBGameDevelopersByNameAndDate } from "./apiFe
 import { IGDBDuplicateGamesJoin, getCollectionSummary, toAverageScore, toCoverLargeFormat } from "./formatter";
 import supabaseRootClient from "./supabaseRootClient";
 import { fetchImageToBuffer } from "./imageFormat";
-import amountFetch from "./amoutFetch";
+import { amountFetch, gameToPublicReviewRequired } from "./config";
 
 let amountDefault = amountFetch;
 
@@ -108,7 +108,7 @@ async function filterByDevelopers(supabase: SupabaseClient, developer: string, g
     return { data: resultArray, error };
 }
 
-async function sortByAspect(supabase: SupabaseClient, aspect: string, gameids: number[] | null, sort: "asc" | "desc", offset:number = 0): Promise<FilteredIDPromise> {
+async function sortByAspect(supabase: SupabaseClient, aspect: string, gameids: number[] | null, sort: "asc" | "desc", offset: number = 0): Promise<FilteredIDPromise> {
     if (gameids && gameids.length === 0) {
         gameids = null
     }
@@ -175,14 +175,15 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
     let [orderBy, ascending, isAspect, isTotal] = generateOrderByType(filters.order || "");
     if (isAspect && !anyError && filters.order) {
         let orderType: "asc" | "desc" = ascending.ascending ? "asc" : "desc";
-        const aspectResponse = await sortByAspect(supabase, orderBy, gameIds, orderType,offset);
+        const aspectResponse = await sortByAspect(supabase, orderBy, gameIds, orderType, offset);
         gameIds = aspectResponse.data || [];
         if (gameIds.length === 0) nothingFoundOnPrevQuery = true;
         if (nothingFoundOnPrevQuery) {
             return { data: [], error: null };
         }
         anyError = aspectResponse.error;
-    } 
+    }
+
     let query = supabase.from('Game').select(`
                 *,
                 developer:GameDeveloper(
@@ -196,13 +197,13 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
     `);
     if (gameIds.length > 0) query.in("id", gameIds);
     if (!isAspect && orderBy !== "release_date") {
-        query.order('id', ascending)
+        query.order('active_date', ascending)
     }
     if (orderBy === "release_date") {
         query.order("release_date", ascending);
     }
     query.eq("state_id", 5);
-    if(!isAspect && !isTotal){
+    if (!isAspect && !isTotal) {
         query.range(offset, offset + amountDefault - 1);
     }
 
@@ -496,7 +497,7 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
         error: userRequest.error
     }
 
-    
+
     if (!game.platform_played) {
         return {
             data: null,
@@ -513,9 +514,8 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
     game.platform_id = Number(platformRequest.data) || 0;
     game.user_id = userId;
     game.public_user_id = Number(userRequest.data);
-    
-    delete game.platform_played;
 
+    delete game.platform_played;
     const { error } = await supabaseRoot
         .from('Review')
         .upsert(game);
@@ -526,18 +526,20 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
             error: error.message
         }
     }
-
     const promisesResult = await Promise.all([updateAverageReviewData(game.game_id), updateAverageUserCollectionInfo(userId)]);
-
+    let promiseError;
     promisesResult.forEach((response: StringDataError) => {
         if (response.error) {
-            return {
-                data: null,
-                error: response.error
-            }
+            promiseError = response.error;
+            return;
         }
     })
-
+    if (promiseError) {
+        return {
+            data: null,
+            error: promiseError
+        }
+    }
     return {
         data: "OK",
         error: error?.message || null
@@ -547,6 +549,14 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
 
 
 async function updateAverageReviewData(gameId: number): Promise<StringDataError> {
+    const stateResult = await supabaseRoot.from("Game").select("state_id").eq("id", gameId);
+    if (stateResult.error || !stateResult.data) {
+        return {
+            data: null,
+            error: "Game not found in database"
+        }
+    }
+
     const { data, error } = await supabaseRoot.from("Review").select("*").eq("game_id", gameId);
     if (data) {
         const averageReview: AverageScoreItem = toAverageScore(data);
@@ -560,7 +570,21 @@ async function updateAverageReviewData(gameId: number): Promise<StringDataError>
                 }
             }
         }
+        if (data.length >= gameToPublicReviewRequired && stateResult.data[0].state_id === 2) {
+            const { data, error } = await supabaseRoot.from('Game').update({ 
+                state_id:5,
+                active_date: new Date()
+            }).match({ id: gameId });
+            if(error){
+                return{
+                    data:null,
+                    error:error.message
+                }
+            } 
+
+        }
     }
+
 
     return {
         data: "OK" || null,
@@ -605,18 +629,18 @@ async function updateAverageUserCollectionInfo(userId: string): Promise<StringDa
 }
 
 
-export async function getSupabasePublicUserReview(gameId:number, userId:number): Promise<GameReviewDataError> {
+export async function getSupabasePublicUserReview(gameId: number, userId: number): Promise<GameReviewDataError> {
     const { data, error } = await supabaseRoot.rpc('get_single_user_review_by_public_user_id_and_game_id', {
         p_public_user_id: userId,
-        p_game_id: gameId, 
+        p_game_id: gameId,
     });
-    if(error){
+    if (error) {
         return {
-            data:null,
+            data: null,
             error: error.message
         }
     }
-    if(data[0] && data[0].user_id){
+    if (data[0] && data[0].user_id) {
         data[0].user_id = "";
     }
 

@@ -163,7 +163,7 @@ export default function GamePreviewItem(props: {
                     leastValue = scoreValue;
                     leastName = key;
                 }
-                if (scoreValue > mostValue && leastName !== key) {
+                if (scoreValue > mostValue && leastName !== key && key !== "microtransactions_avg") {
                     mostValue = scoreValue;
                     mostName = key;
                 }

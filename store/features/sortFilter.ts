@@ -1,4 +1,4 @@
-import amountFetch from "@/utils/amoutFetch";
+import { amountFetch } from "@/utils/config";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 

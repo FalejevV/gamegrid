@@ -45,7 +45,6 @@ export default function GamePageItemsLoader(props: {
             setIsBusy(true);
             let queryParams = generateSortFilterParams(sortFilterSelector, "games");
             queryParams.query.amount += gamesSelector.games.length;
-            console.log(queryParams);
             fetchGames(queryParams);
         }
     }, [inView, gamesSelector]);
