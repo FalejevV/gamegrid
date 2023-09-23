@@ -1,21 +1,8 @@
 import { FullGameReviewInfo } from "@/interface"
+import { dateToText } from "@/utils/formatter"
 import Image from "next/image"
 import Link from "next/link"
-
-function GameItemDataBlock(props: {
-    title: string,
-    value: string,
-    color?: string,
-}) {
-    return (
-        <div className={`flex flex-col flex-auto h-[63px] justify-between sm:h-[73px] sm:p-[10px] sm:pb-[3px] p-[8px]
-            ${props.color ? props.color : "bg-dimm"}
-        `}>
-            <p className="textcol-main sm:text-[24px] text-[20px] w-full text-right font-semibold">{props.value}</p>
-            <p className="textcol-dimm w-full text-[16px]">{props.title}</p>
-        </div>
-    )
-}
+import GameItemDataBlock from "../GameItemDataBlock/GameItemDataBlock"
 
 function PCTabletLayout(props: {
     game: FullGameReviewInfo
@@ -26,7 +13,7 @@ function PCTabletLayout(props: {
                 <div className="flex gap-[10px] flex-auto h-full flex-col">
                     <div className="flex max-h-[34px] h-[34px] w-full gap-[10px] whitespace-nowrap">
                         <p className="textcol-main h-[100%] bg-mid px-[10px] flex items-center font-semibold text-[20px] flex-auto overflow-x-auto ">{props.game.game_name}</p>
-                        <p className="bg-dimm px-[10px] textcol-dimm flex items-center text-[16px] overflow-hidden">{new Date(props.game.date).toDateString()}</p>
+                        <p className="bg-dimm px-[10px] textcol-dimm flex items-center text-[16px] overflow-hidden">{dateToText(new Date(props.game.date).valueOf() / 1000)}</p>
                     </div>
 
                     <div className="flex h-full max-h-[156px] gap-[10px] relative">
@@ -69,7 +56,7 @@ function MobileLayout(props: {
                     <div className="flex flex-col h-full gap-[10px] relative">
                         <Image src={props.game.image || ""} alt={`${props.game.game_name} image`} className="w-full h-[156px] bg-dimm object-cover" width={500} height={156} />
                         {props.game.finished && <p className="absolute left-0 top-[131px] bg-hi px-[10px] py-[2px] text-[14px] font-semibold">Completed</p>}
-                        <p className="bg-dimm px-[10px] textcol-dimm flex items-center text-[16px] overflow-hidden min-w-fit absolute right-0 top-[132px]">{new Date(props.game.date).toDateString()}</p>
+                        <p className="bg-dimm px-[10px] textcol-dimm flex items-center text-[16px] overflow-hidden min-w-fit absolute right-0 top-[132px]">{dateToText(new Date(props.game.date).valueOf() / 1000)}</p>
 
                         <div className="flex flex-col gap-[10px] flex-auto">
                             <div className="flex gap-[10px]">

@@ -230,3 +230,16 @@ export interface CollectionSummaryInfo{
     comment_text:string,
     last_completion:Date,
 }
+
+
+export interface IProfile{
+    username:string,
+    avatar:string,
+    created_at:Date,
+    gender:{
+        gender:string,
+    } | null,
+    country:{
+        country:string,
+    }| null
+}

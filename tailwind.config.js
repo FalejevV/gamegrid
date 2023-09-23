@@ -17,6 +17,12 @@ module.exports = {
       },
       screens: {
         'md': '880px',
+        'max800': {
+          'max' : '800px'
+        },
+        'min800': {
+          'min' : '800px'
+        },
         'summary-lg': '1070px',
         "k": "1000px",
         "f": "512px"

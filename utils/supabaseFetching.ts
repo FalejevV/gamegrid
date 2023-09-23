@@ -642,6 +642,7 @@ export async function getSupabasePublicUserReview(gameId: number, userId: number
     }
     if (data[0] && data[0].user_id) {
         data[0].user_id = "";
+        data[0].public_user_id = userId;
     }
 
     return {

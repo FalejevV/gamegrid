@@ -2,8 +2,10 @@ import ReviewEditButton from "@/components/ReviewEditButton/ReviewEditButton";
 import { RatingNumber } from "@/interface";
 import { ratingSymbols } from "@/rating";
 import { RootState, useAppSelector } from "@/store/store";
+import { dateToText } from "@/utils/formatter";
 import { getSupabasePublicUserReview } from "@/utils/supabaseFetching"
 import Image from "next/image";
+import Link from "next/link";
 
 function DataBlock(props: {
     title: string,
@@ -30,6 +32,7 @@ export default async function Review({ params }: {
 
     let response = await getSupabasePublicUserReview(params.gameId, params.userId);
     let data = response.data;
+
     let error = response.error;
     if (error) {
         return (
@@ -74,12 +77,12 @@ export default async function Review({ params }: {
                 <div className="w-full max-w-[1000px] mx-auto flex-col items-center flexgap">
                     <div className="w-full flexgap f:flex-row flex-col">
                         <p className="px-[20px] h-[34px] textcol-main text-[18px] bg-mid flex items-center justify-center font-semibold whitespace-nowrap overflow-x-auto">{data.game_name}</p>
-                        <p className="px-[10px] h-[34px] textcol-dimm text-[16px] bg-dimm flex items-center justify-end flex-auto whitespace-nowrap overflow-x-auto">{data.date && new Date(data.date).toDateString()}</p>
+                        <p className="px-[10px] h-[34px] textcol-dimm text-[16px] bg-dimm flex items-center justify-end flex-auto whitespace-nowrap overflow-x-auto">{data.date && dateToText(new Date(data.date).valueOf() / 1000)}</p>
                     </div>
 
                     <div className="flex flexgap w-full">
                         <ReviewEditButton gameId={data.game_id} name={data.game_name || ""} image={data.game_image || ""} date={new Date(data.release_date || "").valueOf()} company={""} />
-                        <p className="px-[10px] h-[34px] textcol-dimm text-[18px] bg-mid w-full overflow-x-auto leading-[34px] text-right">{data.username}</p>
+                        <Link href={`/profile/${data.public_user_id}`} className="px-[10px] h-[34px] textcol-dimm text-[18px] bg-mid w-full overflow-x-auto leading-[34px] text-right">{data.username}</Link>
                     </div>
                     <Image src={data.game_image || ""} alt={`${data.game_name} image`} width={400} height={200} className="w-full h-[200px] object-cover" />
 
@@ -112,8 +115,8 @@ export default async function Review({ params }: {
                 <div className="w-full max-w-[1000px] mx-auto flex-col items-center flexgap">
                     <div className="w-full h-[34px] flexgap">
                         <p className="px-[20px] textcol-main text-[18px] bg-mid flex items-center justify-center font-semibold">{data.game_name}</p>
-                        <p className="px-[20px] textcol-dimm text-[16px] bg-dimm flex items-center justify-center">{data.date && new Date(data.date).toDateString()}</p>
-                        <p className="px-[10px] textcol-dimm text-[18px] bg-mid flex items-center flex-auto justify-end">{data.username}</p>
+                        <p className="px-[20px] textcol-dimm text-[16px] bg-dimm flex items-center justify-center">{data.date && dateToText(new Date(data.date).valueOf() / 1000)}</p>
+                        <Link href={`/profile/${data.public_user_id}`} className="px-[10px] textcol-dimm text-[18px] bg-mid flex items-center flex-auto justify-end">{data.username}</Link>
                         <ReviewEditButton gameId={data.game_id} name={data.game_name || ""} image={data.game_image || ""} date={new Date(data.release_date || "").valueOf()} company={""} />
                     </div>
 
