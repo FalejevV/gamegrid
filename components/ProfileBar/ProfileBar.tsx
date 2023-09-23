@@ -6,6 +6,7 @@ import supabaseClient from "@/utils/supabaseClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 
 
@@ -27,7 +28,7 @@ export default function ProfileBar() {
             if (!containerRef.current) return;
             let current = containerRef.current as HTMLElement;
             let target = event.target as HTMLElement;
-            if (!current.contains(target)) {    
+            if (!current.contains(target)) {
                 dispatch(toggleProfileMenuDropdown(false));
             }
         }
@@ -40,7 +41,7 @@ export default function ProfileBar() {
 
     if (!loaded) {
         return (
-            <div className="w-[150px] h-[40px] bg-loading animate-pulse"/>
+            <div className="w-[150px] h-[40px] bg-loading animate-pulse" />
         )
     }
 
@@ -70,6 +71,7 @@ export default function ProfileBar() {
         return (
             <div className="absolute right-0 top-[45px] bg-dimm w-[205px] h-fit textcol-main flex flex-col p-[10px] gap-[15px]">
                 <p className="sm:hidden block textcol-dimm">{userSelector.username}</p>
+                <Link href={`/profile/${userSelector.publicId}`} onClick={toggleDropdown}>Profile</Link>
                 <button className="cursor-pointer text-left" onClick={logOut}>Logout</button>
             </div>
         )
