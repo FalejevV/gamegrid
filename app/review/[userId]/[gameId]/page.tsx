@@ -1,7 +1,6 @@
-import ReviewEditButton from "@/components/ReviewEditButton/ReviewEditButton";
+import ReviewEditButton from "@/components/EditButtons/ReviewEditButton/ReviewEditButton";
 import { RatingNumber } from "@/interface";
 import { ratingSymbols } from "@/rating";
-import { RootState, useAppSelector } from "@/store/store";
 import { dateToText } from "@/utils/formatter";
 import { getSupabasePublicUserReview } from "@/utils/supabaseFetching"
 import Image from "next/image";

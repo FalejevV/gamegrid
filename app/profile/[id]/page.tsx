@@ -1,3 +1,4 @@
+import ProfileEditButton from "@/components/EditButtons/ProfileEditButton/ProfileEditButton";
 import GameItemDataBlock from "@/components/GameItemDataBlock/GameItemDataBlock";
 import { IProfile } from "@/interface";
 import { dateToText } from "@/utils/formatter";
@@ -9,7 +10,7 @@ function ProfileInfoLine(props: {
     text: string | number,
     color?: string,
     flexauto?: boolean,
-    align?:string
+    align?: string
 }) {
     return (
         <p className={`h-[34px] flex items-center px-[10px]
@@ -57,6 +58,7 @@ export default async function Profile({ params }: {
                             <div className="flexgap">
                                 <ProfileInfoLine text={userData.username} flexauto color="bg-dimm saturate-[120%]" />
                                 <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} color="bg-dimm saturate-[70%]" />
+                                <ProfileEditButton />
                             </div>
                             <div className="flexgap">
                                 <ProfileInfoLine flexauto text={`Country: ${userData.country ? userData.country.country : "unknown"}`} />
@@ -92,6 +94,7 @@ export default async function Profile({ params }: {
                             <div className="flexgap">
                                 <ProfileInfoLine text={userData.username} flexauto color="bg-dimm saturate-[120%]" />
                                 <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} color="bg-dimm saturate-[70%]" />
+                                <ProfileEditButton />
                             </div>
                             <div className="flexgap">
                                 <ProfileInfoLine flexauto text={`Country: ${userData.country ? userData.country.country : "unknown"}`} />
@@ -123,8 +126,16 @@ export default async function Profile({ params }: {
             <div className="flex min800:hidden">
                 <div className="w-full flexgap flex-col textcol-main">
                     <div className="flexgap sm:flex-row flex-col w-full">
-                        <ProfileInfoLine flexauto text={userData.username} color="bg-mid" />
-                        <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} align="justify-end"/>
+                        <div className="flex flexgap flex-auto">
+                            <ProfileInfoLine flexauto text={userData.username} color="bg-mid" />
+                            <span className="flex sm:hidden w-[34px]">
+                               <ProfileEditButton /> 
+                            </span>
+                        </div>
+                        <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} align="justify-end" />
+                        <span className="sm:flex hidden">
+                            <ProfileEditButton />
+                        </span>
                     </div>
                     <div className="flex w-full h-[150px] justify-center items-center profile-mobile-avatar-gradient">
                         <Image src={userData.avatar} alt={`${userData.username} avatar`} width={150} height={150} className="w-[150px] h-[150px] object-cover" />
