@@ -1,6 +1,6 @@
 import ProfileEditButton from "@/components/EditButtons/ProfileEditButton/ProfileEditButton";
 import GameItemDataBlock from "@/components/GameItemDataBlock/GameItemDataBlock";
-import { IProfile } from "@/interface";
+import { CollectionSummaryInfo, IProfile } from "@/interface";
 import { dateToText } from "@/utils/formatter";
 import supabaseRootClient from "@/utils/supabaseRootClient"
 import Image from "next/image";
@@ -30,12 +30,13 @@ export default async function Profile({ params }: {
 }) {
 
     const profileRequest = await supabaseRootClient().from("profile").select(`
+    id,
     username,
     avatar,
     created_at,
     gender:Gender(gender),
     country:Country(country)
-    `).eq("user_id", params.id);
+    `).eq("user_id", params.id).single();
 
     if (profileRequest.error) {
         return (
@@ -45,8 +46,10 @@ export default async function Profile({ params }: {
             </div>
         )
     }
-    let userData: IProfile = profileRequest.data[0] as unknown as IProfile;
 
+    let userCollectionSummaryRequest = await supabaseRootClient().from("AverageUserCollectionInfo").select("").eq("user_id", profileRequest.data.id).single(); 
+    let userData: IProfile = profileRequest.data as unknown as IProfile;
+    let userCollectionSummary = userCollectionSummaryRequest.data as unknown as CollectionSummaryInfo;
     function PCLayout() {
         return (
             <div className="hidden k:flex">
@@ -70,9 +73,9 @@ export default async function Profile({ params }: {
                                 </div>
 
                                 <div className="flexgap h-fit">
-                                    <GameItemDataBlock title={"Games Played"} value={"20"} color="bg-dimm saturate-[125%]" />
-                                    <GameItemDataBlock title={"Hours Played"} value={"1920"} color="bg-mid saturate-[65%]" />
-                                    <GameItemDataBlock title={"Popular Platform"} value={"PC"} color="bg-dimm saturate-[90%]" />
+                                    <GameItemDataBlock title={"Games Played"} value={userCollectionSummary.total_games || 0} color="bg-dimm saturate-[125%]" />
+                                    <GameItemDataBlock title={"Hours Played"} value={userCollectionSummary.total_hours || 0} color="bg-mid saturate-[65%]" />
+                                    <GameItemDataBlock title={"Popular Platform"} value={userCollectionSummary.platform || "unknown"} color="bg-dimm saturate-[90%]" />
                                 </div>
                             </div>
                         </div>
