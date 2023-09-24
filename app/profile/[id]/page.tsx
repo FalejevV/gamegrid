@@ -5,16 +5,17 @@ import { dateToText } from "@/utils/formatter";
 import supabaseRootClient from "@/utils/supabaseRootClient"
 import Image from "next/image";
 
+export const revalidate = 1800;
 
 function ProfileInfoLine(props: {
     text: string | number,
-    color?: string,
+    addClass?: string,
     flexauto?: boolean,
     align?: string
 }) {
     return (
         <p className={`h-[34px] flex items-center px-[10px]
-            ${props.color ? props.color : "bg-dimm"}
+            ${props.addClass ? props.addClass : "bg-dimm"}
             ${props.flexauto && "flex-auto"}
             ${props.align && props.align}
         `}>
@@ -59,8 +60,8 @@ export default async function Profile({ params }: {
 
                         <div className="flexgap flex-col flex-auto textcol-main h-full">
                             <div className="flexgap">
-                                <ProfileInfoLine text={userData.username} flexauto color="bg-dimm saturate-[120%]" />
-                                <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} color="bg-dimm saturate-[70%]" />
+                                <ProfileInfoLine text={userData.username} flexauto addClass="bg-dimm saturate-[120%] font-semibold text-[18px]" />
+                                <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} addClass="bg-dimm saturate-[70%]" />
                                 <ProfileEditButton />
                             </div>
                             <div className="flexgap">
@@ -95,8 +96,8 @@ export default async function Profile({ params }: {
 
                         <div className="flexgap flex-col flex-auto textcol-main h-full">
                             <div className="flexgap">
-                                <ProfileInfoLine text={userData.username} flexauto color="bg-dimm saturate-[120%]" />
-                                <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} color="bg-dimm saturate-[70%]" />
+                                <ProfileInfoLine text={userData.username} flexauto addClass="bg-dimm saturate-[120%] font-semibold text-[18px]"  />
+                                <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} addClass="bg-dimm saturate-[70%]" />
                                 <ProfileEditButton />
                             </div>
                             <div className="flexgap">
@@ -130,7 +131,7 @@ export default async function Profile({ params }: {
                 <div className="w-full flexgap flex-col textcol-main">
                     <div className="flexgap sm:flex-row flex-col w-full">
                         <div className="flex flexgap flex-auto">
-                            <ProfileInfoLine flexauto text={userData.username} color="bg-mid" />
+                            <ProfileInfoLine flexauto text={userData.username} addClass="bg-mid font-semibold text-[17px]" />
                             <span className="flex sm:hidden w-[34px]">
                                <ProfileEditButton /> 
                             </span>

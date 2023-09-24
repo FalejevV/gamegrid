@@ -68,8 +68,8 @@ export default function ChangePassword(){
         <div className="w-full flex justify-center pt-[30px]">
             <form className="flex flex-col gap-[15px] w-full max-w-[400px] h-fit bg-dimm p-[15px] textcol-main" onSubmit={formSubmit}>
                 <h1 className="w-full text-center text-[20px] pb-[20px]">Password Change Form</h1>
-                <InputField type="password" label={"New Password"} name={"password"} placeholder={"Enter new password"} value={password} setValue={setPassword}  />
-                <InputField type="password" label={"Repeat New Password"} name={"repassword"} placeholder={"Repeat password"} value={rePassword} setValue={setRePassword}  />
+                <InputField bgColor="bg-mid" type="password" label={"New Password"} name={"password"} placeholder={"Enter new password"} value={password} setValue={setPassword}  />
+                <InputField bgColor="bg-mid" type="password" label={"Repeat New Password"} name={"repassword"} placeholder={"Repeat password"} value={rePassword} setValue={setRePassword}  />
                 <div className="h-[20px]"/>
                 <FormButton name={"Change password"} processing={processing} />
                 {alertText && <AlertText alertText={alertText} />}

@@ -5,7 +5,7 @@ import SortFilterTab from "@/layout/SortFilter/SortFilterTab";
 import { fetchFilteredGames } from "@/utils/supabaseFetching";
 import { PostgrestError } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
-
+export const revalidate = 1800;
 
 export default async function Games({ searchParams }: {
     searchParams: FilterQueryParams

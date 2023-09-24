@@ -5,7 +5,7 @@ import { dateToText } from "@/utils/formatter";
 import { getSupabasePublicUserReview } from "@/utils/supabaseFetching"
 import Image from "next/image";
 import Link from "next/link";
-
+export const revalidate = 1800;
 interface IValueFilter {
     0: string,
     10: string,

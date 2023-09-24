@@ -3,7 +3,7 @@ import CollectionGameItem from "@/components/CollectionGameItem/CollectionGameIt
 import { CollectionSummaryInfo, FullGameReviewInfo } from "@/interface";
 import CollectionSummary from "@/layout/CollectionSummary";
 import supabaseServer from "@/utils/supabaseServer";
-
+export const revalidate = 1800;
 export default async function Collection() {
 
     const supabase = supabaseServer()
