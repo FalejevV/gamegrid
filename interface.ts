@@ -241,5 +241,23 @@ export interface IProfile{
     } | null,
     country:{
         country:string,
-    }| null
+    }| null,
+    user_id:number
+}
+
+export interface UserReviewSample{
+    public_user_id:number,
+    total_score:number,
+    finished:boolean,
+    hours_spent:number,
+    game:{
+        name:string,
+        id:number,
+        image:string
+    }
+}
+
+export interface UserReviewSampleDataError{
+    data: UserReviewSample[] | null,
+    error: string | null
 }

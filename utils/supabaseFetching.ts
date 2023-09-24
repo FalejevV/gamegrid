@@ -1,4 +1,4 @@
-import { AverageScoreItem, CollectionSummaryInfo, FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, GameCreationRequiredInfoDataError, GameReviewData, GameReviewDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError } from "@/interface";
+import { AverageScoreItem, CollectionSummaryInfo, FilterQueryParams, FilteredIDPromise, Game, GameCreationRequiredInfo, GameCreationRequiredInfoDataError, GameReviewData, GameReviewDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError, UserReviewSample, UserReviewSampleDataError } from "@/interface";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import supabaseServer from "./supabaseServer";
 import { getIGDBFullGameInfo, getIGDBGameDevelopersByNameAndDate } from "./apiFetching";
@@ -650,4 +650,23 @@ export async function getSupabasePublicUserReview(gameId: number, userId: number
         error: null
     }
 
+}
+
+
+export async function supabaseGetUserReviews(amount:number, offset:number, publicId:number): Promise<UserReviewSampleDataError>{
+    const {data,error} = await supabaseRoot.from("Review").select(`
+        public_user_id,
+        total_score,
+        finished,
+        hours_spent,
+        game:Game(name, id, image)
+    `).eq("public_user_id", publicId).range(offset, amount) as {
+        data: UserReviewSample[] | null,
+        error: PostgrestError | null
+    };
+    
+    return {
+        data: data || null,
+        error: error?.message || null
+    }
 }

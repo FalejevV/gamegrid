@@ -69,6 +69,22 @@ export async function APICallSupabaseGameInsertByNameDateCompany(name: string, d
     return result;
 }
 
+
+export async function APICallSupabaseUserReviewsSelect(amount: number, offset: number) {
+    const result: GameCreationRequiredInfoDataError = await fetch('/api/supabase-get-user-reviews', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            amount,
+            offset
+        }),
+    }).then(res => res.json())
+    return result;
+}
+
+
 export async function APICallIGDBGameDevelopersByNameDate(name: string, date: number) {
     const result: IGDBFullGameInfoDataError = await fetch('/api/igdb-game-developers-by-name-and-date', {
         method: 'POST',
@@ -138,14 +154,14 @@ export async function APIgetUserReviewByGameNameAndDate(userId: string, gameId: 
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            userId, 
-            gameId 
+            userId,
+            gameId
         }),
     }).then(res => res.json())
-    
+
     return {
         data: result.data || null,
-        error: result.error || null 
+        error: result.error || null
     }
 }
 
