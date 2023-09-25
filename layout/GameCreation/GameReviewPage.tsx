@@ -8,7 +8,6 @@ import { GameCreationRequiredInfo, GameCreationRequiredInfoDataError, GameReview
 import { setGameCreationComment, setGameCreationFetchedGame, setGameCreationFinished, setGameCreationHours, setGameCreationPage, setGameCreationPlatform, setGameCreationScore } from "@/store/features/gameCreation";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store"
 import { APICallSupabaseGameInsertByNameDateCompany, APIgetSupabaseGameFromNameAndDate, APIgetUserReviewByGameNameAndDate } from "@/utils/apiFetching";
-import supabaseClient from "@/utils/supabaseClient";
 import { getTableList } from "@/utils/tableFetching";
 import { FormEvent, useEffect, useState } from "react";
 import GameReviewPageLoading from "./GameReviewPageLoading";
@@ -16,6 +15,7 @@ import TextField from "@/components/TextField/TextField";
 import Button from "@/components/Buttons/WideActionButton/Button";
 import AlertText from "@/components/AlertText/AlertText";
 import Title from "@/components/Title/Title";
+import supabaseClient from "@/utils/supabaseClient";
 
 
 export default function GameReviewPage() {

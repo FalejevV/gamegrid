@@ -1,5 +1,5 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { SupabaseClientOptions } from '@supabase/supabase-js';
+import { SupabaseClient, SupabaseClientOptions } from '@supabase/supabase-js';
 
 const supabaseOptions: SupabaseClientOptions<string> = {
   auth: {
@@ -8,6 +8,6 @@ const supabaseOptions: SupabaseClientOptions<string> = {
 };
 const supabaseClient = createClientComponentClient({
     options:supabaseOptions
-});
+}) as SupabaseClient
 
 export default supabaseClient
