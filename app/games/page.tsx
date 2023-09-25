@@ -1,5 +1,5 @@
-import GamePageItemsLoader from "@/components/GamePageItemsLoader/GamePageItemsLoader";
 import GamePreviewItem from "@/components/GamePreviewItem/GamePreviewItem";
+import GamePageItemsLoader from "@/components/Loader/GamePageItemsLoader/GamePageItemsLoader";
 import { FilterQueryParams, Game } from "@/interface";
 import SortFilterTab from "@/layout/SortFilter/SortFilterTab";
 import { fetchFilteredGames } from "@/utils/supabaseFetching";

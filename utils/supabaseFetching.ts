@@ -653,18 +653,18 @@ export async function getSupabasePublicUserReview(gameId: number, userId: number
 }
 
 
-export async function supabaseGetUserReviews(amount:number, offset:number, publicId:number): Promise<UserReviewSampleDataError>{
+export async function supabaseGetUserReviews(amount:number = amountFetch, offset:number = 0, publicId:number): Promise<UserReviewSampleDataError>{
+    if(offset < 0) offset = 0;
     const {data,error} = await supabaseRoot.from("Review").select(`
         public_user_id,
         total_score,
         finished,
         hours_spent,
         game:Game(name, id, image)
-    `).eq("public_user_id", publicId).range(offset, amount) as {
+    `).eq("public_user_id", publicId).range(offset, amount).limit(amountFetch) as {
         data: UserReviewSample[] | null,
         error: PostgrestError | null
     };
-    
     return {
         data: data || null,
         error: error?.message || null

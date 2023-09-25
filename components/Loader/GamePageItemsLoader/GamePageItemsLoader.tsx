@@ -1,4 +1,5 @@
 "use client"
+import GamePreviewItem from "@/components/GamePreviewItem/GamePreviewItem";
 import { Game } from "@/interface";
 import { pushGames, setCanBeLoaded, setGames } from "@/store/features/games";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/store";
@@ -6,7 +7,6 @@ import { URLQueryObject, generateSortFilterParams } from "@/utils/queryParams";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import GamePreviewItem from "../GamePreviewItem/GamePreviewItem";
 
 export default function GamePageItemsLoader(props: {
     initialGames: Game[]
@@ -67,7 +67,7 @@ export default function GamePageItemsLoader(props: {
             <div className=" w-full flex flex-col gap-[60px] items-center">
                 {gamesSelector.games.length > 0 && gamesSelector.games.map((game: Game) => <GamePreviewItem key={game.id + game.name} gameData={game} />)}
             </div>
-            {!noMoreGames && <Image ref={ref} src={"/Loading-pulse.gif"} alt={"loading animation"} width={60} height={30} />}
+            {!noMoreGames && <Image ref={ref} src={"/Loading-pulse.gif"} alt={"loading animation"} width={60} height={60} className="w-[60px] h-[60px] mx-auto" />}
         </>
     )
 }

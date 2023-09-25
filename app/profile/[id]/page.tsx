@@ -1,59 +1,16 @@
 import ProfileEditButton from "@/components/EditButtons/ProfileEditButton/ProfileEditButton";
 import GameItemDataBlock from "@/components/GameItemDataBlock/GameItemDataBlock";
+import UserReviewItemsLoader from "@/components/Loader/UserReviewItemsLoader/UserPeviewItemsLoader";
+import ProfileInfoLine from "@/components/ProfileInfoLine/ProfileInfoLine";
+import GamePreviewSampleItem from "@/components/UserReviewSampleItem/UserReviewSampleItem";
 import { CollectionSummaryInfo, IProfile, UserReviewSample, UserReviewSampleDataError } from "@/interface";
+import { amountFetch } from "@/utils/config";
 import { dateToText } from "@/utils/formatter";
 import { supabaseGetUserReviews, supabaseGetUserTopReviews, supabaseGetUserWorstReviews } from "@/utils/supabaseFetching";
 import supabaseRootClient from "@/utils/supabaseRootClient"
 import Image from "next/image";
-import Link from "next/link";
 
 export const revalidate = 1800;
-
-function ProfileInfoLine(props: {
-    text: string | number,
-    addClass?: string,
-    flexauto?: boolean,
-    align?: string
-}) {
-    return (
-        <p className={`h-[34px] flex items-center px-[10px]
-            ${props.addClass ? props.addClass : "bg-dimm"}
-            ${props.flexauto && "flex-auto"}
-            ${props.align && props.align}
-        `}>
-            {props.text}
-        </p>
-    )
-}
-
-function GamePreviewItem(props: {
-    review: UserReviewSample,
-    userId: number
-}) {
-    if (!props?.review?.game.id || !props?.review?.total_score) return;
-    return (
-        <Link href={`/review/${props.userId}/${props.review.game.id}`} className="w-[333px] min-w-[300px] flexgap flex-col hover:brightness-110 transition-all duration-150">
-            <ProfileInfoLine text={props.review.game.name} />
-            <Image src={props.review.game.image} alt={`${props.review.game.name} image`} width={326} height={150} className="w-full max-w-[326px] h-[150px] object-cover" />
-            <div className="flexgap">
-                <div className="bg-dimm h-[34px] flexgap items-center justify-between px-[10px] flex-auto">
-                    <p className="textcol-dimm">Hours</p>
-                    <p className="textcol-main">{props.review.hours_spent}</p>
-                </div>
-
-                <div className="bg-dimm h-[34px] flexgap items-center justify-between px-[10px] flex-auto">
-                    <p className="textcol-dimm">Score</p>
-                    <p className="textcol-main">{props.review.total_score}/100</p>
-                </div>
-            </div>
-            <div className="bg-dimm h-[34px] flexgap items-center justify-between px-[10px]">
-                <p className="textcol-dimm">Completed</p>
-                <p className="textcol-main">{props.review.finished ? "Yes" : "No"}</p>
-            </div>
-
-        </Link>
-    )
-}
 
 export default async function Profile({ params }: {
     params: {
@@ -86,7 +43,7 @@ export default async function Profile({ params }: {
     let userData: IProfile = profileRequest.data as unknown as IProfile;
     let userCollectionSummary = userCollectionSummaryRequest.data as unknown as CollectionSummaryInfo;
     let promises = await Promise.all([
-        supabaseGetUserReviews(5, 0, userData.user_id),
+        supabaseGetUserReviews(amountFetch, 0, userData.user_id),
         supabaseGetUserTopReviews(userData.user_id, 3),
         supabaseGetUserWorstReviews(userData.user_id, 3)
     ])
@@ -118,15 +75,16 @@ export default async function Profile({ params }: {
     }
 
     function TopWorstReviews() {
+        if (userReviewsData.length < 7) return;
         return (
             <>
                 {userReviewsTopData.length > 0 &&
                     <div className="w-full flexgap flex-col textcol-main">
                         <ProfileInfoLine text={"Most Loved Games"} addClass="bg-hi" />
                         <div className="flexgap w-full overflow-x-auto">
-                            <GamePreviewItem review={userReviewsTopData[0]} userId={params.id} />
-                            <GamePreviewItem review={userReviewsTopData[1]} userId={params.id} />
-                            <GamePreviewItem review={userReviewsTopData[2]} userId={params.id} />
+                            <GamePreviewSampleItem review={userReviewsTopData[0]} userId={params.id} />
+                            <GamePreviewSampleItem review={userReviewsTopData[1]} userId={params.id} />
+                            <GamePreviewSampleItem review={userReviewsTopData[2]} userId={params.id} />
                         </div>
                     </div>
                 }
@@ -134,9 +92,9 @@ export default async function Profile({ params }: {
                     <div className="w-full flexgap flex-col textcol-main">
                         <ProfileInfoLine text={"Least Loved Games"} addClass="bg-hi" />
                         <div className="flexgap w-full overflow-x-auto">
-                            <GamePreviewItem review={userReviewsWorstData[0]} userId={params.id} />
-                            <GamePreviewItem review={userReviewsWorstData[1]} userId={params.id} />
-                            <GamePreviewItem review={userReviewsWorstData[2]} userId={params.id} />
+                            <GamePreviewSampleItem review={userReviewsWorstData[0]} userId={params.id} />
+                            <GamePreviewSampleItem review={userReviewsWorstData[1]} userId={params.id} />
+                            <GamePreviewSampleItem review={userReviewsWorstData[2]} userId={params.id} />
                         </div>
                     </div>
                 }
@@ -147,7 +105,7 @@ export default async function Profile({ params }: {
 
     function PCLayout() {
         return (
-            <div className="hidden k:flex">
+            <div className="hidden k:flex w-full">
                 <div className="w-full max-w-[1000px] flexgap flex-col mx-auto">
                     <div className="w-full flexgap max-h-[270px] h-[270px]">
                         <Image src={userData.avatar} alt={`${userData.username} profile image`} width={270} height={270} className="bg-mid min-w-[270px] w-[270px] h-[270px] object-cover" />
@@ -156,7 +114,7 @@ export default async function Profile({ params }: {
                             <div className="flexgap">
                                 <ProfileInfoLine text={userData.username} flexauto addClass="bg-dimm saturate-[120%] font-semibold text-[18px]" />
                                 <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} addClass="bg-dimm saturate-[70%]" />
-                                <ProfileEditButton />
+                                <ProfileEditButton publicId={Number(params.id) || 0} />
                             </div>
                             <div className="flexgap">
                                 <ProfileInfoLine flexauto text={`Country: ${userData.country ? userData.country.country : "unknown"}`} />
@@ -184,7 +142,7 @@ export default async function Profile({ params }: {
 
     function TabletLayout() {
         return (
-            <div className="flex k:hidden max800:hidden">
+            <div className="flex k:hidden max800:hidden w-full">
                 <div className="w-full flexgap flex-col mx-auto">
                     <div className="w-full flexgap max-h-[270px] h-[270px]">
                         <Image src={userData.avatar} alt={`${userData.username} profile image`} width={270} height={270} className="bg-mid min-w-[270px] w-[270px] h-[270px] object-cover" />
@@ -193,7 +151,7 @@ export default async function Profile({ params }: {
                             <div className="flexgap">
                                 <ProfileInfoLine text={userData.username} flexauto addClass="bg-dimm saturate-[120%] font-semibold text-[18px]" />
                                 <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} addClass="bg-dimm saturate-[70%]" />
-                                <ProfileEditButton />
+                                <ProfileEditButton publicId={Number(params.id) || 0} />
                             </div>
                             <div className="flexgap">
                                 <ProfileInfoLine flexauto text={`Country: ${userData.country ? userData.country.country : "unknown"}`} />
@@ -223,18 +181,18 @@ export default async function Profile({ params }: {
 
     function MobileLayout() {
         return (
-            <div className="flex min800:hidden">
+            <div className="flex min800:hidden w-full">
                 <div className="w-full flexgap flex-col textcol-main">
                     <div className="flexgap sm:flex-row flex-col w-full">
                         <div className="flex flexgap flex-auto">
                             <ProfileInfoLine flexauto text={userData.username} addClass="bg-mid font-semibold text-[17px]" />
                             <span className="flex sm:hidden w-[34px]">
-                                <ProfileEditButton />
+                                <ProfileEditButton publicId={Number(params.id) || 0} />
                             </span>
                         </div>
                         <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} align="justify-end" />
                         <span className="sm:flex hidden">
-                            <ProfileEditButton />
+                            <ProfileEditButton publicId={Number(params.id) || 0} />
                         </span>
                     </div>
                     <div className="flex w-full h-[150px] justify-center items-center profile-mobile-avatar-gradient">
@@ -250,10 +208,17 @@ export default async function Profile({ params }: {
     }
 
     return (
-        <>
+        <div className="mx-auto flex flex-col flexgap w-full max-w-[1000px] items-center">
             <TabletLayout />
             <PCLayout />
             <MobileLayout />
-        </>
+            {userReviewsData.length ?
+                <div className="flexgap flex-col w-full textcol-main">
+                    <ProfileInfoLine flexauto text={"Review List"} addClass="bg-mid" />
+                    <UserReviewItemsLoader publicId={userData.user_id} initialData={userReviewsData} />
+                </div>
+                : <></>
+            }
+        </div>
     )
 }
