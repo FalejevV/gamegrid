@@ -670,3 +670,39 @@ export async function supabaseGetUserReviews(amount:number, offset:number, publi
         error: error?.message || null
     }
 }
+
+
+export async function supabaseGetUserTopReviews(publicId:number, amount:number ): Promise<UserReviewSampleDataError>{
+    const {data,error} = await supabaseRoot.from("Review").select(`
+        public_user_id,
+        total_score,
+        finished,
+        hours_spent,
+        game:Game(name, id, image)
+    `).eq("public_user_id", publicId).order("total_score", {ascending:false}).limit(amount) as {
+        data: UserReviewSample[] | null,
+        error: PostgrestError | null
+    };
+
+    return {
+        data: data || null,
+        error: error?.message || null
+    }
+}
+
+export async function supabaseGetUserWorstReviews(publicId:number, amount:number ): Promise<UserReviewSampleDataError>{
+       const {data,error} = await supabaseRoot.from("Review").select(`
+        public_user_id,
+        total_score,
+        finished,
+        hours_spent,
+        game:Game(name, id, image)
+    `).eq("public_user_id", publicId).order("total_score", {ascending:true}).limit(amount) as {
+        data: UserReviewSample[] | null,
+        error: PostgrestError | null
+    };
+    return {
+        data: data || null,
+        error: error?.message || null
+    }
+}

@@ -2,7 +2,7 @@ import ProfileEditButton from "@/components/EditButtons/ProfileEditButton/Profil
 import GameItemDataBlock from "@/components/GameItemDataBlock/GameItemDataBlock";
 import { CollectionSummaryInfo, IProfile, UserReviewSample, UserReviewSampleDataError } from "@/interface";
 import { dateToText } from "@/utils/formatter";
-import { supabaseGetUserReviews } from "@/utils/supabaseFetching";
+import { supabaseGetUserReviews, supabaseGetUserTopReviews, supabaseGetUserWorstReviews } from "@/utils/supabaseFetching";
 import supabaseRootClient from "@/utils/supabaseRootClient"
 import Image from "next/image";
 import Link from "next/link";
@@ -28,9 +28,9 @@ function ProfileInfoLine(props: {
 
 function GamePreviewItem(props: {
     review: UserReviewSample,
-    userId:number
+    userId: number
 }) {
-    if(!props?.review?.game.id || !props?.review?.total_score) return;
+    if (!props?.review?.game.id || !props?.review?.total_score) return;
     return (
         <Link href={`/review/${props.userId}/${props.review.game.id}`} className="w-[333px] min-w-[300px] flexgap flex-col hover:brightness-110 transition-all duration-150">
             <ProfileInfoLine text={props.review.game.name} />
@@ -80,11 +80,70 @@ export default async function Profile({ params }: {
         )
     }
 
+
+
     let userCollectionSummaryRequest = await supabaseRootClient().from("AverageUserCollectionInfo").select("").eq("user_id", profileRequest.data.id).single();
     let userData: IProfile = profileRequest.data as unknown as IProfile;
     let userCollectionSummary = userCollectionSummaryRequest.data as unknown as CollectionSummaryInfo;
-    let userReviewsRequest: UserReviewSampleDataError = await supabaseGetUserReviews(5, 0, userData.user_id);
-    let userReviewsData = userReviewsRequest.data as unknown as UserReviewSample[];
+    let promises = await Promise.all([
+        supabaseGetUserReviews(5, 0, userData.user_id),
+        supabaseGetUserTopReviews(userData.user_id, 3),
+        supabaseGetUserWorstReviews(userData.user_id, 3)
+    ])
+    let userReviewsData: UserReviewSample[] = [];
+    let userReviewsTopData: UserReviewSample[] = [];
+    let userReviewsWorstData: UserReviewSample[] = [];
+
+    let promiseError = "";
+    promises.forEach((response: UserReviewSampleDataError, index: number) => {
+        if (promiseError.trim() !== "") return;
+        if (response.error) {
+            promiseError = response.error;
+            return;
+        }
+        switch (index) {
+            case 0: userReviewsData = response.data || []
+            case 1: userReviewsTopData = response.data || []
+            case 2: userReviewsWorstData = response.data || []
+        }
+    })
+    if (userReviewsWorstData.length > 0 && userReviewsTopData.length > 0) {
+        let resultWorstReviews: UserReviewSample[] = [];
+        userReviewsWorstData.forEach((worstReview: UserReviewSample) => {
+            if (userReviewsTopData.filter((topReview: UserReviewSample) => topReview.game.id === worstReview.game.id).length === 0) {
+                resultWorstReviews.push(worstReview);
+            }
+        })
+        userReviewsWorstData = resultWorstReviews;
+    }
+
+    function TopWorstReviews() {
+        return (
+            <>
+                {userReviewsTopData.length > 0 &&
+                    <div className="w-full flexgap flex-col textcol-main">
+                        <ProfileInfoLine text={"Most Loved Games"} addClass="bg-hi" />
+                        <div className="flexgap w-full overflow-x-auto">
+                            <GamePreviewItem review={userReviewsTopData[0]} userId={params.id} />
+                            <GamePreviewItem review={userReviewsTopData[1]} userId={params.id} />
+                            <GamePreviewItem review={userReviewsTopData[2]} userId={params.id} />
+                        </div>
+                    </div>
+                }
+                {userReviewsWorstData.length > 0 &&
+                    <div className="w-full flexgap flex-col textcol-main">
+                        <ProfileInfoLine text={"Least Loved Games"} addClass="bg-hi" />
+                        <div className="flexgap w-full overflow-x-auto">
+                            <GamePreviewItem review={userReviewsWorstData[0]} userId={params.id} />
+                            <GamePreviewItem review={userReviewsWorstData[1]} userId={params.id} />
+                            <GamePreviewItem review={userReviewsWorstData[2]} userId={params.id} />
+                        </div>
+                    </div>
+                }
+            </>
+        )
+    }
+
 
     function PCLayout() {
         return (
@@ -109,23 +168,14 @@ export default async function Profile({ params }: {
                                 </div>
 
                                 <div className="flexgap h-fit">
-                                    <GameItemDataBlock title={"Games Played"} value={userCollectionSummary.total_games || 0} color="bg-dimm saturate-[125%]" />
-                                    <GameItemDataBlock title={"Hours Played"} value={userCollectionSummary.total_hours || 0} color="bg-mid saturate-[65%]" />
-                                    <GameItemDataBlock title={"Popular Platform"} value={userCollectionSummary.platform || "unknown"} color="bg-dimm saturate-[90%]" />
+                                    <GameItemDataBlock title={"Games Played"} value={userCollectionSummary?.total_games || 0} color="bg-dimm saturate-[125%]" />
+                                    <GameItemDataBlock title={"Hours Played"} value={userCollectionSummary?.total_hours || 0} color="bg-mid saturate-[65%]" />
+                                    <GameItemDataBlock title={"Popular Platform"} value={userCollectionSummary?.platform || "unknown"} color="bg-dimm saturate-[90%]" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {userReviewsData.length > 0 &&
-                        <div className="w-full flexgap flex-col textcol-main">
-                            <ProfileInfoLine text={"Most Loved Games"} addClass="bg-mid" />
-                            <div className="flexgap w-full overflow-x-auto">
-                                <GamePreviewItem review={userReviewsData[0]} userId={params.id} />
-                                <GamePreviewItem review={userReviewsData[1]} userId={params.id}/>
-                                <GamePreviewItem review={userReviewsData[2]} userId={params.id}/>
-                            </div>
-                        </div>
-                    }
+                    <TopWorstReviews />
                 </div>
 
             </div>
@@ -135,7 +185,7 @@ export default async function Profile({ params }: {
     function TabletLayout() {
         return (
             <div className="flex k:hidden max800:hidden">
-                <div className="w-full flex-col mx-auto">
+                <div className="w-full flexgap flex-col mx-auto">
                     <div className="w-full flexgap max-h-[270px] h-[270px]">
                         <Image src={userData.avatar} alt={`${userData.username} profile image`} width={270} height={270} className="bg-mid min-w-[270px] w-[270px] h-[270px] object-cover" />
 
@@ -155,26 +205,17 @@ export default async function Profile({ params }: {
                                 </div>
 
                                 <div className="flexgap h-fit">
-                                    <GameItemDataBlock title={"Games Played"} value={"20"} color="bg-dimm saturate-[125%]" />
-                                    <GameItemDataBlock title={"Hours Played"} value={"1920"} color="bg-mid saturate-[65%]" />
+                                    <GameItemDataBlock title={"Games Played"} value={userCollectionSummary?.total_games || 0} color="bg-dimm saturate-[125%]" />
+                                    <GameItemDataBlock title={"Hours Played"} value={userCollectionSummary?.total_hours || 0} color="bg-mid saturate-[65%]" />
                                 </div>
 
                                 <div className="max-h-[73px]">
-                                    <GameItemDataBlock title={"Popular Platform"} value={"PC"} color="bg-dimm saturate-[90%]" />
+                                    <GameItemDataBlock title={"Popular Platform"} value={userCollectionSummary?.platform || "unknown"} color="bg-dimm saturate-[90%]" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {userReviewsData.length > 0 &&
-                        <div className="w-full flexgap flex-col textcol-main">
-                            <ProfileInfoLine text={"Most Loved Games"} addClass="bg-mid" />
-                            <div className="flexgap w-full overflow-x-auto">
-                                <GamePreviewItem review={userReviewsData[0]} userId={params.id}/>
-                                <GamePreviewItem review={userReviewsData[1]} userId={params.id}/>
-                                <GamePreviewItem review={userReviewsData[2]} userId={params.id}/>
-                            </div>
-                        </div>
-                    }
+                    <TopWorstReviews />
                 </div>
             </div>
         )
@@ -199,19 +240,10 @@ export default async function Profile({ params }: {
                     <div className="flex w-full h-[150px] justify-center items-center profile-mobile-avatar-gradient">
                         <Image src={userData.avatar} alt={`${userData.username} avatar`} width={150} height={150} className="w-[150px] h-[150px] object-cover" />
                     </div>
-                    <GameItemDataBlock title={"Games Played"} value={"20"} color="bg-dimm saturate-[125%]" />
-                    <GameItemDataBlock title={"Hours Played"} value={"1920"} color="bg-mid saturate-[65%]" />
-                    <GameItemDataBlock title={"Popular Platform"} value={"PC"} color="bg-dimm saturate-[90%]" />
-                    {userReviewsData.length > 0 &&
-                        <div className="w-full flexgap flex-col textcol-main">
-                            <ProfileInfoLine text={"Most Loved Games"} addClass="bg-mid" />
-                            <div className="flexgap w-full overflow-x-auto">
-                                <GamePreviewItem review={userReviewsData[0]} userId={params.id}/>
-                                <GamePreviewItem review={userReviewsData[1]} userId={params.id}/>
-                                <GamePreviewItem review={userReviewsData[2]} userId={params.id}/>
-                            </div>
-                        </div>
-                    }
+                    <GameItemDataBlock title={"Games Played"} value={userCollectionSummary?.total_games || 0} color="bg-dimm saturate-[125%]" />
+                    <GameItemDataBlock title={"Hours Played"} value={userCollectionSummary?.total_hours || 0} color="bg-mid saturate-[65%]" />
+                    <GameItemDataBlock title={"Popular Platform"} value={userCollectionSummary?.platform || "unknown"} color="bg-dimm saturate-[90%]" />
+                    <TopWorstReviews />
                 </div>
             </div >
         )
