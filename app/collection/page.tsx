@@ -33,7 +33,7 @@ export default async function Collection() {
                 <>
                     <p className="text-[25px] font-semibold textcol-main pt-[30px] pb-[10px]">Game Collection</p>
                     <div className="flex gap-[50px] flex-col textcol-main text-[18px]">
-                        {collectionFetch?.data && collectionFetch.data?.length > 0 && collectionFetch.data.map((game: FullGameReviewInfo) => <CollectionGameItem game={game} />)}
+                        {collectionFetch?.data && collectionFetch.data?.length > 0 && collectionFetch.data.map((game: FullGameReviewInfo) => <CollectionGameItem game={game} key={game.game_name+game.game_id}/>)}
                     </div>
                 </>
             }
