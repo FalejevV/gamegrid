@@ -27,10 +27,12 @@ function ProfileInfoLine(props: {
 }
 
 function GamePreviewItem(props: {
-    review: UserReviewSample
+    review: UserReviewSample,
+    userId:number
 }) {
+    if(!props?.review?.game.id || !props?.review?.total_score) return;
     return (
-        <Link href={`/review/${props.review.public_user_id}/${props.review.game.id}`} className="w-[333px] min-w-[300px] flexgap flex-col hover:brightness-110 transition-all duration-150">
+        <Link href={`/review/${props.userId}/${props.review.game.id}`} className="w-[333px] min-w-[300px] flexgap flex-col hover:brightness-110 transition-all duration-150">
             <ProfileInfoLine text={props.review.game.name} />
             <Image src={props.review.game.image} alt={`${props.review.game.name} image`} width={326} height={150} className="w-full max-w-[326px] h-[150px] object-cover" />
             <div className="flexgap">
@@ -118,9 +120,9 @@ export default async function Profile({ params }: {
                         <div className="w-full flexgap flex-col textcol-main">
                             <ProfileInfoLine text={"Most Loved Games"} addClass="bg-mid" />
                             <div className="flexgap w-full overflow-x-auto">
-                                <GamePreviewItem review={userReviewsData[0]} />
-                                <GamePreviewItem review={userReviewsData[1]} />
-                                <GamePreviewItem review={userReviewsData[2]} />
+                                <GamePreviewItem review={userReviewsData[0]} userId={params.id} />
+                                <GamePreviewItem review={userReviewsData[1]} userId={params.id}/>
+                                <GamePreviewItem review={userReviewsData[2]} userId={params.id}/>
                             </div>
                         </div>
                     }
@@ -167,9 +169,9 @@ export default async function Profile({ params }: {
                         <div className="w-full flexgap flex-col textcol-main">
                             <ProfileInfoLine text={"Most Loved Games"} addClass="bg-mid" />
                             <div className="flexgap w-full overflow-x-auto">
-                                <GamePreviewItem review={userReviewsData[0]} />
-                                <GamePreviewItem review={userReviewsData[1]} />
-                                <GamePreviewItem review={userReviewsData[2]} />
+                                <GamePreviewItem review={userReviewsData[0]} userId={params.id}/>
+                                <GamePreviewItem review={userReviewsData[1]} userId={params.id}/>
+                                <GamePreviewItem review={userReviewsData[2]} userId={params.id}/>
                             </div>
                         </div>
                     }
@@ -204,9 +206,9 @@ export default async function Profile({ params }: {
                         <div className="w-full flexgap flex-col textcol-main">
                             <ProfileInfoLine text={"Most Loved Games"} addClass="bg-mid" />
                             <div className="flexgap w-full overflow-x-auto">
-                                <GamePreviewItem review={userReviewsData[0]} />
-                                <GamePreviewItem review={userReviewsData[1]} />
-                                <GamePreviewItem review={userReviewsData[2]} />
+                                <GamePreviewItem review={userReviewsData[0]} userId={params.id}/>
+                                <GamePreviewItem review={userReviewsData[1]} userId={params.id}/>
+                                <GamePreviewItem review={userReviewsData[2]} userId={params.id}/>
                             </div>
                         </div>
                     }
