@@ -233,6 +233,7 @@ export interface CollectionSummaryInfo{
 
 
 export interface IProfile{
+    id:string,
     username:string,
     avatar:string,
     created_at:Date,

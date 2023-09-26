@@ -3,9 +3,7 @@ import { RootState, useAppSelector } from "@/store/store"
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-export default function ProfileEditButton(props:{
-    publicId:number
-}) {
+export default function ProfileEditButton() {
     const userSelector = useAppSelector((state: RootState) => state.userAuth);
     const router = useRouter();
     
@@ -13,7 +11,7 @@ export default function ProfileEditButton(props:{
         router.push("/edit-profile")    
     }
     
-    if (!userSelector.publicId || userSelector.publicId === "-1" || props.publicId !== Number(userSelector.publicId)) return;
+    if (!userSelector.publicId || userSelector.publicId === "-1") return;
     
     return (
         <div className="w-[34px] h-full bg-hi cursor-pointer flex items-center justify-center hover:brightness-125 group transition-all duration-300" onClick={editClick} >

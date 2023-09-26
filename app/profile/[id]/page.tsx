@@ -8,6 +8,7 @@ import { amountFetch } from "@/utils/config";
 import { dateToText } from "@/utils/formatter";
 import { supabaseGetUserReviews, supabaseGetUserTopReviews, supabaseGetUserWorstReviews } from "@/utils/supabaseFetching";
 import supabaseRootClient from "@/utils/supabaseRootClient"
+import supabaseServer from "@/utils/supabaseServer";
 import Image from "next/image";
 
 export const revalidate = 1800;
@@ -38,7 +39,8 @@ export default async function Profile({ params }: {
     }
 
 
-
+    let authRequest = await supabaseServer().auth.getUser();
+    let authData = authRequest.data;
     let userCollectionSummaryRequest = await supabaseRootClient().from("AverageUserCollectionInfo").select("").eq("user_id", profileRequest.data.id).single();
     let userData: IProfile = profileRequest.data as unknown as IProfile;
     let userCollectionSummary = userCollectionSummaryRequest.data as unknown as CollectionSummaryInfo;
@@ -114,17 +116,15 @@ export default async function Profile({ params }: {
                             <div className="flexgap">
                                 <ProfileInfoLine text={userData.username} flexauto addClass="bg-dimm saturate-[120%] font-semibold text-[18px]" />
                                 <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} addClass="bg-dimm saturate-[70%]" />
-                                <ProfileEditButton publicId={Number(params.id) || 0} />
+                                {authData.user?.id === userData.id &&
+                                    <ProfileEditButton />
+                                }
                             </div>
                             <div className="flexgap">
                                 <ProfileInfoLine flexauto text={`Country: ${userData.country ? userData.country.country : "unknown"}`} />
                                 <ProfileInfoLine flexauto text={`Gender: ${userData.gender ? userData.gender.gender : "unknown"}`} />
                             </div>
                             <div className="flexgap flex-col h-full">
-                                <div className="w-full flex-auto">
-
-                                </div>
-
                                 <div className="flexgap h-fit">
                                     <GameItemDataBlock title={"Games Played"} value={userCollectionSummary?.total_games || 0} color="bg-dimm saturate-[125%]" />
                                     <GameItemDataBlock title={"Hours Played"} value={userCollectionSummary?.total_hours || 0} color="bg-mid saturate-[65%]" />
@@ -151,17 +151,15 @@ export default async function Profile({ params }: {
                             <div className="flexgap">
                                 <ProfileInfoLine text={userData.username} flexauto addClass="bg-dimm saturate-[120%] font-semibold text-[18px]" />
                                 <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} addClass="bg-dimm saturate-[70%]" />
-                                <ProfileEditButton publicId={Number(params.id) || 0} />
+                                {authData.user?.id === userData.id &&
+                                    <ProfileEditButton />
+                                }
                             </div>
                             <div className="flexgap">
                                 <ProfileInfoLine flexauto text={`Country: ${userData.country ? userData.country.country : "unknown"}`} />
                                 <ProfileInfoLine flexauto text={`Gender: ${userData.gender ? userData.gender.gender : "unknown"}`} />
                             </div>
                             <div className="flexgap flex-col h-full">
-                                <div className="w-full flex-auto">
-
-                                </div>
-
                                 <div className="flexgap h-fit">
                                     <GameItemDataBlock title={"Games Played"} value={userCollectionSummary?.total_games || 0} color="bg-dimm saturate-[125%]" />
                                     <GameItemDataBlock title={"Hours Played"} value={userCollectionSummary?.total_hours || 0} color="bg-mid saturate-[65%]" />
@@ -186,14 +184,18 @@ export default async function Profile({ params }: {
                     <div className="flexgap sm:flex-row flex-col w-full">
                         <div className="flex flexgap flex-auto">
                             <ProfileInfoLine flexauto text={userData.username} addClass="bg-mid font-semibold text-[17px]" />
-                            <span className="flex sm:hidden w-[34px]">
-                                <ProfileEditButton publicId={Number(params.id) || 0} />
-                            </span>
+                            {authData.user?.id === userData.id &&
+                                <span className="flex sm:hidden w-[34px]">
+                                    <ProfileEditButton />
+                                </span>
+                            }
                         </div>
                         <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} align="justify-end" />
-                        <span className="sm:flex hidden">
-                            <ProfileEditButton publicId={Number(params.id) || 0} />
-                        </span>
+                        {authData.user?.id === userData.id &&
+                            <span className="sm:flex hidden ">
+                                <ProfileEditButton />
+                            </span>
+                        }
                     </div>
                     <div className="flex w-full h-[150px] justify-center items-center profile-mobile-avatar-gradient">
                         <Image src={userData.avatar} alt={`${userData.username} avatar`} width={150} height={150} className="w-[150px] h-[150px] object-cover" />
