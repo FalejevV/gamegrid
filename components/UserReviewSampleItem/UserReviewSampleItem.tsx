@@ -10,7 +10,7 @@ export default function GamePreviewSampleItem(props: {
 }) {
     if (!props?.review?.game.id || !props?.review?.total_score) return;
     return (
-        <Link href={`/review/${props.userId}/${props.review.game.id}`} className={`${!props.maxWidth ? "flex-auto" : "sm:max-w-[500px]"} min-w-[300px] flexgap flex-col hover:brightness-110 transition-all duration-150`}>
+        <Link href={`/review/${props.userId}/${props.review.game.id}`} className={`${!props.maxWidth ? "flex-auto" : "sm:max-w-[500px]"} min-w-[300px] k:w-[326px] flexgap flex-col hover:brightness-110 transition-all duration-150`}>
             <ProfileInfoLine text={props.review.game.name} />
             <Image src={props.review.game.image} alt={`${props.review.game.name} image`} width={450} height={150} className="w-full max-w-[600px] h-[150px] object-cover" />
             <div className="flexgap">

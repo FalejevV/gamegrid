@@ -82,7 +82,7 @@ export default async function Profile({ params }: {
             <>
                 {userReviewsTopData.length > 0 &&
                     <div className="w-full flexgap flex-col textcol-main">
-                        <ProfileInfoLine text={"Most Loved Games"} addClass="bg-hi" />
+                        <ProfileInfoLine text={"Most Loved Games"} addClass="bg-mid inputheight font-semibold text-[22px]" align="justify-center" />
                         <div className="flexgap w-full overflow-x-auto">
                             <GamePreviewSampleItem review={userReviewsTopData[0]} userId={params.id} />
                             <GamePreviewSampleItem review={userReviewsTopData[1]} userId={params.id} />
@@ -92,7 +92,7 @@ export default async function Profile({ params }: {
                 }
                 {userReviewsWorstData.length > 0 &&
                     <div className="w-full flexgap flex-col textcol-main">
-                        <ProfileInfoLine text={"Least Loved Games"} addClass="bg-hi" />
+                        <ProfileInfoLine text={"Least Loved Games"} addClass="bg-mid inputheight font-semibold text-[22px]" align="justify-center" />
                         <div className="flexgap w-full overflow-x-auto">
                             <GamePreviewSampleItem review={userReviewsWorstData[0]} userId={params.id} />
                             <GamePreviewSampleItem review={userReviewsWorstData[1]} userId={params.id} />
@@ -216,7 +216,7 @@ export default async function Profile({ params }: {
             <MobileLayout />
             {userReviewsData.length ?
                 <div className="flexgap flex-col w-full textcol-main">
-                    <ProfileInfoLine flexauto text={"Review List"} addClass="bg-mid" />
+                    <ProfileInfoLine flexauto text={"Review List"} addClass="bg-mid inputheight font-semibold text-[22px]" align="justify-center" />
                     <UserReviewItemsLoader publicId={userData.user_id} initialData={userReviewsData} />
                 </div>
                 : <></>
