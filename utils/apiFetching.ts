@@ -253,6 +253,21 @@ export async function getIGDBGameDevelopersByNameAndDate(name: string, date: num
 
 
 
+export default async function APISupabaseAvailabilityProfileCheck(column:string, value:string|number, user_id:number): Promise<StringDataError>{
+    const result: StringDataError = await fetch("/api/profile-availability-check", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            column,
+            value,
+            user_id 
+        }),
+    }).then(res => res.json())
+
+    return result;
+}
 
 
 

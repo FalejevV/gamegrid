@@ -59,8 +59,8 @@ export default function UserReviewItemsLoader(props: {
     }, []);
     return (
         <>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] w-full max-w-[1000px] k:gap-[10px] gap-[5px]">
-                {fetchedGames.length > 0 && fetchedGames.map((game: UserReviewSample) => <GamePreviewSampleItem maxWidth={fetchedGames.length < 3} review={game} userId={props.publicId} />)}
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] w-full max-w-[1000px] k:gap-[10px] gap-[5px]">
+                {fetchedGames.length > 0 && fetchedGames.map((game: UserReviewSample) => <GamePreviewSampleItem highlight maxWidth={fetchedGames.length < 3} key={game.game.name+game.game.id+game.hours_spent} review={game} userId={props.publicId} />)}
             </div>
             {!noMoreGames && <Image ref={ref} src={"/Loading-pulse.gif"} alt={"loading animation"} width={60} height={60} className="w-[60px] h-[60px] mx-auto"/>}
         </>

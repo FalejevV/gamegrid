@@ -1,4 +1,4 @@
-import { insertSupabaseReview } from "@/utils/supabaseFetching";
+import { insertSupabaseReview, supabaseCheckProfileAvailability } from "@/utils/supabaseFetching";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -14,14 +14,14 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: Request): Promise<NextResponse> {
   const res = await request.json()
-  if (res.userId === undefined || res.game === undefined) return new NextResponse(JSON.stringify({
+  if (res.column === undefined || res.value === undefined || res.user_id === undefined) return new NextResponse(JSON.stringify({
     data: null,
-    error: "Auth Error" 
+    error: "Missing parameters. Some values are undefined" 
   }), {
-    status: 401,
+    status: 400,
     headers: { "Content-Type": "application/json" },
   })
-  let { data, error } = await insertSupabaseReview(res.userId, res.game);
+  let { data, error } = await supabaseCheckProfileAvailability(res.column, res.value, res.user_id);
 
   return new NextResponse(JSON.stringify({
     data: data,

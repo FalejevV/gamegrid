@@ -706,3 +706,13 @@ export async function supabaseGetUserWorstReviews(publicId:number, amount:number
         error: error?.message || null
     }
 }
+
+
+export async function supabaseCheckProfileAvailability(column:string, value:string, user_id:number): Promise<StringDataError>{
+    const {data,error} = await supabaseRoot.from("profile").select("user_id").eq(column, value).neq("user_id",user_id);
+    let resultValue = data?.length === 0 ? "OK" : "BUSY";
+    return{
+        data:resultValue,
+        error:error?.message || null
+    }
+}

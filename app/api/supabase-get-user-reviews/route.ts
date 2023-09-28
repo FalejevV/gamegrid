@@ -20,7 +20,7 @@ export async function POST(request: Request):Promise<NextResponse<UserReviewSamp
     data: null,
     error: "Request body lacks the variable data. Something is not passed"
   }), {
-    status: 200,
+    status: 400,
     headers: { "Content-Type": "application/json" },
   });
   let {data, error} = await supabaseGetUserReviews(res.amount, res.offset, res.publicId);

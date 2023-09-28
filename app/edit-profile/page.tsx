@@ -21,6 +21,7 @@ export default async function EditProfile() {
     }
 
     const profileRequest = await supabaseRootClient().from("profile").select(`
+    user_id,
     username,
     avatar,
     created_at,
@@ -38,7 +39,7 @@ export default async function EditProfile() {
     }
     return (
         <div className="flexgap flex-col w-full max-w-[500px] mx-auto">
-            <EditProfileForm username={userData.username} />
+            <EditProfileForm username={userData.username} publicId={Number(userData.user_id || -1)} />
         </div>
     )
 }
