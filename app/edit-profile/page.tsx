@@ -3,6 +3,7 @@ import { IProfile } from "@/interface";
 import EditProfileForm from "@/layout/EditProfileForm";
 import supabaseRootClient from "@/utils/supabaseRootClient";
 import supabaseServer from "@/utils/supabaseServer";
+import { profile } from "console";
 
 export default async function EditProfile() {
 
@@ -28,7 +29,7 @@ export default async function EditProfile() {
     gender:Gender(gender),
     country:Country(country)
     `).eq("id", userCheck.data.user.id).single();
-
+    
 
     const userData: IProfile = profileRequest.data as unknown as IProfile;
     const userError = profileRequest.error;
@@ -39,7 +40,7 @@ export default async function EditProfile() {
     }
     return (
         <div className="flexgap flex-col w-full max-w-[500px] mx-auto">
-            <EditProfileForm username={userData.username} publicId={Number(userData.user_id || -1)} />
+            <EditProfileForm username={userData.username} publicId={Number(userData.user_id || -1)} gender={userData.gender?.gender || "Prefer not to tell"} country={userData.country?.country || "Unset"}  />
         </div>
     )
 }

@@ -47,7 +47,7 @@ export default function DropdownInput(props: {
 
     function dropdownList() {
         return (
-            <div className="absolute right-0 top-[45px] sm:w-[240px] w-[220px] h-fit max-h-[300px] overflow-y-scroll bg-dimm z-[20] transition-all duration-200">
+            <div className="absolute right-0 top-[45px] sm:w-[240px] w-[220px] h-fit max-h-[300px] overflow-y-scroll bg-dimm z-[20] pb-[18px] transition-all duration-200">
                 {props.options.map((option: string) => <DropdownOption key={option} onClick={() => props.onChange(option)} title={option} />)}
                 {props.additionalOptions && <div className="w-full">
                     <p className="textcol-main py-[20px] w-full bg-mid text-center"> - - - - Other options  - - - -</p>
