@@ -63,7 +63,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   let url = "https://kvwtrzxxikuvdjmcwofc.supabase.co/storage/v1/object/public/gamegrid/avatar/";
   if (!error) {
     let updatResponse = await supabaseRootClient().from("profile").update({
-      avatar: url + publicIdRequest.data.user_id + ".webp"
+      avatar: url + publicIdRequest.data.user_id + ".webp?" +new Date().valueOf()
     }).eq("id", userUUID);
     if (updatResponse.error) {
       return new NextResponse(JSON.stringify({
@@ -77,18 +77,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   } else {
     return new NextResponse(JSON.stringify({
       data: null,
-      error:  error.message
+      error: error.message
     }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     })
   }
 
-  return new NextResponse(JSON.stringify({
-    data: null,
-    error: null
-  }), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  })
+return new NextResponse(JSON.stringify({
+  data: null,
+  error: null
+}), {
+  status: 200,
+  headers: { "Content-Type": "application/json" },
+})
 }
