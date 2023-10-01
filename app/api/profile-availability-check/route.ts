@@ -1,4 +1,4 @@
-import { insertSupabaseReview, supabaseCheckProfileAvailability } from "@/utils/supabaseFetching";
+import { supabaseCheckProfileAvailability } from "@/utils/supabaseFetching";
 import { NextRequest, NextResponse } from "next/server";
 
 

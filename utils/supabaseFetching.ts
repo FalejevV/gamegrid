@@ -716,3 +716,8 @@ export async function supabaseCheckProfileAvailability(column:string, value:stri
         error:error?.message || null
     }
 }
+
+
+export async function supabaseAvatarInsert(image:File, publicId:number){
+    
+}

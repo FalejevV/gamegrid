@@ -60,7 +60,7 @@ export default function DropdownInput(props: {
     return (
         <div ref={containerRef} className="w-full flexgap items-center justify-between h-[45px] relative select-none" onClick={() => setToggleDropdown(prev => !prev)}>
             <p className={`textcol-main`}>{props.title}</p>
-            <div className={`sm:w-[240px] w-[140px] h-full bg-dimm textcol-main flex items-center justify-center cursor-pointer overflow-hidden whitespace-nowrap transition-all duration-200
+            <div className={`sm:w-[240px] w-[140px] h-full bg-dimm textcol-main flex items-center justify-center cursor-pointer overflow-hidden whitespace-nowrap transition-all duration-200 hover:brightness-110
                 ${toggleDropdown ? "saturate-[70%]" : "saturate-100"}
             `}>
                 {props.value === "" ? "Platform" : props.value}

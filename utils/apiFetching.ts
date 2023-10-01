@@ -70,8 +70,8 @@ export async function APICallSupabaseGameInsertByNameDateCompany(name: string, d
 }
 
 
-export async function APICallSupabaseUserReviewsSelect(publicId:number, amount: number, offset: number) {
-    const result: UserReviewSampleDataError= await fetch('/api/supabase-get-user-reviews', {
+export async function APICallSupabaseUserReviewsSelect(publicId: number, amount: number, offset: number) {
+    const result: UserReviewSampleDataError = await fetch('/api/supabase-get-user-reviews', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -253,7 +253,7 @@ export async function getIGDBGameDevelopersByNameAndDate(name: string, date: num
 
 
 
-export default async function APISupabaseAvailabilityProfileCheck(column:string, value:string|number, user_id:number): Promise<StringDataError>{
+export async function APISupabaseAvailabilityProfileCheck(column: string, value: string | number, user_id: number): Promise<StringDataError> {
     const result: StringDataError = await fetch("/api/profile-availability-check", {
         method: 'POST',
         headers: {
@@ -262,14 +262,23 @@ export default async function APISupabaseAvailabilityProfileCheck(column:string,
         body: JSON.stringify({
             column,
             value,
-            user_id 
+            user_id
         }),
     }).then(res => res.json())
 
     return result;
 }
 
+export async function APISupabaseAvatarInsert(image: File):Promise<StringDataError> {
+    const formData = new FormData();
+    formData.append('image', image);
+    const result: StringDataError = await fetch("/api/profile-avatar-update", {
+        method: 'POST',
+        body: formData 
+    }).then(res => res.json())
 
+    return result;
+}
 
 
 
