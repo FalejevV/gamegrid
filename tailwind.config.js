@@ -18,7 +18,7 @@ module.exports = {
       screens: {
         'md': '880px',
         'max800': {
-          'max' : '800px'
+          'max' : '799px'
         },
         'min800': {
           'min' : '800px'
