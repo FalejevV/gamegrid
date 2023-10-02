@@ -216,7 +216,7 @@ export default async function Profile({ params }: {
             <MobileLayout />
             {userReviewsData.length ?
                 <div className="flexgap flex-col w-full textcol-main">
-                    <ProfileInfoLine flexauto text={"Review List"} addClass="bg-hi inputheight font-semibold text-[22px]" align="justify-center" />
+                    <ProfileInfoLine flexauto text={"Recent Reviews"} addClass="bg-hi inputheight font-semibold text-[22px]" align="justify-center" />
                     <UserReviewItemsLoader publicId={userData.user_id} initialData={userReviewsData} />
                 </div>
                 : <></>

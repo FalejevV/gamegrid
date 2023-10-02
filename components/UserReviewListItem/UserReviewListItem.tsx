@@ -1,6 +1,9 @@
+"use client"
+
 import { UserReviewSample } from "@/interface"
 import Image from "next/image"
 import Link from "next/link"
+import { useInView } from "react-intersection-observer"
 
 
 
@@ -12,7 +15,7 @@ export default function UserReviewListItem(props: {
 
     function MobileView() {
         return (
-            <Link href={`/review/${props.game.public_user_id}/${props.game.game.id}`} className={`md:hidden w-full flex flex-col gapt items-center hover:brightness-110
+            <Link href={`/review/${props.game.public_user_id}/${props.game.game.id}`} className={`md:hidden w-full h-full flex flex-col gapt items-center hover:brightness-110
         ${props.oddColor && "saturate-[70%] hover:saturate-[80%]"}`}>
                 <p className="flex-auto bg-mid px-[10px] flex items-center sm:text-[18px] text-[15px] font-medium w-full h-[34px] justify-center">{props.game.game.name}</p>
                 <div className="flexgap h-[34px] w-full">
@@ -39,7 +42,7 @@ export default function UserReviewListItem(props: {
 
     function PCView() {
         return (
-            <Link href={`/review/${props.game.public_user_id}/${props.game.game.id}`} className={`hidden w-full md:flex md:gapt gapt h-[34px] items-center hover:brightness-110
+            <Link href={`/review/${props.game.public_user_id}/${props.game.game.id}`} className={`hidden w-full md:flex md:gapt gapt h-full items-center hover:brightness-110
         ${props.oddColor && "saturate-[70%] hover:saturate-[80%]"}`}>
                 <p className="flex-auto bg-mid px-[10px] h-full flex items-center text-[18px] font-medium">{props.game.game.name}</p>
                 <div className="bg-dimm h-[34px] flexgap items-center justify-between px-[10px] min-w-[110px]">
@@ -62,10 +65,17 @@ export default function UserReviewListItem(props: {
         )
     }
 
+    const { ref, inView, entry } = useInView({
+        /* Optional options */
+        threshold: 0,
+    });
+
     return (
-        <>
-            <MobileView />
-            <PCView />
-        </>
+        <div ref={ref} className="h-[73px] md:h-[34px]">
+            {inView && <>
+                <MobileView />
+                <PCView />
+            </>}
+        </div>
     )
 }
