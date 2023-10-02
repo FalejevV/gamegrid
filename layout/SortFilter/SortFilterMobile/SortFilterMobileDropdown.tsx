@@ -102,7 +102,7 @@ export default function SortFilterMobileDropdown(props: {
 
 
     return (
-        <span className={`w-screen h-screen fixed left-0 top-0 bg-[#0000008a] z-[300] transition-all duration-200 pb-[0px]
+        <span className={`w-screen h-screen fixed left-0 top-0 bg-[#0000008a] z-[1000] transition-all duration-200 pb-[0px]
             ${mobileDropdownSelector ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
         `} onClick={clickLocationCheck}>
 
