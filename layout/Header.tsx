@@ -14,7 +14,7 @@ export default function Header(){
     const windowSelector = useAppSelector((state:RootState) => state.window);
 
     return(
-        <header className="w-full max-w-screen sm:h-[70px] h-[60px] bg-[#0D0306] fixed top-0 left-0 z-[100] flex items-center p-[10px] pl-[17px] gap-[25px]">
+        <header className="w-full max-w-screen sm:h-[70px] h-[60px] bg-[#0D0306] fixed top-0 left-0 z-[999] flex items-center p-[10px] pl-[17px] gap-[25px]">
             
             <AuthListener />
             {windowSelector.displayAuthWindow && <AuthPopUp />}

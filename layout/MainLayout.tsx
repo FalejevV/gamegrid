@@ -7,6 +7,7 @@ import React, { useMemo } from "react"
 import WindowResizeListener from "@/components/WindowResizeListener/WindowResizeListener"
 import Header from "./Header"
 import Sidebar from "./Sidebar"
+import ScrollLock from "@/components/ScrollLock/ScrollLock"
 
 
 export default function MainLayout(props:{
@@ -15,6 +16,7 @@ export default function MainLayout(props:{
   const memoListeners = useMemo(() => {
     return(<>
       <WindowResizeListener />
+      <ScrollLock />
     </>)
   },[])
     
