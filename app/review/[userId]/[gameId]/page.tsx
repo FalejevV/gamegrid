@@ -104,7 +104,7 @@ export default async function Review({ params }: {
             <span className="k:hidden flex">
                 <div className="w-full max-w-[1000px] mx-auto flex-col items-center flexgap">
                     <div className="w-full flexgap f:flex-row flex-col">
-                        <p className="px-[20px] h-[34px] textcol-main text-[18px] bg-mid flex items-center justify-center font-semibold whitespace-nowrap overflow-x-auto">{data.game_name}</p>
+                        <Link className="px-[20px] h-[34px] textcol-main text-[18px] bg-mid flex items-center justify-center font-semibold whitespace-nowrap overflow-x-auto" href={`/game/${data.game_id}`}>{data.game_name}</Link>
                         <p className="px-[10px] h-[34px] textcol-dimm text-[16px] bg-dimm flex items-center justify-end flex-auto whitespace-nowrap overflow-x-auto">{data.date && dateToText(new Date(data.date).valueOf() / 1000)}</p>
                     </div>
 
@@ -142,7 +142,7 @@ export default async function Review({ params }: {
             <span className="k:flex hidden">
                 <div className="w-full max-w-[1000px] mx-auto flex-col items-center flexgap">
                     <div className="w-full h-[34px] flexgap">
-                        <p className="px-[20px] textcol-main text-[18px] bg-mid flex items-center justify-center font-semibold">{data.game_name}</p>
+                        <Link className="px-[20px] textcol-main text-[18px] bg-mid flex items-center justify-center font-semibold" href={`/game/${data.game_id}`}>{data.game_name}</Link>
                         <p className="px-[20px] textcol-dimm text-[16px] bg-dimm flex items-center justify-center">{data.date && dateToText(new Date(data.date).valueOf() / 1000)}</p>
                         <Link href={`/profile/${data.public_user_id}`} className="px-[10px] textcol-dimm text-[18px] bg-mid flex items-center flex-auto justify-end">{data.username}</Link>
                         <ReviewEditButton gameId={data.game_id} name={data.game_name || ""} image={data.game_image || ""} date={new Date(data.release_date || "").valueOf()} company={""} />

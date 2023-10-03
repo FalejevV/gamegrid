@@ -15,6 +15,7 @@ import AdditionalInfoHover from "../AdditionalInfoHover/AdditionalInfoHover";
 import Tag from "../Tag/Tag";
 import { useInView } from "react-intersection-observer";
 import { setCanBeLoaded } from "@/store/features/games";
+import Link from "next/link";
 
 function getDeveloperStringArray(game: Game): string[] {
     return game.developer.map((developer: { Developer: { developer: string } }) => developer.Developer.developer).slice(1);
@@ -192,9 +193,9 @@ export default function GamePreviewItem(props: {
 
     // check if width is set and values are calculated
     if (windowSelector.width !== -1 && leastLoved && mostLoved && total) return (
-        <div ref={ref} className="w-full max-w-[1000px]">
+        <Link href={`game/${props.gameData.id}`} ref={ref} className="w-full max-w-[1000px]">
             {windowSelector.width > 1000 ? PCItemLayout(props.gameData, leastLoved, mostLoved, total, inView) :
                 windowSelector.width < 600 ? MobileItemLayout(props.gameData, leastLoved, mostLoved, total, inView) : TabletItemLayout(props.gameData, leastLoved, mostLoved, total, inView)}
-        </div>
+        </Link>
     )
 }
