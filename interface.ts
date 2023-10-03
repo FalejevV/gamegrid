@@ -28,7 +28,11 @@ export interface AverageScoreItem {
     customization_avg: number,
     microtransactions_avg: number,
     support_avg: number,
-    total: number
+    total: number,
+    total_hours:number,
+    review_count:number,
+    completion_rate:number,
+    platform:number,
 }
 
 export interface TagItem {

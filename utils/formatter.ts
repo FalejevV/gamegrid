@@ -148,9 +148,14 @@ export function toAverageScore(games: GameReviewData[]): AverageScoreItem {
         customization_avg: 0,
         microtransactions_avg: 0,
         support_avg: 0,
-        total: 0
+        total: 0,
+        total_hours: 0,
+        review_count: 0,
+        completion_rate: 0,
+        platform: 0
     };
 
+    let platformMap:Map<number, number> = new Map();
     games.forEach((game: GameReviewData) => {
         resultGame.game_id = game.game_id;
         resultGame.graphics_avg += game.graphics_score;
@@ -165,6 +170,20 @@ export function toAverageScore(games: GameReviewData[]): AverageScoreItem {
         resultGame.microtransactions_avg += game.microtransactions_score;
         resultGame.support_avg += game.support_score;
         resultGame.total += game.total_score;
+        resultGame.total_hours += game.hours_spent;
+        resultGame.review_count += 1;
+
+        if(game.finished){
+            resultGame.completion_rate += 1;
+        }
+
+        if(platformMap.has(game.platform_id)){
+            //@ts-ignore
+            platformMap.set(game.platform_id, platformMap.get(game.platform_id) + 1);
+        }else{
+            platformMap.set(game.platform_id, 1);
+        }
+
     });
 
     resultGame.graphics_avg = Math.floor(resultGame.graphics_avg / games.length);
@@ -179,7 +198,10 @@ export function toAverageScore(games: GameReviewData[]): AverageScoreItem {
     resultGame.microtransactions_avg = Math.floor(resultGame.microtransactions_avg / games.length);
     resultGame.support_avg = Math.floor(resultGame.support_avg / games.length);
     resultGame.total = Math.floor(resultGame.total / games.length);
+    resultGame.completion_rate = resultGame.completion_rate / resultGame.review_count;
 
+    const sortedPlatformId = Array.from(platformMap).sort(([ ,p1], [ ,p2]) => p2 - p1);
+    resultGame.platform = sortedPlatformId[0][0];
     return resultGame;
 }
 
