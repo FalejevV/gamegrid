@@ -1,3 +1,4 @@
+import { IValueFilter } from "./interface"
 
 export interface PrimaryItem{
     title:string,

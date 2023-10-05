@@ -1,50 +1,13 @@
+import DataBlock from "@/components/DataBlock/DataBlock";
 import ReviewEditButton from "@/components/EditButtons/ReviewEditButton/ReviewEditButton";
-import { RatingNumber } from "@/interface";
-import { ratingSymbols } from "@/rating";
+import ScoreGrid from "@/components/ScoreGrid/ScoreGrid";
 import { dateToText } from "@/utils/formatter";
 import { getSupabasePublicUserReview } from "@/utils/supabaseFetching"
 import Image from "next/image";
 import Link from "next/link";
 export const revalidate = 1800;
-interface IValueFilter {
-    0: string,
-    10: string,
-    20: string,
-    30: string,
-    50: string,
-    70: string,
-    80: string,
-    90: string,
-    100: string
-}
 
-let valueFilter:IValueFilter = {
-    0: "saturate-[50%]",
-    10: "saturate-[60%]",
-    20: "saturate-[75%]",
-    30: "saturate-[80%]",
-    50: "",
-    70: "birghtness-[105%]",
-    80: "brightness-[110%]",
-    90: "brightness-[115%]",
-    100: "brightness-[120%]"
-}
 
-function DataBlock(props: {
-    title: string,
-    value: number,
-    textValue?: string | number
-    color?: string,
-    filter?: string
-}) {
-    let ratingNameKey = props.value / 10 as RatingNumber;
-    return (
-        <div className={`flexgap items-center justify-between px-[10px] w-full k:h-[50px] h-[40px] ${props.color ? props.color : "bg-dimm"} ${props.filter}`}>
-            <p className="textcol-dimm text-[16px]">{props.title}</p>
-            <p className="textcol-main text-[25px] font-semibold">{!props.textValue ? ratingSymbols[ratingNameKey] : props.textValue}</p>
-        </div>
-    )
-}
 
 export default async function Review({ params }: {
     params: {
@@ -71,32 +34,6 @@ export default async function Review({ params }: {
             <p className="w-full max-w-[1000px] mx-auto bg-dimm h-[34px] flex items-center justify-center textcol-main">Game review not found :/</p>
         )
     }
-
-    function ScoreGrid() {
-        function getFilter(score: number) {
-            let scoreValue = score as keyof IValueFilter;
-            return valueFilter[scoreValue];
-        }
-
-        return (
-            <div className="grid k:grid-cols-3 k:grid-rows-[repeat(4,50px)] w-full gap-[5px] k:gap-[10px] 
-            grid-cols-[repeat(2,minmax(270px,1fr))] grid-rows-[repeat(6,40px)] overflow-x-auto">
-                <DataBlock title={"Graphics"} value={data?.graphics_score || 0} filter={getFilter(data?.graphics_score || 50)} />
-                <DataBlock title={"Sound Design"} value={data?.sound_score || 0} filter={getFilter(data?.sound_score|| 50)}/>
-                <DataBlock title={"Gameplay"} value={data?.gameplay_score || 0} filter={getFilter(data?.gameplay_score|| 50)} />
-                <DataBlock title={"Level Design"} value={data?.level_score || 0} filter={getFilter(data?.level_score|| 50)} />
-                <DataBlock title={"Balance"} value={data?.balance_score || 0} filter={getFilter(data?.balance_score|| 50)} />
-                <DataBlock title={"Story/Narrative"} value={data?.story_score || 0} filter={getFilter(data?.story_score|| 50)}/>
-                <DataBlock title={"Performance"} value={data?.performance_score || 0} filter={getFilter(data?.performance_score|| 50)} />
-                <DataBlock title={"Originality"} value={data?.original_score || 0} filter={getFilter(data?.original_score || 50)}/>
-                <DataBlock title={"Customization"} value={data?.customization_score || 0} filter={getFilter(data?.customization_score|| 50)}/>
-                <DataBlock title={"Microtransactions"} value={data?.microtransactions_score || 0} filter={getFilter(data?.microtransactions_score|| 50)}/>
-                <DataBlock title={"Support"} value={data?.support_score || 0} filter={getFilter(data?.support_score|| 50)} />
-                <DataBlock title={"Total Score"} textValue={`${data?.total_score || 0}/100`} value={0} color="bg-mid"/>
-            </div>
-        )
-    }
-
     function MobileLayout() {
         if (!data) return;
 
@@ -127,7 +64,7 @@ export default async function Review({ params }: {
                         </div>
                     </div>
 
-                    <ScoreGrid />
+                    <ScoreGrid data={data} />
                 </div>
             </span>
         )
@@ -163,7 +100,7 @@ export default async function Review({ params }: {
                         </div>
                     </div>
 
-                    <ScoreGrid />
+                    <ScoreGrid data={data}/>
                 </div>
             </span>
         )
