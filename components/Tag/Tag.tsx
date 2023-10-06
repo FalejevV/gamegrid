@@ -1,3 +1,4 @@
+"use client";
 import { SortFilterDropdowns, clearOptions, toggleOption } from "@/store/features/sortFilter";
 import { useAppDispatch } from "@/store/store"
 

@@ -1,7 +1,7 @@
 import ProfileEditButton from "@/components/EditButtons/ProfileEditButton/ProfileEditButton";
 import GameItemDataBlock from "@/components/GameItemDataBlock/GameItemDataBlock";
 import UserReviewItemsLoader from "@/components/Loader/UserReviewItemsLoader/UserPeviewItemsLoader";
-import ProfileInfoLine from "@/components/ProfileInfoLine/ProfileInfoLine";
+import InfoLine from "@/components/ProfileInfoLine/ProfileInfoLine";
 import GamePreviewSampleItem from "@/components/UserReviewSampleItem/UserReviewSampleItem";
 import { CollectionSummaryInfo, IProfile, UserReviewSample, UserReviewSampleDataError } from "@/interface";
 import { amountFetch } from "@/utils/config";
@@ -82,7 +82,7 @@ export default async function Profile({ params }: {
             <>
                 {userReviewsTopData.length > 0 &&
                     <div className="w-full flexgap flex-col textcol-main">
-                        <ProfileInfoLine text={"Most Loved Games"} addClass="bg-mid inputheight font-semibold text-[22px]" align="justify-center" />
+                        <InfoLine text={"Most Loved Games"} addClass="bg-mid inputheight font-semibold text-[22px]" align="justify-center" />
                         <div className="flexgap w-full overflow-x-auto">
                             <GamePreviewSampleItem review={userReviewsTopData[0]} userId={params.id} />
                             <GamePreviewSampleItem review={userReviewsTopData[1]} userId={params.id} />
@@ -92,7 +92,7 @@ export default async function Profile({ params }: {
                 }
                 {userReviewsWorstData.length > 0 &&
                     <div className="w-full flexgap flex-col textcol-main">
-                        <ProfileInfoLine text={"Least Loved Games"} addClass="bg-mid inputheight font-semibold text-[22px]" align="justify-center" />
+                        <InfoLine text={"Least Loved Games"} addClass="bg-mid inputheight font-semibold text-[22px]" align="justify-center" />
                         <div className="flexgap w-full overflow-x-auto">
                             <GamePreviewSampleItem review={userReviewsWorstData[0]} userId={params.id} />
                             <GamePreviewSampleItem review={userReviewsWorstData[1]} userId={params.id} />
@@ -114,15 +114,15 @@ export default async function Profile({ params }: {
 
                         <div className="flexgap flex-col flex-auto textcol-main h-full">
                             <div className="flexgap">
-                                <ProfileInfoLine text={userData.username} flexauto addClass="bg-dimm saturate-[120%] font-semibold text-[18px]" />
-                                <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} addClass="bg-dimm saturate-[70%]" />
+                                <InfoLine text={userData.username} flexauto addClass="bg-dimm saturate-[120%] font-semibold text-[18px]" />
+                                <InfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} addClass="bg-dimm saturate-[70%]" />
                                 {authData.user?.id === userData.id &&
                                     <ProfileEditButton />
                                 }
                             </div>
                             <div className="flexgap">
-                                <ProfileInfoLine flexauto text={`Country: ${userData.country ? userData.country.country : "unknown"}`} />
-                                <ProfileInfoLine flexauto text={`Gender: ${userData.gender ? userData.gender.gender : "unknown"}`} />
+                                <InfoLine flexauto text={`Country: ${userData.country ? userData.country.country : "unknown"}`} />
+                                <InfoLine flexauto text={`Gender: ${userData.gender ? userData.gender.gender : "unknown"}`} />
                             </div>
                             <div className="flexgap flex-col h-full">
                                 <div className="flexgap h-fit">
@@ -149,15 +149,15 @@ export default async function Profile({ params }: {
 
                         <div className="flexgap flex-col flex-auto textcol-main h-full">
                             <div className="flexgap">
-                                <ProfileInfoLine text={userData.username} flexauto addClass="bg-dimm saturate-[120%] font-semibold text-[18px]" />
-                                <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} addClass="bg-dimm saturate-[70%]" />
+                                <InfoLine text={userData.username} flexauto addClass="bg-dimm saturate-[120%] font-semibold text-[18px]" />
+                                <InfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} addClass="bg-dimm saturate-[70%]" />
                                 {authData.user?.id === userData.id &&
                                     <ProfileEditButton />
                                 }
                             </div>
                             <div className="flexgap">
-                                <ProfileInfoLine flexauto text={`Country: ${userData.country ? userData.country.country : "unknown"}`} />
-                                <ProfileInfoLine flexauto text={`Gender: ${userData.gender ? userData.gender.gender : "unknown"}`} />
+                                <InfoLine flexauto text={`Country: ${userData.country ? userData.country.country : "unknown"}`} />
+                                <InfoLine flexauto text={`Gender: ${userData.gender ? userData.gender.gender : "unknown"}`} />
                             </div>
                             <div className="flexgap flex-col h-full">
                                 <div className="flexgap h-fit">
@@ -183,14 +183,14 @@ export default async function Profile({ params }: {
                 <div className="w-full flexgap flex-col textcol-main">
                     <div className="flexgap sm:flex-row flex-col w-full">
                         <div className="flex flexgap flex-auto">
-                            <ProfileInfoLine flexauto text={userData.username} addClass="bg-mid font-semibold text-[17px]" />
+                            <InfoLine flexauto text={userData.username} addClass="bg-mid font-semibold text-[17px]" />
                             {authData.user?.id === userData.id &&
                                 <span className="flex sm:hidden w-[34px]">
                                     <ProfileEditButton />
                                 </span>
                             }
                         </div>
-                        <ProfileInfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} align="justify-end" />
+                        <InfoLine text={dateToText(new Date(userData.created_at).valueOf() / 1000)} align="justify-end" />
                         {authData.user?.id === userData.id &&
                             <span className="sm:flex hidden ">
                                 <ProfileEditButton />
@@ -216,7 +216,7 @@ export default async function Profile({ params }: {
             <MobileLayout />
             {userReviewsData.length ?
                 <div className="flexgap flex-col w-full textcol-main">
-                    <ProfileInfoLine flexauto text={"Recent Reviews"} addClass="bg-hi inputheight font-semibold text-[22px]" align="justify-center" />
+                    <InfoLine flexauto text={"Recent Reviews"} addClass="bg-hi inputheight font-semibold text-[22px]" align="justify-center" />
                     <UserReviewItemsLoader publicId={userData.user_id} initialData={userReviewsData} />
                 </div>
                 : <></>
