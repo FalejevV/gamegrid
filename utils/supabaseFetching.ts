@@ -529,6 +529,7 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
     const promisesResult = await Promise.all([updateAverageReviewData(game.game_id), updateAverageUserCollectionInfo(userId)]);
     let promiseError;
     promisesResult.forEach((response: StringDataError) => {
+        console.log(response);
         if (response.error) {
             promiseError = response.error;
             return;

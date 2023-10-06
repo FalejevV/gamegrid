@@ -155,7 +155,7 @@ export function toAverageScore(games: GameReviewData[]): AverageScoreItem {
         platform: 0
     };
 
-    let platformMap:Map<number, number> = new Map();
+    let platformMap: Map<number, number> = new Map();
     games.forEach((game: GameReviewData) => {
         resultGame.game_id = game.game_id;
         resultGame.graphics_avg += game.graphics_score;
@@ -173,14 +173,14 @@ export function toAverageScore(games: GameReviewData[]): AverageScoreItem {
         resultGame.total_hours += game.hours_spent;
         resultGame.review_count += 1;
 
-        if(game.finished){
+        if (game.finished) {
             resultGame.completion_rate += 1;
         }
 
-        if(platformMap.has(game.platform_id)){
+        if (platformMap.has(game.platform_id)) {
             //@ts-ignore
             platformMap.set(game.platform_id, platformMap.get(game.platform_id) + 1);
-        }else{
+        } else {
             platformMap.set(game.platform_id, 1);
         }
 
@@ -198,9 +198,9 @@ export function toAverageScore(games: GameReviewData[]): AverageScoreItem {
     resultGame.microtransactions_avg = Math.floor(resultGame.microtransactions_avg / games.length);
     resultGame.support_avg = Math.floor(resultGame.support_avg / games.length);
     resultGame.total = Math.floor(resultGame.total / games.length);
-    resultGame.completion_rate = resultGame.completion_rate / resultGame.review_count;
+    resultGame.completion_rate = resultGame.completion_rate / resultGame.review_count * 100;
 
-    const sortedPlatformId = Array.from(platformMap).sort(([ ,p1], [ ,p2]) => p2 - p1);
+    const sortedPlatformId = Array.from(platformMap).sort(([, p1], [, p2]) => p2 - p1);
     resultGame.platform = sortedPlatformId[0][0];
     return resultGame;
 }
@@ -286,4 +286,23 @@ export function getCollectionSummary(games: FullGameReviewInfo[]): CollectionSum
     summary.comment_game = lastGame;
     summary.comment_text = lastComment;
     return summary;
+}
+
+
+export function formatHours(hours: number) {
+    if (hours >= 100000000) {
+        return `${Math.round(hours / (24 * 365 * 1000) * 100) / 100} Milleniums`
+    }
+    if (hours >= 800000) {
+        return `${Math.round(hours / (24 * 365 * 100) * 100) / 100} Centuries`
+    }
+    if (hours >= 10000) {
+        return `${Math.round(hours / (24 * 365) * 10) / 10} Years`
+    }
+    if (hours >= 1000) {
+        return `${Math.round(hours / (24) * 10) / 10} Days`
+    }
+    else {
+        return `${hours}h`
+    }
 }

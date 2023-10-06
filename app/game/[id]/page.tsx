@@ -1,7 +1,9 @@
+import DataBlock from "@/components/DataBlock/DataBlock"
 import PageErrorMessage from "@/components/PageErrorMessage/PageErrorMessate"
 import InfoLine from "@/components/ProfileInfoLine/ProfileInfoLine"
 import ScoreGrid from "@/components/ScoreGrid/ScoreGrid"
 import { AverageScoreItem, Game, GameReviewData, TagItem } from "@/interface"
+import { formatHours } from "@/utils/formatter"
 import supabaseRootClient from "@/utils/supabaseRootClient"
 import Image from "next/image"
 
@@ -66,7 +68,7 @@ export default async function Game({ params }: {
                     border-l-[5px] border-b-[5px] border-r-[5px]
                     ">{gameInfo.release_date.toString()}</p>
 
-                    <p className="w-full textcol-main text-[25px] font-semibold overflow-x-auto overflow-y-hidden bg-mid px-[10px] min-h-[40px] flex items-center">{gameInfo.name}</p>
+                    <p className="w-full textcol-main text-[25px] font-semibold overflow-x-auto overflow-y-hidden bg-hi saturate-[80%] px-[10px] min-h-[40px] flex items-center">{gameInfo.name}</p>
                     <div className="flexgap flex-wrap">
                         {gameInfo.tags.map((tag: TagItem) => <p key={tag.Tag.tag} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{tag.Tag.tag}</p>)}
                     </div>
@@ -75,12 +77,19 @@ export default async function Game({ params }: {
                     <div className="flexgap flex-wrap">
                         {gameInfo.developers.map((Developer) => <p key={Developer.Developer.developer} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Developer.Developer.developer}</p>)}
                     </div>
-                    <InfoLine text={"Description"} addClass="textcol-main bg-mid saturate-[70%]"/>
+                    <InfoLine text={"Description"} addClass="textcol-main bg-mid saturate-[70%]" />
                     <p className="flex-auto bg-dimm textcol-dimm p-[10px] overflow-y-auto">
                         {gameInfo.description}
                     </p>
                 </div>
-                <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={400} height={600} className="w-full max-w-[450px] h-full object-cover object-top saturate-50" />
+                <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={400} height={600} className="w-full max-w-[450px] h-full object-cover object-top brightness-75 hover:brightness-100 transition-all duration-200" />
+            </div>
+
+            <div className="flexgap">
+                <DataBlock title={"Played for"} value={0} textValue={formatHours(gameInfo.review.total_hours)}/>
+                <DataBlock title={"Reviewed"} value={0} textValue={`${gameInfo.review.review_count}`} />
+                <DataBlock title={"Completion rate"} value={0} textValue={`${gameInfo.review.completion_rate}%`} />
+                <DataBlock title={"Average hours"} value={0} textValue={`${gameInfo.review.total_hours / gameInfo.review.review_count}h`} />
             </div>
             <ScoreGrid onlyNumbers data={gameScore} />
         </div>
