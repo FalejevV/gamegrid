@@ -1,4 +1,5 @@
 import DataBlock from "@/components/DataBlock/DataBlock"
+import HoverIcon from "@/components/HoverIcon/HoverIcon"
 import PageErrorMessage from "@/components/PageErrorMessage/PageErrorMessate"
 import InfoLine from "@/components/ProfileInfoLine/ProfileInfoLine"
 import ScoreGrid from "@/components/ScoreGrid/ScoreGrid"
@@ -21,10 +22,14 @@ export default async function Game({ params }: {
         developers:GameDeveloper(
              Developer(developer)
         ),
+        platforms:GamePlatform(
+            Platform(platform)
+        ),
         tags:GameTag(
              Tag(tag)
         )
     `).eq("id", params.id).single()
+
 
     let gameError = gameInfoRequest.error?.message;
     if (gameError) {
@@ -32,6 +37,8 @@ export default async function Game({ params }: {
             <PageErrorMessage text={gameError} />
         )
     }
+
+    
     interface GameReviewAndInfo extends Game {
         review: AverageScoreItem,
         tags: TagItem[],
@@ -40,8 +47,16 @@ export default async function Game({ params }: {
                 developer: string
             }
         }[],
+        platforms: {
+            Platform: {
+                platform: string
+            }
+        }[]
     };
+
     let gameInfo: GameReviewAndInfo = gameInfoRequest.data;
+    const gameDuplicateRequest = await supabaseRootClient().from("Game").select("id").eq("name", gameInfo.name);
+
 
     let gameScore = {
         graphics_score: gameInfo.review.graphics_avg,
@@ -58,7 +73,6 @@ export default async function Game({ params }: {
         total_score: gameInfo.review.total,
     } as GameReviewData
 
-
     return (
         <div className="w-full flexgap flex-col mx-auto max-w-[1000px]">
             <div className="w-full flexgap h-[500px] relative">
@@ -73,7 +87,14 @@ export default async function Game({ params }: {
                         {gameInfo.tags.map((tag: TagItem) => <p key={tag.Tag.tag} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{tag.Tag.tag}</p>)}
                     </div>
 
-                    <InfoLine text={"Related Companies"} addClass="textcol-main bg-mid saturate-[70%]" />
+                    <div className="flexgap h-[34px]">
+                        <InfoLine text={"Platforms"} addClass="textcol-main bg-mid saturate-[70%]" />
+                        {gameDuplicateRequest.data && gameDuplicateRequest.data?.length > 1 &&  <HoverIcon hoverText={"The list of platforms may have inaccuracies due to duplicate game names."} />}
+                    </div>
+                    <div className="flexgap flex-wrap">
+                        {gameInfo.platforms.map((Platform) => <p key={Platform.Platform.platform} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Platform.Platform.platform}</p>)}
+                    </div>
+                    <InfoLine text={"Involved Companies"} addClass="textcol-main bg-mid saturate-[70%]" />
                     <div className="flexgap flex-wrap">
                         {gameInfo.developers.map((Developer) => <p key={Developer.Developer.developer} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Developer.Developer.developer}</p>)}
                     </div>
@@ -86,10 +107,10 @@ export default async function Game({ params }: {
             </div>
 
             <div className="flexgap">
-                <DataBlock title={"Played for"} value={0} textValue={formatHours(gameInfo.review.total_hours)}/>
+                <DataBlock title={"Played for"} value={0} textValue={formatHours(gameInfo.review.total_hours)} />
                 <DataBlock title={"Reviewed"} value={0} textValue={`${gameInfo.review.review_count}`} />
                 <DataBlock title={"Completion rate"} value={0} textValue={`${gameInfo.review.completion_rate}%`} />
-                <DataBlock title={"Average hours"} value={0} textValue={`${gameInfo.review.total_hours / gameInfo.review.review_count}h`} />
+                <DataBlock title={"Average hours"} value={0} textValue={`${Math.floor(gameInfo.review.total_hours / gameInfo.review.review_count)}h`} />
             </div>
             <ScoreGrid onlyNumbers data={gameScore} />
         </div>
