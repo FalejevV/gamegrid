@@ -126,6 +126,9 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
     let gameIds: number[] = [];
     let anyError: PostgrestError | null = null;
     let nothingFoundOnPrevQuery = false;
+    if(filters.amount > amountFetch * 2){
+        filters.amount = amountFetch;
+    }
     amountDefault = Number(filters.amount || amountFetch);
     // If tags are selected, fint games by these tags
     if (filters.tags && filters.tags.length > 0) {
