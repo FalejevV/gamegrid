@@ -11,7 +11,7 @@ export default function DataBlock(props: {
 }) {
     let ratingNameKey = props.value / 10 as RatingNumber;
     return (
-        <div className={`flexgap items-center justify-between px-[10px] w-full k:h-[50px] h-[40px] ${props.color ? props.color : "bg-dimm"} ${props.filter} hover:textcol-main textcol-dimm cursor-default`}>
+        <div className={`flexgap items-center justify-between px-[10px] w-full  h-full ${props.color ? props.color : "bg-dimm"} ${props.filter} hover:textcol-main textcol-dimm cursor-default`}>
             <p className="text-[16px] whitespace-nowrap pr-[15px]">{props.title}</p>
             <p className="textcol-main text-[25px] font-semibold whitespace-nowrap">{(props.textValue || "").toString().trim() === "" ? ratingSymbols[ratingNameKey] : props.textValue}</p>
         </div>

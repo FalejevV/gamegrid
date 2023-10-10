@@ -11,7 +11,8 @@ export default function Tag(props:{
     single?:boolean
 }){
     const dispatch = useAppDispatch();
-    function tagClick(){
+    function tagClick(e:React.MouseEvent){
+        e.preventDefault();
         if(props.single && props.type){
             dispatch(clearOptions(props.type))
         }

@@ -74,6 +74,10 @@ body {
   color: rgb(202, 233, 234);
 }
 
+.textcol-gray{
+ color:rgb(26, 26, 28); 
+}
+
 .textcol-bgmid {
   color: rgb(149, 7, 65);
 }
@@ -88,7 +92,7 @@ body {
 }
 
 .pten {
-  padding: 10px;
+  @apply k:p-[10px] p-[5px]
 }
 
 .gapt {

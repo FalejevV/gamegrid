@@ -9,6 +9,21 @@ import supabaseRootClient from "@/utils/supabaseRootClient"
 import Image from "next/image"
 
 
+function UserTotalStat(props: {
+    icon: string,
+    title: string,
+    value: string | number
+}) {
+    return (
+        <div className="flex-auto h-full flexgap flex-col justify-between w-full overflow-hidden bg-hi relative pten">
+            <div className="flexgap justify-end items-center overflow-hidden">
+                <Image src={props.icon} alt={`${props.title} icon`} width={85} height={85} className="w-[125px] h-[125px] absolute left-[-50px] top-[-20px] opacity-25" />
+                <p className="textcol-dimm text-[18px] font-medium">{props.title}</p>
+            </div>
+            <p className={`${props.value.toString().split("").length > 12 ? "text-[23px] pb-[8px]" : "text-[35px]"} textcol-main font-semibold whitespace-nowrap overflow-x-auto text-right`}>{props.value}</p>
+        </div>
+    )
+}
 
 export default async function Game({ params }: {
     params: {
@@ -38,7 +53,7 @@ export default async function Game({ params }: {
         )
     }
 
-    
+
     interface GameReviewAndInfo extends Game {
         review: AverageScoreItem,
         tags: TagItem[],
@@ -89,7 +104,7 @@ export default async function Game({ params }: {
 
                     <div className="flexgap h-[34px]">
                         <InfoLine text={"Platforms"} addClass="textcol-main bg-mid saturate-[70%]" />
-                        {gameDuplicateRequest.data && gameDuplicateRequest.data?.length > 1 &&  <HoverIcon hoverText={"The list of platforms may have inaccuracies due to duplicate game names."} />}
+                        {gameDuplicateRequest.data && gameDuplicateRequest.data?.length > 1 && <HoverIcon hoverText={"The list of platforms may have inaccuracies due to duplicate game names."} />}
                     </div>
                     <div className="flexgap flex-wrap">
                         {gameInfo.platforms.map((Platform) => <p key={Platform.Platform.platform} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Platform.Platform.platform}</p>)}
@@ -103,16 +118,17 @@ export default async function Game({ params }: {
                         {gameInfo.description}
                     </p>
                 </div>
-                <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={400} height={600} className="w-full max-w-[450px] h-full object-cover object-top brightness-75 hover:brightness-100 transition-all duration-200" />
+                <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={400} height={600} className="w-full max-w-[450px] h-full object-cover object-top brightness-[85%] hover:brightness-100 transition-all duration-200" />
             </div>
 
-            <div className="flexgap">
-                <DataBlock title={"Played for"} value={0} textValue={formatHours(gameInfo.review.total_hours)} />
-                <DataBlock title={"Reviewed"} value={0} textValue={`${gameInfo.review.review_count}`} />
-                <DataBlock title={"Completion rate"} value={0} textValue={`${gameInfo.review.completion_rate}%`} />
-                <DataBlock title={"Average hours"} value={0} textValue={`${Math.floor(gameInfo.review.total_hours / gameInfo.review.review_count)}h`} />
+            <div className="flexgap h-[120px] saturate-[85%]">
+                <UserTotalStat icon={"/icons/clock.svg"} title={"Played for"} value={formatHours(gameInfo.review.total_hours + 1000000)} />
+                <UserTotalStat icon={"/icons/comments.svg"} title={"Reviews"} value={gameInfo.review.review_count} />
+                <UserTotalStat icon={"/icons/circle-check.svg"} title={"Completion rate"} value={`${gameInfo.review.completion_rate}%`} />
+                <UserTotalStat icon={"/icons/hourglass.svg"} title={"Average Hours"} value={formatHours(gameInfo.review.total_hours / gameInfo.review.review_count)} />
             </div>
             <ScoreGrid onlyNumbers data={gameScore} />
+
         </div>
     )
 }

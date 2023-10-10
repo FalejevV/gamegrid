@@ -30,7 +30,7 @@ function PCItemLayout(gameData: Game, leastLoved: ScoreItem, mostLoved: ScoreIte
                     <div className="flex gap-[30px] h-full flex-auto bg-red-400 items-center px-3 bg-dimm">
                         <div className="flex gap-[10px] items-center relative">
                             <Tag single tag={gameData.developer[0].Developer.developer} bright type="developer" />
-                            <AdditionalInfoHover single items={getDeveloperStringArray(gameData)} type={"developer"} direction="left-[0px]" />
+                            <AdditionalInfoHover single items={getDeveloperStringArray(gameData)} type={"developer"} direction="left-[-20px]" />
                         </div>
                         <p className="textcol-dimm font-medium text-[14px] whitespace-nowrap"> {gameData.release_date.toString()} </p>
                         <GamePreviewTags tags={gameData.tags} />
