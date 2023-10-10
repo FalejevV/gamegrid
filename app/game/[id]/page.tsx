@@ -17,10 +17,10 @@ function UserTotalStat(props: {
     return (
         <div className="flex-auto h-full flexgap flex-col justify-between w-full overflow-hidden bg-hi relative pten">
             <div className="flexgap justify-end items-center overflow-hidden">
-                <Image src={props.icon} alt={`${props.title} icon`} width={85} height={85} className="w-[125px] h-[125px] absolute left-[-50px] top-[-20px] opacity-25" />
-                <p className="textcol-dimm text-[18px] font-medium">{props.title}</p>
+                <Image src={props.icon} alt={`${props.title} icon`} width={85} height={85} className="sm:w-[125px] sm:h-[125px] w-[70px] h-[70px] absolute sm:left-[-50px] sm:top-[-20px] left-[-20px] top-[-10px] opacity-25" />
+                <p className="textcol-dimm sm:text-[16px] text-[18px] font-medium">{props.title}</p>
             </div>
-            <p className={`${props.value.toString().split("").length > 12 ? "text-[23px] pb-[8px]" : "text-[35px]"} textcol-main font-semibold whitespace-nowrap overflow-x-auto text-right`}>{props.value}</p>
+            <p className={`${props.value.toString().split("").length > 12 ? "sm:text-[23px] pb-[8px]" : "sm:text-[35px]"} text-[22px] textcol-main font-semibold whitespace-nowrap overflow-x-auto text-right`}>{props.value}</p>
         </div>
     )
 }
@@ -86,49 +86,161 @@ export default async function Game({ params }: {
         microtransactions_score: gameInfo.review.microtransactions_avg,
         support_score: gameInfo.review.support_avg,
         total_score: gameInfo.review.total,
-    } as GameReviewData
+    } as GameReviewData;
 
-    return (
-        <div className="w-full flexgap flex-col mx-auto max-w-[1000px]">
-            <div className="w-full flexgap h-[500px] relative">
-                <div className="flexgap flex-col flex-auto h-full max-w-[550px]">
-                    <p className="absolute k:right-[-10px] right-[-5px] top-0 bg-dimm z-10 px-[10px] k:h-[47px] h-[37px] flex items-center justify-center textcol-main font-medium text-[18px] bordercol-gray 
+    function PCLayout() {
+        return (
+            <div className="w-full k:flex hidden gapt flex-col mx-auto max-w-[1000px]">
+                <div className="w-full flexgap h-[500px] relative">
+                    <div className="flexgap flex-col flex-auto h-full max-w-[550px]">
+                        <p className="absolute k:right-[-10px] right-[-5px] top-0 bg-dimm z-10 px-[10px] k:h-[47px] h-[37px] flex items-center justify-center textcol-main font-medium text-[18px] bordercol-gray 
                     k:border-l-[10px] k:border-b-[10px] k:border-r-[10px]
                     border-l-[5px] border-b-[5px] border-r-[5px]
                     ">{gameInfo.release_date.toString()}</p>
 
-                    <p className="w-full textcol-main text-[25px] font-semibold overflow-x-auto overflow-y-hidden bg-hi saturate-[80%] px-[10px] min-h-[40px] flex items-center">{gameInfo.name}</p>
-                    <div className="flexgap flex-wrap">
-                        {gameInfo.tags.map((tag: TagItem) => <p key={tag.Tag.tag} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{tag.Tag.tag}</p>)}
-                    </div>
+                        <p className="w-full textcol-main text-[25px] font-semibold overflow-x-auto overflow-y-hidden bg-hi saturate-[80%] px-[10px] min-h-[40px] flex items-center">{gameInfo.name}</p>
+                        <div className="flexgap flex-wrap">
+                            {gameInfo.tags.map((tag: TagItem) => <p key={tag.Tag.tag} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{tag.Tag.tag}</p>)}
+                        </div>
 
-                    <div className="flexgap h-[34px]">
-                        <InfoLine text={"Platforms"} addClass="textcol-main bg-mid saturate-[70%]" />
-                        {gameDuplicateRequest.data && gameDuplicateRequest.data?.length > 1 && <HoverIcon hoverText={"The list of platforms may have inaccuracies due to duplicate game names."} />}
+                        <div className="flexgap h-[34px]">
+                            <InfoLine text={"Platforms"} addClass="textcol-main bg-mid saturate-[70%]" />
+                            {gameDuplicateRequest.data && gameDuplicateRequest.data?.length > 1 && <HoverIcon hoverText={"The list of platforms may have inaccuracies due to duplicate game names."} />}
+                        </div>
+                        <div className="flexgap flex-wrap">
+                            {gameInfo.platforms.map((Platform) => <p key={Platform.Platform.platform} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Platform.Platform.platform}</p>)}
+                        </div>
+                        <InfoLine text={"Involved Companies"} addClass="textcol-main bg-mid saturate-[70%]" />
+                        <div className="flexgap flex-wrap">
+                            {gameInfo.developers.map((Developer) => <p key={Developer.Developer.developer} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Developer.Developer.developer}</p>)}
+                        </div>
+                        <InfoLine text={"Description"} addClass="textcol-main bg-mid saturate-[70%]" />
+                        <p className="flex-auto bg-dimm textcol-dimm p-[10px] overflow-y-auto">
+                            {gameInfo.description}
+                        </p>
                     </div>
-                    <div className="flexgap flex-wrap">
-                        {gameInfo.platforms.map((Platform) => <p key={Platform.Platform.platform} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Platform.Platform.platform}</p>)}
-                    </div>
-                    <InfoLine text={"Involved Companies"} addClass="textcol-main bg-mid saturate-[70%]" />
-                    <div className="flexgap flex-wrap">
-                        {gameInfo.developers.map((Developer) => <p key={Developer.Developer.developer} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Developer.Developer.developer}</p>)}
-                    </div>
-                    <InfoLine text={"Description"} addClass="textcol-main bg-mid saturate-[70%]" />
-                    <p className="flex-auto bg-dimm textcol-dimm p-[10px] overflow-y-auto">
-                        {gameInfo.description}
-                    </p>
+                    <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={400} height={600} className="w-full max-w-[450px] h-full object-cover object-top brightness-[85%] hover:brightness-100 transition-all duration-200" />
                 </div>
-                <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={400} height={600} className="w-full max-w-[450px] h-full object-cover object-top brightness-[85%] hover:brightness-100 transition-all duration-200" />
-            </div>
 
-            <div className="flexgap h-[120px] saturate-[85%]">
-                <UserTotalStat icon={"/icons/clock.svg"} title={"Played for"} value={formatHours(gameInfo.review.total_hours + 1000000)} />
-                <UserTotalStat icon={"/icons/comments.svg"} title={"Reviews"} value={gameInfo.review.review_count} />
-                <UserTotalStat icon={"/icons/circle-check.svg"} title={"Completion rate"} value={`${gameInfo.review.completion_rate}%`} />
-                <UserTotalStat icon={"/icons/hourglass.svg"} title={"Average Hours"} value={formatHours(gameInfo.review.total_hours / gameInfo.review.review_count)} />
-            </div>
-            <ScoreGrid onlyNumbers data={gameScore} />
+                <div className="flexgap h-[120px] saturate-[85%]">
+                    <UserTotalStat icon={"/icons/clock.svg"} title={"Played for"} value={formatHours(gameInfo.review.total_hours)} />
+                    <UserTotalStat icon={"/icons/comments.svg"} title={"Reviews"} value={gameInfo.review.review_count} />
+                    <UserTotalStat icon={"/icons/circle-check.svg"} title={"Completion rate"} value={`${gameInfo.review.completion_rate}%`} />
+                    <UserTotalStat icon={"/icons/hourglass.svg"} title={"Average Hours"} value={formatHours(gameInfo.review.total_hours / gameInfo.review.review_count)} />
+                </div>
+                <ScoreGrid onlyNumbers data={gameScore} />
 
-        </div>
+            </div>
+        )
+    }
+
+
+    function TabletLayout() {
+        return (
+            <div className="w-full k:hidden max640:hidden flex gapt flex-col mx-auto max-w-[1000px]">
+                <div className="w-full flexgap h-fit relative">
+                    <div className="flexgap flex-col flex-auto h-full w-full">
+                        <p className="absolute k:right-[-10px] right-[-5px] top-[45px] bg-dimm z-10 px-[10px] k:h-[47px] h-[37px] flex items-center justify-center textcol-main font-medium text-[18px] bordercol-gray 
+                    k:border-l-[10px] k:border-b-[10px] k:border-r-[10px]
+                    border-l-[5px] border-b-[5px] border-r-[5px]
+                    ">{gameInfo.release_date.toString()}</p>
+
+                        <p className="w-full textcol-main text-[20px] font-semibold overflow-x-auto overflow-y-hidden bg-hi saturate-[80%] px-[10px] min-h-[40px] flex items-center">{gameInfo.name}</p>
+                        <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={1000} height={200} className="w-full max-w-[1000px] h-[200px] object-center object-cover brightness-[85%] hover:brightness-100 transition-all duration-200" />
+
+                        <div className="flexgap flex-wrap">
+                            {gameInfo.tags.map((tag: TagItem) => <p key={tag.Tag.tag} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{tag.Tag.tag}</p>)}
+                        </div>
+
+                        <div className="flexgap h-[34px]">
+                            <InfoLine text={"Platforms"} addClass="textcol-main bg-mid saturate-[70%]" align="justify-center" />
+                            {gameDuplicateRequest.data && gameDuplicateRequest.data?.length > 1 && <HoverIcon hoverText={"The list of platforms may have inaccuracies due to duplicate game names."} />}
+                        </div>
+                        <div className="flexgap flex-wrap">
+                            {gameInfo.platforms.map((Platform) => <p key={Platform.Platform.platform} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Platform.Platform.platform}</p>)}
+                        </div>
+                        <InfoLine text={"Involved Companies"} addClass="textcol-main bg-mid saturate-[70%]" align="justify-center"/>
+                        <div className="flexgap flex-wrap">
+                            {gameInfo.developers.map((Developer) => <p key={Developer.Developer.developer} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Developer.Developer.developer}</p>)}
+                        </div>
+                        <InfoLine text={"Description"} addClass="textcol-main bg-mid saturate-[70%]" align="justify-center"/>
+                        <p className="flex-auto bg-dimm textcol-dimm p-[10px] overflow-y-auto max-h-[200px]">
+                            {gameInfo.description}
+                        </p>
+                    </div>
+
+                </div>
+
+                <div className="flex-col flex gapt h-fit saturate-[85%]">
+                    <div className="flexgap">
+                        <UserTotalStat icon={"/icons/clock.svg"} title={"Played for"} value={formatHours(gameInfo.review.total_hours)} />
+                        <UserTotalStat icon={"/icons/comments.svg"} title={"Reviews"} value={gameInfo.review.review_count} />
+                    </div>
+                    <div className="flexgap">
+                        <UserTotalStat icon={"/icons/circle-check.svg"} title={"Completion rate"} value={`${gameInfo.review.completion_rate}%`} />
+                        <UserTotalStat icon={"/icons/hourglass.svg"} title={"Average Hours"} value={formatHours(gameInfo.review.total_hours / gameInfo.review.review_count)} />
+                    </div>
+                </div>
+                <ScoreGrid onlyNumbers data={gameScore} />
+
+            </div>
+        )
+    }
+
+
+    function MobileLayout() {
+        return (
+            <div className="w-full sm:hidden flex gapt flex-col mx-auto max-w-[1000px]">
+                <div className="w-full flexgap h-fit relative">
+                    <div className="flexgap flex-col flex-auto h-full w-full">
+                        <p className="absolute k:right-[-10px] right-[-5px] top-[45px] bg-dimm z-10 px-[10px] k:h-[47px] h-[37px] flex items-center justify-center textcol-main font-medium text-[18px] bordercol-gray 
+                    k:border-l-[10px] k:border-b-[10px] k:border-r-[10px]
+                    border-l-[5px] border-b-[5px] border-r-[5px]
+                    ">{gameInfo.release_date.toString()}</p>
+
+                        <p className="w-full textcol-main text-[20px] font-semibold overflow-x-auto overflow-y-hidden bg-hi saturate-[80%] px-[10px] min-h-[40px] flex items-center">{gameInfo.name}</p>
+                        <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={1000} height={200} className="w-full max-w-[1000px] h-[200px] object-center object-cover brightness-[85%] hover:brightness-100 transition-all duration-200" />
+
+                        <div className="flexgap flex-wrap">
+                            {gameInfo.tags.map((tag: TagItem) => <p key={tag.Tag.tag} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{tag.Tag.tag}</p>)}
+                        </div>
+
+                        <div className="flexgap h-[34px]">
+                            <InfoLine text={"Platforms"} addClass="textcol-main bg-mid saturate-[70%]" align="justify-center" />
+                            {gameDuplicateRequest.data && gameDuplicateRequest.data?.length > 1 && <HoverIcon hoverText={"The list of platforms may have inaccuracies due to duplicate game names."} />}
+                        </div>
+                        <div className="flexgap flex-wrap">
+                            {gameInfo.platforms.map((Platform) => <p key={Platform.Platform.platform} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Platform.Platform.platform}</p>)}
+                        </div>
+                        <InfoLine text={"Involved Companies"} addClass="textcol-main bg-mid saturate-[70%]" align="justify-center"/>
+                        <div className="flexgap flex-wrap">
+                            {gameInfo.developers.map((Developer) => <p key={Developer.Developer.developer} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Developer.Developer.developer}</p>)}
+                        </div>
+                        <InfoLine text={"Description"} addClass="textcol-main bg-mid saturate-[70%]" align="justify-center"/>
+                        <p className="flex-auto bg-dimm textcol-dimm p-[10px] overflow-y-auto max-h-[200px]">
+                            {gameInfo.description}
+                        </p>
+                    </div>
+
+                </div>
+
+                <div className="flex-col flex gapt h-fit saturate-[85%]">
+                        <UserTotalStat icon={"/icons/clock.svg"} title={"Played for"} value={formatHours(gameInfo.review.total_hours)} />
+                        <UserTotalStat icon={"/icons/comments.svg"} title={"Reviews"} value={gameInfo.review.review_count} />
+                        <UserTotalStat icon={"/icons/circle-check.svg"} title={"Completion rate"} value={`${gameInfo.review.completion_rate}%`} />
+                        <UserTotalStat icon={"/icons/hourglass.svg"} title={"Average Hours"} value={formatHours(gameInfo.review.total_hours / gameInfo.review.review_count)} />
+                </div>
+                <ScoreGrid onlyNumbers data={gameScore} />
+
+            </div>
+        )
+    }
+
+    return (
+        <>
+            <PCLayout />
+            <TabletLayout />
+            <MobileLayout />
+        </>
     )
 }
