@@ -1,4 +1,3 @@
-import DataBlock from "@/components/DataBlock/DataBlock"
 import GameVideo from "@/components/GameVideo/GameVideo"
 import HoverIcon from "@/components/HoverIcon/HoverIcon"
 import PageErrorMessage from "@/components/PageErrorMessage/PageErrorMessate"
@@ -8,6 +7,7 @@ import { AverageScoreItem, Game, GameReviewData, TagItem } from "@/interface"
 import { formatHours } from "@/utils/formatter"
 import supabaseRootClient from "@/utils/supabaseRootClient"
 import Image from "next/image"
+const usetube = require('usetube')
 
 function UserTotalStat(props: {
     icon: string,
@@ -71,12 +71,9 @@ export default async function Game({ params }: {
 
     let gameInfo: GameReviewAndInfo = gameInfoRequest.data;
     const gameDuplicateRequest = await supabaseRootClient().from("Game").select("id").eq("name", gameInfo.name);
-    let youtubeRequest = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${`${gameInfo.name}-${new Date(gameInfo.release_date).getFullYear()}-original-game-trailer`}&key=${process.env.NEXT_YOUTUBE_KEY}`);
-    let youtubeJSON = await youtubeRequest.json();
-    let youtubeId:null | string;
-    if (youtubeJSON.data && youtubeJSON.data.items && youtubeJSON.data.items.length > 0) {
-          youtubeId = youtubeJSON.data.items[0].id.videoId;
-        }
+    let video = await usetube.searchVideo(`${gameInfo.name}-${new Date(gameInfo.release_date).getFullYear()}-original-game-trailer`);
+    let youtubeId:string | undefined = video.videos[0].id || undefined;
+
     let gameScore = {
         graphics_score: gameInfo.review.graphics_avg,
         sound_score: gameInfo.review.sound_avg,
@@ -126,7 +123,7 @@ export default async function Game({ params }: {
                     <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={400} height={600} className="w-full max-w-[450px] h-full object-cover object-top brightness-[85%] hover:brightness-100 transition-all duration-200" />
                 </div>
 
-                <GameVideo videoId={youtubeId || "LNHZ9WAertc"} position="top-[445px] right-[-10px]" />
+                <GameVideo videoId={youtubeId} position="top-[445px] right-[-10px]" />
                 <div className="flexgap h-[120px] saturate-[85%]">
                     <UserTotalStat icon={"/icons/clock.svg"} title={"Played for"} value={formatHours(gameInfo.review.total_hours)} />
                     <UserTotalStat icon={"/icons/comments.svg"} title={"Reviews"} value={gameInfo.review.review_count} />
@@ -152,7 +149,7 @@ export default async function Game({ params }: {
 
                         <p className="w-full textcol-main text-[20px] font-semibold overflow-x-auto overflow-y-hidden bg-hi saturate-[80%] px-[10px] min-h-[40px] flex items-center">{gameInfo.name}</p>
                         <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={1000} height={200} className="w-full max-w-[1000px] h-[200px] object-center object-cover brightness-[85%] hover:brightness-100 transition-all duration-200" />
-                        <GameVideo videoId={youtubeId || "LNHZ9WAertc"} position="top-[205px] right-[-5px]" />
+                        <GameVideo videoId={youtubeId} position="top-[205px] right-[-5px]" />
                         <div className="flexgap flex-wrap">
                             {gameInfo.tags.map((tag: TagItem) => <p key={tag.Tag.tag} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{tag.Tag.tag}</p>)}
                         </div>
@@ -205,7 +202,7 @@ export default async function Game({ params }: {
 
                         <p className="w-full textcol-main text-[20px] font-semibold overflow-x-auto overflow-y-hidden bg-hi saturate-[80%] px-[10px] min-h-[40px] flex items-center">{gameInfo.name}</p>
                         <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={1000} height={200} className="w-full max-w-[1000px] h-[200px] object-center object-cover brightness-[85%] hover:brightness-100 transition-all duration-200" />
-                        <GameVideo videoId={youtubeId || "LNHZ9WAertc"} position="top-[205px] right-[-5px]" />
+                        <GameVideo videoId={youtubeId} position="top-[205px] right-[-5px]" />
                         <div className="flexgap flex-wrap">
                             {gameInfo.tags.map((tag: TagItem) => <p key={tag.Tag.tag} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{tag.Tag.tag}</p>)}
                         </div>
