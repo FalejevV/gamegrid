@@ -15,12 +15,12 @@ function UserTotalStat(props: {
     value: string | number
 }) {
     return (
-        <div className="flex-auto h-full flexgap flex-col justify-between w-full overflow-hidden bg-hi relative pten">
+        <div className="flex-auto h-full group flexgap flex-col justify-between w-full overflow-hidden bg-hi relative pten">
             <div className="flexgap justify-end items-center overflow-hidden">
-                <Image src={props.icon} alt={`${props.title} icon`} width={85} height={85} className="sm:w-[125px] sm:h-[125px] w-[70px] h-[70px] absolute sm:left-[-50px] sm:top-[-20px] left-[-20px] top-[-10px] opacity-25" />
-                <p className="textcol-dimm sm:text-[16px] text-[18px] font-medium">{props.title}</p>
+                <Image src={props.icon} alt={`${props.title} icon`} width={85} height={85} className="sm:w-[125px] sm:h-[125px] w-[70px] h-[70px] absolute sm:left-[-50px] sm:top-[-20px] left-[-20px] top-[-10px] opacity-25 group-hover:opacity-30 transition-all duration-200" />
+                <p className="textcol-main opacity-75 group-hover:opacity-100 transition-all duration-200 sm:text-[16px] text-[18px] font-medium">{props.title}</p>
             </div>
-            <p className={`${props.value.toString().split("").length > 12 ? "sm:text-[23px] pb-[8px]" : "sm:text-[35px]"} text-[22px] textcol-main font-semibold whitespace-nowrap overflow-x-auto text-right`}>{props.value}</p>
+            <p className={`${props.value.toString().split("").length > 12 ? "sm:text-[23px] pb-[5px] sm:leading-[23px]" : "sm:text-[35px] sm:leading-[35px]"} leading-[22px] text-[22px] textcol-main font-semibold whitespace-nowrap overflow-y-hidden overflow-x-auto text-right`}>{props.value}</p>
         </div>
     )
 }

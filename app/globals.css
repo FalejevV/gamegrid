@@ -5,6 +5,7 @@
 body {
   background-color: rgb(26, 26, 28);
   overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .do-scroll {

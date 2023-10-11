@@ -20,9 +20,9 @@ export default function GameVideo(props: {
 
     function FloatingVideoButton() {
         return (
-            <div className={"absolute w-fit h-fit bg-hi saturate-[75%] bordercol-gray k:border-[10px] border-[5px] pten cursor-pointer select-none group " + props.position} onClick={() => setVideoToggle(prev => !prev)}>
+            <div className={`absolute w-fit h-fit bg-hi saturate-[75%] bordercol-gray k:border-[10px] border-[5px] pten cursor-pointer select-none group brightness-100 hover:brightness-110 transition-all duration-200 ${props.position}`} onClick={() => setVideoToggle(prev => !prev)}>
                 <div className="flexgap items-center justify-center">
-                    <Image src={`/icons/${videoToggle ? "stop" : "play"}.svg`} alt={`${videoToggle ? "stop" : "play"} trailer`} width={20} height={20} className="w-[20px] h-[20px] invert opacity-[60%]" />
+                    <Image src={`/icons/${videoToggle ? "stop" : "play"}.svg`} alt={`${videoToggle ? "stop" : "play"} trailer`} width={20} height={20} className="w-[20px] h-[20px] invert opacity-[30%]" />
                     <p className="textcol-main">Video</p>
                 </div>
             </div>
