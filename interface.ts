@@ -262,11 +262,29 @@ export interface UserReviewSample {
     }
 }
 
+
+
 export interface UserReviewSampleDataError {
     data: UserReviewSample[] | null,
     error: string | null
 }
 
+export interface GameReviewSample{
+   game_id:number,
+   total_score: number,
+   finished:boolean,
+   hours_spent:number,
+   user_comment:string,
+   profile:{
+    username:string,
+    user_id:number
+   } 
+}
+
+export interface GameReviewSampleDataError {
+    data: GameReviewSample[] | null,
+    error: string | null
+} 
 
 export interface IValueFilter {
     0: string,

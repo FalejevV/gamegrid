@@ -1,10 +1,12 @@
 import GameVideo from "@/components/GameVideo/GameVideo"
 import HoverIcon from "@/components/HoverIcon/HoverIcon"
+import GameReviewItemsLoader from "@/components/Loader/GameReviewItemsLoader/GameReviewItemsLoader"
 import PageErrorMessage from "@/components/PageErrorMessage/PageErrorMessate"
 import InfoLine from "@/components/ProfileInfoLine/ProfileInfoLine"
 import ScoreGrid from "@/components/ScoreGrid/ScoreGrid"
-import { AverageScoreItem, Game, GameReviewData, TagItem } from "@/interface"
+import { AverageScoreItem, Game, GameReviewData, GameReviewSample, TagItem } from "@/interface"
 import { formatHours } from "@/utils/formatter"
+import { supabaseGetGameReviews } from "@/utils/supabaseFetching"
 import supabaseRootClient from "@/utils/supabaseRootClient"
 import Image from "next/image"
 const usetube = require('usetube')
@@ -31,7 +33,8 @@ export default async function Game({ params }: {
     }
 }) {
 
-    const gameInfoRequest = await supabaseRootClient().from("Game").select(`
+    let promises = await Promise.all([
+        supabaseRootClient().from("Game").select(`
         *,
         review:AverageReview(*),
         developers:GameDeveloper(
@@ -43,10 +46,11 @@ export default async function Game({ params }: {
         tags:GameTag(
              Tag(tag)
         )
-    `).eq("id", params.id).single()
+    `).eq("id", params.id).single(),
+        supabaseGetGameReviews(10, 0, params.id)
+    ])
 
-
-    let gameError = gameInfoRequest.error?.message;
+    let gameError = promises[0].error?.message;
     if (gameError) {
         return (
             <PageErrorMessage text={gameError} />
@@ -69,10 +73,11 @@ export default async function Game({ params }: {
         }[]
     };
 
-    let gameInfo: GameReviewAndInfo = gameInfoRequest.data;
+    let gameInfo: GameReviewAndInfo = promises[0].data;
+    let reviewsData = promises[1].data as unknown as GameReviewSample[];
     const gameDuplicateRequest = await supabaseRootClient().from("Game").select("id").eq("name", gameInfo.name);
     let video = await usetube.searchVideo(`${gameInfo.name}-${new Date(gameInfo.release_date).getFullYear()}-original-game-trailer`);
-    let youtubeId:string | undefined = video.videos[0].id || undefined;
+    let youtubeId: string | undefined = video.videos[0].id || undefined;
 
     let gameScore = {
         graphics_score: gameInfo.review.graphics_avg,
@@ -130,8 +135,6 @@ export default async function Game({ params }: {
                     <UserTotalStat icon={"/icons/circle-check.svg"} title={"Completion rate"} value={`${gameInfo.review.completion_rate}%`} />
                     <UserTotalStat icon={"/icons/hourglass.svg"} title={"Average Hours"} value={formatHours(gameInfo.review.total_hours / gameInfo.review.review_count)} />
                 </div>
-                <ScoreGrid onlyNumbers data={gameScore} />
-
             </div>
         )
     }
@@ -183,8 +186,6 @@ export default async function Game({ params }: {
                         <UserTotalStat icon={"/icons/hourglass.svg"} title={"Average Hours"} value={formatHours(gameInfo.review.total_hours / gameInfo.review.review_count)} />
                     </div>
                 </div>
-                <ScoreGrid onlyNumbers data={gameScore} />
-
             </div>
         )
     }
@@ -232,17 +233,22 @@ export default async function Game({ params }: {
                     <UserTotalStat icon={"/icons/circle-check.svg"} title={"Completion rate"} value={`${gameInfo.review.completion_rate}%`} />
                     <UserTotalStat icon={"/icons/hourglass.svg"} title={"Average Hours"} value={formatHours(gameInfo.review.total_hours / gameInfo.review.review_count)} />
                 </div>
-                <ScoreGrid onlyNumbers data={gameScore} />
+
 
             </div>
         )
     }
 
     return (
-        <>
+        <div className="w-full flex gapt flex-col mx-auto max-w-[1000px]">
             <PCLayout />
             <TabletLayout />
             <MobileLayout />
-        </>
+
+            <ScoreGrid onlyNumbers data={gameScore} />
+
+            <InfoLine text={"User Reviews"} addClass="textcol-main bg-mid" />
+            <GameReviewItemsLoader gameId={params.id} initialData={reviewsData} />
+        </div>
     )
 }

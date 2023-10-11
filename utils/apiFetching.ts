@@ -1,4 +1,4 @@
-import { GameCreationRequiredInfoDataError, GameReviewData, GameReviewDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError, UserReviewSampleDataError } from "@/interface";
+import { GameCreationRequiredInfoDataError, GameReviewData, GameReviewDataError, GameReviewSampleDataError, IGDBFullGameInfo, IGDBFullGameInfoDataError, StringArrayDataError, StringDataError, UserReviewSampleDataError } from "@/interface";
 import igdbToken from "./igdbToken";
 import supabaseServer from "./supabaseServer";
 import supabaseClient from "./supabaseClient";
@@ -85,6 +85,24 @@ export async function APICallSupabaseUserReviewsSelect(publicId: number, amount:
 
     return result;
 }
+
+export async function APICallSupabaseGameReviewsSelect(gameId: number | string, amount: number, offset: number) {
+    const result: GameReviewSampleDataError = await fetch('/api/supabase-get-game-reviews', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            gameId,
+            amount,
+            offset
+        }),
+    }).then(res => res.json())
+
+    return result;
+}
+
+
 
 
 export async function APICallIGDBGameDevelopersByNameDate(name: string, date: number) {

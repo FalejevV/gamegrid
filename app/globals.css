@@ -93,7 +93,7 @@ body {
 }
 
 .pten {
-  @apply k:p-[10px] p-[5px]
+  padding:10px;
 }
 
 .gapt {
