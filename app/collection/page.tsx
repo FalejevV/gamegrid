@@ -21,8 +21,8 @@ export default async function Collection() {
 
     const collectionFetch = await supabase.rpc('get_reviews_by_user_id', { p_user_id: data.user.id });
     return (
-        <div className="flex gap-[10px] flex-col w-full max-w-[1000px] mx-auto">
-            <div className="flex items-center justify-betwee gap-[10px]">
+        <div className="flexgap flex-col w-full max-w-[1000px] mx-auto">
+            <div className="flexgap items-center justify-between">
                 <div className="flex-auto inputheight text-[16px] textcol-main bg-dimm saturate-50 flex items-center p-[10px] font-medium sm:text-[19px] min-w-[170px] justify-center">Your Summary</div>
                 <AddGameButton />
             </div>
@@ -32,8 +32,8 @@ export default async function Collection() {
             {collectionFetch && collectionFetch.data && collectionFetch.data.length > 0 &&
                 <>
                     <p className="text-[25px] font-semibold textcol-main pt-[30px] pb-[10px]">Game Collection</p>
-                    <div className="flex gap-[50px] flex-col textcol-main text-[18px]">
-                        {collectionFetch?.data && collectionFetch.data?.length > 0 && collectionFetch.data.map((game: FullGameReviewInfo) => <CollectionGameItem game={game} key={game.game_name+game.game_id}/>)}
+                    <div className="flex gap-[35px] flex-col textcol-main text-[18px]">
+                        {collectionFetch?.data && collectionFetch.data?.length > 0 && collectionFetch.data.map((game: FullGameReviewInfo) => <CollectionGameItem game={game} key={game.game_name + game.game_id} />)}
                     </div>
                 </>
             }

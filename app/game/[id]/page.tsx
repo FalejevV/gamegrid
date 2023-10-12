@@ -250,7 +250,7 @@ export default async function Game({ params }: {
             <div className="flexgap flex-col">
                 <div className="flexgap flex-auto bg-mid items-center justify-center h-[120px] relative overflow-hidden">
                     <p className="textcol-main text-[25px] font-semibold pten">User Reviews</p>
-                    <Image src={"/icons/gamepad.svg"} alt={"gamepad"} className="absolute left-[-40px] top-[-75px] w-[200px] h-[200px] opacity-[7%] select-none pointer-events-none rotate-[-20deg]" width={200} height={200} />
+                    <Image src={"/icons/Gamepad.svg"} alt={"gamepad"} className="absolute left-[-40px] top-[-75px] w-[200px] h-[200px] opacity-[7%] select-none pointer-events-none rotate-[-20deg]" width={200} height={200} />
                     <Image src={"/icons/pac.svg"} alt={"pac"} className="absolute right-[0px] top-[-15px] w-[100px] h-[100px] opacity-[7%] select-none pointer-events-none rotate-12" width={100} height={100} />
                     <Image src={"/icons/group.svg"} alt={"group"} className="absolute left-[25%] bottom-[-40px] w-[200px] h-[200px] opacity-[5%] select-none pointer-events-none" width={200} height={200} />
                     <Image src={"/icons/trophy.svg"} alt={"trophy"} className="absolute right-[25%] bottom-[0px] w-[100px] h-[100px] opacity-[5%] select-none pointer-events-none rotate-[24deg]" width={100} height={100} />

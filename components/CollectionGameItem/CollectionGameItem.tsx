@@ -9,18 +9,18 @@ function PCTabletLayout(props: {
 }) {
     return (
         <div className="w-full max-w-[1000px] h-[200px] hidden sm:flex hover:brightness-110 transition-all duration-200">
-            <div className="flex gap-[10px] w-full h-full">
-                <div className="flex gap-[10px] flex-auto h-full flex-col">
-                    <div className="flex max-h-[34px] h-[34px] w-full gap-[10px] whitespace-nowrap">
+            <div className="flexgap w-full h-full">
+                <div className="flexgap flex-auto h-full flex-col">
+                    <div className="flexgap max-h-[34px] h-[34px] w-full whitespace-nowrap">
                         <p className="textcol-main h-[100%] bg-mid px-[10px] flex items-center font-semibold text-[20px] flex-auto overflow-x-auto ">{props.game.game_name}</p>
                         <p className="bg-dimm px-[10px] textcol-dimm flex items-center text-[16px] overflow-hidden">{dateToText(new Date(props.game.date).valueOf() / 1000)}</p>
                     </div>
 
-                    <div className="flex h-full max-h-[156px] gap-[10px] relative">
+                    <div className="flexgap h-full max-h-[156px] relative">
                         <Image src={props.game.image || ""} alt={`${props.game.game_name} image`} className="w-full max-w-[300px] h-full bg-dimm object-cover" width={300} height={156} />
                         {props.game.finished && <p className="absolute left-0 bottom-0 bg-hi px-[15px] py-[3px] text-[15px] font-semibold">Completed</p>}
-                        <div className="flex flex-col gap-[10px] flex-auto">
-                            <div className="flex gap-[10px]">
+                        <div className="flexgap flex-col flex-auto">
+                            <div className="flexgap">
                                 <GameItemDataBlock title={"Hours"} value={props.game.hours_spent + ""} />
                                 <GameItemDataBlock title={"Score"} value={props.game.total_score + " / 100"} color="bg-dimm saturate-[110%]" />
                             </div>
@@ -47,19 +47,19 @@ function MobileLayout(props: {
 }) {
     return (
         <div className="w-full max-w-[1000px] sm:hidden flex">
-            <div className="flex gap-[10px] w-full h-full">
-                <div className="flex gap-[10px] flex-auto h-full flex-col">
-                    <div className="flex max-h-[34px] h-[34px] w-full gap-[10px] whitespace-nowrap">
+            <div className="flexgap w-full h-full">
+                <div className="flexgap flex-auto h-full flex-col">
+                    <div className="flexgap max-h-[34px] h-[34px] w-full whitespace-nowrap">
                         <p className="textcol-main h-[100%] bg-mid px-[10px] flex items-center font-semibold text-[20px] flex-auto w-[calc(100vw-20px)] overflow-x-auto">{props.game.game_name}</p>
                     </div>
 
-                    <div className="flex flex-col h-full gap-[10px] relative">
+                    <div className="flexgap flex-col h-full relative">
                         <Image src={props.game.image || ""} alt={`${props.game.game_name} image`} className="w-full h-[156px] bg-dimm object-cover" width={500} height={156} />
                         {props.game.finished && <p className="absolute left-0 top-[131px] bg-hi px-[10px] py-[2px] text-[14px] font-semibold">Completed</p>}
-                        <p className="bg-dimm px-[10px] textcol-dimm flex items-center text-[16px] overflow-hidden min-w-fit absolute right-0 top-[132px]">{dateToText(new Date(props.game.date).valueOf() / 1000)}</p>
+                        <p className="bg-dimm px-[10px] textcol-dimm flex items-center text-[16px] overflow-hidden min-w-fit absolute right-[-5px] top-[127px] bordercol-gray border-[5px]">{dateToText(new Date(props.game.date).valueOf() / 1000)}</p>
 
-                        <div className="flex flex-col gap-[10px] flex-auto">
-                            <div className="flex gap-[10px]">
+                        <div className="flexgap flex-col flex-auto">
+                            <div className="flexgap">
                                 <GameItemDataBlock title={"Hours"} value={props.game.hours_spent + ""} />
                                 <GameItemDataBlock title={"Score"} value={props.game.total_score + " / 100"} color="bg-dimm saturate-[110%]" />
                             </div>

@@ -33,7 +33,7 @@ export default function CollectionSummary(props: {
 
     function MobileLayout() {
         return (
-            <div className="flex gap-[10px] items-center overflow-x-scroll pb-[10px] visible summary-lg:hidden">
+            <div className="flexgap items-center overflow-x-scroll pb-[10px] visible summary-lg:hidden">
                 <div className="summary-grid-mobile">
                     <SummaryStatSmall title={totalGames} about={"Total Games"} className="bg-mid" />
                     <SummaryStatWide title={completionRate+"%"} about={"Completion Rate"} />
