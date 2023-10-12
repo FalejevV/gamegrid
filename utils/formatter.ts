@@ -303,6 +303,6 @@ export function formatHours(hours: number) {
         return `${Math.round(hours / (24) * 10) / 10} Days`
     }
     else {
-        return `${hours}h`
+        return `${Math.round(hours)}h`
     }
 }

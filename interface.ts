@@ -275,6 +275,7 @@ export interface GameReviewSample{
    finished:boolean,
    hours_spent:number,
    user_comment:string,
+   date:Date,
    profile:{
     username:string,
     user_id:number

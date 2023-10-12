@@ -152,7 +152,7 @@ export default async function Game({ params }: {
 
                         <p className="w-full textcol-main text-[20px] font-semibold overflow-x-auto overflow-y-hidden bg-hi saturate-[80%] px-[10px] min-h-[40px] flex items-center">{gameInfo.name}</p>
                         <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={1000} height={200} className="w-full max-w-[1000px] h-[200px] object-center object-cover brightness-[85%] hover:brightness-100 transition-all duration-200" />
-                        <GameVideo videoId={youtubeId} position="top-[205px] right-[-5px]" />
+                        <GameVideo videoId={youtubeId} position="top-[196px] right-[-5px]" />
                         <div className="flexgap flex-wrap">
                             {gameInfo.tags.map((tag: TagItem) => <p key={tag.Tag.tag} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{tag.Tag.tag}</p>)}
                         </div>
@@ -203,7 +203,7 @@ export default async function Game({ params }: {
 
                         <p className="w-full textcol-main text-[20px] font-semibold overflow-x-auto overflow-y-hidden bg-hi saturate-[80%] px-[10px] min-h-[40px] flex items-center">{gameInfo.name}</p>
                         <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={1000} height={200} className="w-full max-w-[1000px] h-[200px] object-center object-cover brightness-[85%] hover:brightness-100 transition-all duration-200" />
-                        <GameVideo videoId={youtubeId} position="top-[205px] right-[-5px]" />
+                        <GameVideo videoId={youtubeId} position="top-[196px] right-[-5px]" />
                         <div className="flexgap flex-wrap">
                             {gameInfo.tags.map((tag: TagItem) => <p key={tag.Tag.tag} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{tag.Tag.tag}</p>)}
                         </div>
@@ -247,8 +247,16 @@ export default async function Game({ params }: {
 
             <ScoreGrid onlyNumbers data={gameScore} />
 
-            <InfoLine text={"User Reviews"} addClass="textcol-main bg-mid" />
-            <GameReviewItemsLoader gameId={params.id} initialData={reviewsData} />
+            <div className="flexgap flex-col">
+                <div className="flexgap flex-auto bg-mid items-center justify-center h-[120px] relative overflow-hidden">
+                    <p className="textcol-main text-[25px] font-semibold pten">User Reviews</p>
+                    <Image src={"/icons/gamepad.svg"} alt={"gamepad"} className="absolute left-[-40px] top-[-75px] w-[200px] h-[200px] opacity-[7%] select-none pointer-events-none rotate-[-20deg]" width={200} height={200} />
+                    <Image src={"/icons/pac.svg"} alt={"pac"} className="absolute right-[0px] top-[-15px] w-[100px] h-[100px] opacity-[7%] select-none pointer-events-none rotate-12" width={100} height={100} />
+                    <Image src={"/icons/group.svg"} alt={"group"} className="absolute left-[25%] bottom-[-40px] w-[200px] h-[200px] opacity-[5%] select-none pointer-events-none" width={200} height={200} />
+                    <Image src={"/icons/trophy.svg"} alt={"trophy"} className="absolute right-[25%] bottom-[0px] w-[100px] h-[100px] opacity-[5%] select-none pointer-events-none rotate-[24deg]" width={100} height={100} />
+                </div>
+                <GameReviewItemsLoader gameId={params.id} initialData={reviewsData} />
+            </div>
         </div>
     )
 }

@@ -23,7 +23,6 @@ export default function GameReviewItemsLoader(props: {
     const [loaded, setLoaded] = useState(false);
     const [fetchedGames, setFetchedGames] = useState<GameReviewSample[]>(props.initialData);
     const { ref, inView } = useInView({
-        /* Optional options */
         threshold: 0,
     });
 
