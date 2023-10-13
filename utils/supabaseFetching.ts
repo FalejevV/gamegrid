@@ -126,7 +126,7 @@ export async function fetchFilteredGames(filters: FilterQueryParams, offset: num
     let gameIds: number[] = [];
     let anyError: PostgrestError | null = null;
     let nothingFoundOnPrevQuery = false;
-    if(filters.amount > amountFetch * 2){
+    if (filters.amount > amountFetch * 2) {
         filters.amount = amountFetch;
     }
     amountDefault = Number(filters.amount || amountFetch);
@@ -518,7 +518,10 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
     game.user_id = userId;
     game.public_user_id = Number(userRequest.data);
 
+    var Filter = require('bad-words'),
+        filter = new Filter();
     delete game.platform_played;
+    game.user_comment = filter.clean(game.user_comment);
     const { error } = await supabaseRoot
         .from('Review')
         .upsert(game);
@@ -532,7 +535,6 @@ export async function insertSupabaseReview(userId: string, game: GameReviewData)
     const promisesResult = await Promise.all([updateAverageReviewData(game.game_id), updateAverageUserCollectionInfo(userId)]);
     let promiseError;
     promisesResult.forEach((response: StringDataError) => {
-        console.log(response);
         if (response.error) {
             promiseError = response.error;
             return;
@@ -575,16 +577,16 @@ async function updateAverageReviewData(gameId: number): Promise<StringDataError>
             }
         }
         if (data.length >= gameToPublicReviewRequired && stateResult.data[0].state_id === 2) {
-            const { data, error } = await supabaseRoot.from('Game').update({ 
-                state_id:5,
+            const { data, error } = await supabaseRoot.from('Game').update({
+                state_id: 5,
                 active_date: new Date()
             }).match({ id: gameId });
-            if(error){
-                return{
-                    data:null,
-                    error:error.message
+            if (error) {
+                return {
+                    data: null,
+                    error: error.message
                 }
-            } 
+            }
 
         }
     }
@@ -657,15 +659,15 @@ export async function getSupabasePublicUserReview(gameId: number, userId: number
 }
 
 
-export async function supabaseGetUserReviews(amount:number = amountFetch, offset:number = 0, publicId:number): Promise<UserReviewSampleDataError>{
-    if(offset < 0) offset = 0;
-    const {data,error} = await supabaseRoot.from("Review").select(`
+export async function supabaseGetUserReviews(amount: number = amountFetch, offset: number = 0, publicId: number): Promise<UserReviewSampleDataError> {
+    if (offset < 0) offset = 0;
+    const { data, error } = await supabaseRoot.from("Review").select(`
         public_user_id,
         total_score,
         finished,
         hours_spent,
         game:Game(name, id, image)
-    `).eq("public_user_id", publicId).range(offset, amount).limit(amountFetch).order("date", {ascending:false}) as {
+    `).eq("public_user_id", publicId).range(offset, amount).limit(amountFetch).order("date", { ascending: false }) as {
         data: UserReviewSample[] | null,
         error: PostgrestError | null
     };
@@ -675,9 +677,9 @@ export async function supabaseGetUserReviews(amount:number = amountFetch, offset
     }
 }
 
-export async function supabaseGetGameReviews(amount:number = amountFetch, offset:number = 0, gameId:number | string): Promise<GameReviewSampleDataError>{
-    if(offset < 0) offset = 0;
-    const {data,error} = await supabaseRoot.from("Review").select(`
+export async function supabaseGetGameReviews(amount: number = amountFetch, offset: number = 0, gameId: number | string): Promise<GameReviewSampleDataError> {
+    if (offset < 0) offset = 0;
+    const { data, error } = await supabaseRoot.from("Review").select(`
         game_id,
         total_score,
         finished,
@@ -685,7 +687,7 @@ export async function supabaseGetGameReviews(amount:number = amountFetch, offset
         date,
         user_comment,
         profile:profile(username, user_id)
-    `).eq("game_id", gameId).range(offset, amount).limit(amountFetch).order("date", {ascending:false}) as {
+    `).eq("game_id", gameId).range(offset, amount).limit(amountFetch).order("date", { ascending: false }) as {
         data: GameReviewSample[] | null,
         error: PostgrestError | null
     };
@@ -696,14 +698,14 @@ export async function supabaseGetGameReviews(amount:number = amountFetch, offset
 }
 
 
-export async function supabaseGetUserTopReviews(publicId:number, amount:number ): Promise<UserReviewSampleDataError>{
-    const {data,error} = await supabaseRoot.from("Review").select(`
+export async function supabaseGetUserTopReviews(publicId: number, amount: number): Promise<UserReviewSampleDataError> {
+    const { data, error } = await supabaseRoot.from("Review").select(`
         public_user_id,
         total_score,
         finished,
         hours_spent,
         game:Game(name, id, image)
-    `).eq("public_user_id", publicId).order("total_score", {ascending:false}).limit(amount) as {
+    `).eq("public_user_id", publicId).order("total_score", { ascending: false }).limit(amount) as {
         data: UserReviewSample[] | null,
         error: PostgrestError | null
     };
@@ -714,14 +716,14 @@ export async function supabaseGetUserTopReviews(publicId:number, amount:number )
     }
 }
 
-export async function supabaseGetUserWorstReviews(publicId:number, amount:number ): Promise<UserReviewSampleDataError>{
-       const {data,error} = await supabaseRoot.from("Review").select(`
+export async function supabaseGetUserWorstReviews(publicId: number, amount: number): Promise<UserReviewSampleDataError> {
+    const { data, error } = await supabaseRoot.from("Review").select(`
         public_user_id,
         total_score,
         finished,
         hours_spent,
         game:Game(name, id, image)
-    `).eq("public_user_id", publicId).order("total_score", {ascending:true}).limit(amount) as {
+    `).eq("public_user_id", publicId).order("total_score", { ascending: true }).limit(amount) as {
         data: UserReviewSample[] | null,
         error: PostgrestError | null
     };
@@ -732,16 +734,16 @@ export async function supabaseGetUserWorstReviews(publicId:number, amount:number
 }
 
 
-export async function supabaseCheckProfileAvailability(column:string, value:string, user_id:number): Promise<StringDataError>{
-    const {data,error} = await supabaseRoot.from("profile").select("user_id").eq(column, value).neq("user_id",user_id);
+export async function supabaseCheckProfileAvailability(column: string, value: string, user_id: number): Promise<StringDataError> {
+    const { data, error } = await supabaseRoot.from("profile").select("user_id").eq(column, value).neq("user_id", user_id);
     let resultValue = data?.length === 0 ? "OK" : "BUSY";
-    return{
-        data:resultValue,
-        error:error?.message || null
+    return {
+        data: resultValue,
+        error: error?.message || null
     }
 }
 
 
-export async function supabaseAvatarInsert(image:File, publicId:number){
-    
+export async function supabaseAvatarInsert(image: File, publicId: number) {
+
 }

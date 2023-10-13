@@ -125,7 +125,7 @@ export default async function Game({ params }: {
                 </div>
 
                 <GameVideo videoId={youtubeId} position="top-[445px] right-[-10px]" />
-                <p className="flex-auto bg-dimm textcol-dimm p-[10px] overflow-y-auto max-h-[170px] h-full">
+                <p className="flex-auto bg-dimm textcol-dimm p-[10px] overflow-y-auto max-h-[170px] h-screen">
                     {gameInfo.description}
                 </p>
                 <div className="flexgap h-[120px] saturate-[85%]">

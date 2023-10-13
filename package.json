@@ -11,6 +11,7 @@
     "@supabase/auth-helpers-nextjs": "latest",
     "@supabase/supabase-js": "latest",
     "autoprefixer": "10.4.14",
+    "bad-words": "^3.0.4",
     "nanoid": "^4.0.2",
     "next": "latest",
     "node-fetch": "^3.3.2",
