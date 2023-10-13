@@ -3,7 +3,6 @@ import { IProfile } from "@/interface";
 import EditProfileForm from "@/layout/EditProfileForm";
 import supabaseRootClient from "@/utils/supabaseRootClient";
 import supabaseServer from "@/utils/supabaseServer";
-import { profile } from "console";
 
 export default async function EditProfile() {
 

@@ -69,10 +69,12 @@ export default function ProfileBar() {
 
     function DropDown() {
         return (
-            <div className="absolute right-0 top-[45px] bg-dimm w-[205px] h-fit textcol-main flex flex-col p-[10px] gap-[15px]">
+            <div className="absolute right-0 top-[45px] bg-dimm w-fit min-w-[150px] h-fit textcol-main flex flex-col p-[10px] gap-[15px]">
                 <p className="sm:hidden block textcol-dimm">{userSelector.username}</p>
-                <Link href={`/profile/${userSelector.publicId}`} onClick={toggleDropdown}>Profile</Link>
-                <button className="cursor-pointer text-left" onClick={logOut}>Logout</button>
+                <Link href={`/profile/${userSelector.publicId}`} onClick={toggleDropdown} className="text-right">Profile</Link>
+                <hr className="opacity-20"></hr>
+                <Link href={`/edit-profile`} onClick={toggleDropdown} className="text-right">Settings</Link>
+                <button className="cursor-pointer text-right" onClick={logOut}>Log Out</button>
             </div>
         )
     }
