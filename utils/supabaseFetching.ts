@@ -665,7 +665,7 @@ export async function supabaseGetUserReviews(amount:number = amountFetch, offset
         finished,
         hours_spent,
         game:Game(name, id, image)
-    `).eq("public_user_id", publicId).range(offset, amount).limit(amountFetch) as {
+    `).eq("public_user_id", publicId).range(offset, amount).limit(amountFetch).order("date", {ascending:false}) as {
         data: UserReviewSample[] | null,
         error: PostgrestError | null
     };

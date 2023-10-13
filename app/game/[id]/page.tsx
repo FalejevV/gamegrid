@@ -116,19 +116,18 @@ export default async function Game({ params }: {
                         <div className="flexgap flex-wrap">
                             {gameInfo.platforms.map((Platform) => <p key={Platform.Platform.platform} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Platform.Platform.platform}</p>)}
                         </div>
-                        <InfoLine text={"Involved Companies"} addClass="textcol-main bg-mid saturate-[70%]" />
-                        <div className="flexgap flex-wrap">
+                        <InfoLine text={"Involved Companies"} addClass="textcol-main bg-mid saturate-[70%] max-h-[34px]" />
+                        <div className="flexgap flex-wrap ">
                             {gameInfo.developers.map((Developer) => <p key={Developer.Developer.developer} className="textcol-dimm px-[10px] bg-dimm cursor-default flex-auto flex items-center justify-center">{Developer.Developer.developer}</p>)}
                         </div>
-                        <InfoLine text={"Description"} addClass="textcol-main bg-mid saturate-[70%]" />
-                        <p className="flex-auto bg-dimm textcol-dimm p-[10px] overflow-y-auto">
-                            {gameInfo.description}
-                        </p>
                     </div>
                     <Image src={gameInfo.image} alt={`${gameInfo.name} image`} width={400} height={600} className="w-full max-w-[450px] h-full object-cover object-top brightness-[85%] hover:brightness-100 transition-all duration-200" />
                 </div>
 
                 <GameVideo videoId={youtubeId} position="top-[445px] right-[-10px]" />
+                <p className="flex-auto bg-dimm textcol-dimm p-[10px] overflow-y-auto max-h-[170px] h-full">
+                    {gameInfo.description}
+                </p>
                 <div className="flexgap h-[120px] saturate-[85%]">
                     <UserTotalStat icon={"/icons/clock.svg"} title={"Played for"} value={formatHours(gameInfo.review.total_hours)} />
                     <UserTotalStat icon={"/icons/comments.svg"} title={"Reviews"} value={gameInfo.review.review_count} />

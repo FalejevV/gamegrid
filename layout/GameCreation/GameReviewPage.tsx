@@ -209,7 +209,7 @@ export default function GameReviewPage() {
 
     function reviewWindow() {
         return (
-            <form className="flex flex-col gap-[10px]" onSubmit={formSubmit}>
+            <form className="flexgap flex-col " onSubmit={formSubmit}>
                 <div className="flex flex-col gap-[25px]">
                     <SelectedGame gameInfo={gameCreationSelector.gameCreationFetchedGame} />
                     <Title title={"Please describe your experience"} />
@@ -218,9 +218,9 @@ export default function GameReviewPage() {
                     <DropdownInput additionalOptions={allPlatformsFetch} options={gameCreationSelector.gameCreationFetchedGame?.platforms || []} value={gameCreationSelector.questions.platform} onChange={(value: string) => dispatch(setGameCreationPlatform(value))} title={"What platform did you play on?"} name={"platform"} />
                     <TextField title={"Please write a short comment about this game. Even 1 sentence is enough :)"} name={"comment"} onChange={(value: string) => dispatch(setGameCreationComment(value))} value={gameCreationSelector.questions.comment} />
                 </div>
-                <div className="flex w-full items-center justify-between gap-[10px]">
-                    <Button title={"BACK"} onClick={proceedToPrevPage} />
-                    <WideActionButton submit text={"NEXT"} onClick={() => { }} />
+                <div className="flexgap w-full items-center justify-between">
+                    <Button title={"Go Back"} onClick={proceedToPrevPage} />
+                    <WideActionButton submit text={"Next"} onClick={() => { }} />
                 </div>
 
             </form>

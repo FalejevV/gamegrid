@@ -7,11 +7,11 @@ function PCLayout() {
             <div className="w-full flexgap h-[500px] relative">
                 <div className="flexgap flex-col flex-auto h-full max-w-[550px]">
                     <div className="w-full bg-loading h-[40px] min-h-[40px]" />
-                    <div className="flex-auto bg-loading" />
+                    <div className="flex-auto bg-loading-fade" />
                 </div>
                 <div className="w-full max-w-[440px] h-full bg-loading" />
             </div>
-
+            <div className="w-full h-[170px] bg-loading" />
             <div className="flexgap h-[120px] saturate-[85%]">
                 <div className="flex-auto bg-loading" />
                 <div className="flex-auto bg-loading" />
@@ -38,7 +38,7 @@ function TabletLayout() {
 
 export default function Loading() {
     return (
-        <div className="w-full flexgap flex-col mx-auto max-w-[1000px] relative">
+        <div className="w-full flexgap flex-col mx-auto max-w-[1000px] relative animate-pulse">
             <PCLayout />
             <TabletLayout />
             <div className="hidden k:flex">

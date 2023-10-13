@@ -36,14 +36,14 @@ export default function GameRatingField() {
         }
     }
     return (
-        <div className="flex flex-col gap-[10px]">
-            <div className="flex flex-col gap-[10px]">
+        <div className="flexgap flex-col">
+            <div className="flexgap flex-col">
                 <p className="w-full inputheight bg-dimm flex items-center justify-center textcol-main">{gameCreationGameInfoSelector.name}</p>
                 <div className="flex items-center justify-between flexgap">
                     <Title title={`${ratingAspects[ratingPageAspectNamesArray[gameCreationRatingPageSelector]].title}`} />
                     <p className="textcol-dimm text-[15px] whitespace-nowrap"> {gameCreationRatingPageSelector + 1} / 11</p>
                 </div>
-                <p className="textcol-dimm sm:text-[16px] text-[15px] h-[90px]">{ratingAspects[ratingPageAspectNamesArray[gameCreationRatingPageSelector]].description}</p>
+                <p className="textcol-dimm sm:text-[16px] text-[15px] h-[100px]">{ratingAspects[ratingPageAspectNamesArray[gameCreationRatingPageSelector]].description}</p>
             </div>
             <div className="bg-[#6f223171] p-[10px] pb-[50px]">
                 <div className="flex items-center justify-between">
@@ -58,7 +58,7 @@ export default function GameRatingField() {
                     <RatingButton value={10} />
                 </div>
             </div>
-            <div className="flex items-center justify-between gap-[10px]">
+            <div className="flexgap items-center justify-between">
                 {gameCreationRatingPageSelector >= 0 && <Button title={"Previous Question"} onClick={previousQuestion} />}
                 <WideActionButton onClick={nextQuestion} text={gameCreationRatingPageSelector < 10 ? "Next Question" : "Finish!"} disableText="Pick Something" disabled={gameCreationRatingScore < 0} />
             </div>

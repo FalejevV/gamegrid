@@ -9,7 +9,7 @@ import { setGameCreationPage } from "@/store/features/gameCreation";
 export default function GameRatingPage() {
     const dispatch = useAppDispatch();
     return (
-        <div className="w-full max-w-[1000px] h-fit sm:gap-[100px] gap-[50px] flex flex-col">
+        <div className="w-full max-w-[1000px] h-fit k:gap-[90px] gap-[5px] flex flex-col">
            
 
 

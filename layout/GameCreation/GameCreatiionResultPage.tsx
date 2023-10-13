@@ -80,7 +80,7 @@ export default function GameCreationResultPage() {
         setIsFetching(false);
     }
 
-    let gameReviewInfo:FullGameReviewInfo = {
+    let gameReviewInfo: FullGameReviewInfo = {
         game_id: 0,
         user_comment: gameCreationSelector.questions.comment,
         graphics_score: 0,
@@ -107,12 +107,13 @@ export default function GameCreationResultPage() {
     }
 
     return (
-        <div className="flex gap-[10px] flex-col w-full textcol-main overflow-hidden">
+        <div className="flexgap flex-col w-full textcol-main overflow-hidden">
             <p className="inputheight w-full bg-dimm flex items-center justify-center">{gameCreationSelector.gameInfo.name}</p>
+            <div />
             <Title title={"Game Creation Results"} />
             <div />
             <CollectionGameItem disabledLink game={gameReviewInfo} />
-            <div className="flex gap-[10px] items-center justify-between">
+            <div className="flexgap items-center justify-between">
                 <Button title={"Go Back"} onClick={previousPage} />
                 <WideActionButton disabled={isFetching} onClick={saveReview} text={"Save My Review"} disableText="Saving..." />
             </div>
