@@ -198,7 +198,7 @@ export function toAverageScore(games: GameReviewData[]): AverageScoreItem {
     resultGame.microtransactions_avg = Math.floor(resultGame.microtransactions_avg / games.length);
     resultGame.support_avg = Math.floor(resultGame.support_avg / games.length);
     resultGame.total = Math.floor(resultGame.total / games.length);
-    resultGame.completion_rate = resultGame.completion_rate / resultGame.review_count * 100;
+    resultGame.completion_rate = Math.floor(resultGame.completion_rate / resultGame.review_count * 100);
 
     const sortedPlatformId = Array.from(platformMap).sort(([, p1], [, p2]) => p2 - p1);
     resultGame.platform = sortedPlatformId[0][0];
